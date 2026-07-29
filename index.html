@@ -341,7 +341,7 @@
     </section>
 
     <section class="view" id="v-ai">
-      <div class="sec-head"><h2>AI Koç</h2><p>Sana özel içerik üreten kişisel öğretmenin. Seviyene ve ilgi alanına göre uyarlanır.</p></div>
+      <div class="sec-head"><h2>Pratik</h2><p>Oku, yaz, kalıpları gölgele. Hepsi çevrimdışı çalışır — internet gerekmez.</p></div>
       <div class="segment" id="aiSeg">
         <button data-m="read" class="on">📖 Oku</button>
         <button data-m="write">✍️ Yaz</button>
@@ -379,7 +379,7 @@
     </button>
     <button data-tab="ai">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3 3 3 0 0 0 0 6 3 3 0 0 0 3 3v1a3 3 0 0 0 6 0v-1a3 3 0 0 0 3-3 3 3 0 0 0 0-6 3 3 0 0 0-3-3V6a3 3 0 0 0-3-3z"/><path d="M12 8v8M9 12h6"/></svg>
-      <span>AI Koç</span>
+      <span>Pratik</span>
     </button>
     <button data-tab="progress">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
@@ -603,6 +603,219 @@ const GUIDE = [
     <div class="eg"><span class="en"><b>4. th</b></span> — <span class="tr">en düşük öncelik; yanlış söylesen de genelde anlaşılırsın.</span></div>`}
 ];
 
+/* ================= HAFIZA İPUÇLARI (anahtar kelime yöntemi) =================
+   Araştırma: ses köprüsü + canlı sahne, ilk kutularda hatırlamayı hızlandırır.
+   Kutu 3'ten sonra gizlenir — mnemonik koltuk değneği olmamalı. */
+const MNEM={
+  "experience":["EKSPRES + ANI","Ekspres trenin penceresinde geçmiş <b>anıların</b> film gibi akıyor. Biriktirdiğin her anı bir <b>deneyim</b>."],
+  "company":["KAMP + ANI","Bütün çalışanlar tek bir <b>kampta</b>, aynı ateşin başında <b>anı</b> biriktiriyor. İşte <b>şirket</b> bu."],
+  "skill":["İSKELE","<b>İskelede</b> tek eliyle tuğla dizen usta. Herkes duruyor, o çalışıyor — çünkü <b>becerisi</b> var."],
+  "deadline":["DEDE + LAYN (çizgi)","<b>Dede</b> yere kalın bir <b>çizgi</b> çekiyor: \"Bu çizgiden sonra iş kabul yok!\" — <b>son teslim tarihi</b>."],
+  "strength":["STREÇ","<b>Streç</b> film gibisin: gerilirsin, esnersin ama kopmazsın. Bu senin <b>güçlü yönün</b>."],
+  "weakness":["VİKS","Nezle olmuşsun, göğsüne <b>Viks</b> sürüyorsun. Herkesin böyle bir <b>zayıf anı</b> var."],
+  "achieve":["AÇ + EV","Günlerce <b>aç</b> yürüdün, sonunda <b>eve</b> ulaştın. Ulaşmak = <b>başarmak</b>."],
+  "improve":["İMZA + PROVA","<b>İmzanı</b> yüz kere <b>prova</b> ediyorsun; her seferinde biraz daha güzel. <b>Geliştirmek</b> budur."],
+  "manage":["MENÜ + AŞÇI","Müdür elinde <b>menü</b>, mutfakta <b>aşçılara</b> bağırıyor. Hepsini <b>yönetiyor</b>."],
+  "colleague":["KOLİ + LİG","<b>İş arkadaşlarınla</b> <b>koli</b> taşıma <b>ligindesiniz</b>; kim daha çok taşırsa o kazanır."],
+  "opportunity":["APAR + TOP","Top havada, <b>apar</b> onu! Kaçırırsan bir daha gelmez — <b>fırsat</b>."],
+  "responsible for":["RAPOR + SORUMLU","Masanda kocaman bir <b>rapor</b>; müdür \"bundan sen <b>sorumlusun</b>\" diyor. <b>for</b> = raporun başında sen varsın (\"from\" DEĞİL)."],
+  "internship":["İNTERNET + ŞİP (gemi)","<b>İnternetten</b> bulduğun bir <b>gemiye</b> stajyer olarak biniyorsun. Maaş yok ama deneyim var — <b>staj</b>."],
+  "university":["ÜNİ + EVREN","<b>Üniversite</b> koca bir <b>evren</b>: her fakülte ayrı bir gezegen."],
+  "engineering":["MOTOR + ER","<b>Motorların eri</b> — bozulan her şeyi söküp takan asker. <b>Mühendislik</b>."],
+  "position":["POZ + İŞİN","<b>İşin</b> için kravat takıp <b>poz</b> veriyorsun. Bu senin <b>pozisyonun</b>."],
+  "goal":["GOL","Topu ağlara gönderdin: <b>GOL!</b> Herkesin bir <b>hedefi</b> var."],
+  "project":["PRO + JET","<b>Profesyonel</b> bir <b>jet</b> yapıyorsunuz, herkes bir parçadan sorumlu. <b>Proje</b>."],
+  "meeting":["MİTİNG","Kalabalık bir <b>miting</b> — ama salonda ve kravatlı. <b>Toplantı</b>."],
+  "report":["RÖPORTAJ","<b>Röportajı</b> yazıya döküyorsun, patrona veriyorsun. Olan biteni anlatan kâğıt = <b>rapor</b>."],
+  "difficult":["DEFİ (meydan okuma) + KÜLT","Efsanevi bir <b>meydan okuma</b>, <b>kült</b> olmuş bir sınav. Yani: <b>zor</b>."],
+  "wake up":["VEY! KAP!","Alarm çalıyor: \"<b>Vey! Kap</b> kendini!\" Yataktan fırlıyorsun — <b>uyanmak</b>."],
+  "look for":["LUK + FOR","Gözünle her yeri <b>tarıyorsun</b> (look) çünkü bir amaç <b>için</b> (for). Bakmak + amaç = <b>aramak</b>."],
+  "apply for":["APLİKASYON","Telefonundaki <b>aplikasyon</b> (application) üzerinden işe <b>başvuruyorsun</b>."],
+  "hardworking":["HARD (sert) + WORKING","Taş gibi <b>sert</b>, durmadan <b>çalışan</b> biri. <b>Çalışkan</b>."],
+  "under pressure":["ANDIR + PRES","Fabrikanın kocaman <b>presi</b> tepende, seni <b>andırıyor</b>: \"acele et!\" — <b>baskı altında</b>."],
+  "on time":["SAAT ON","Buluşma <b>saat onda</b>, sen tam onda oradasın. <b>Zamanında</b>."],
+  "because":["Bİ KOZ","Elinde <b>bir koz</b> var, onu masaya koyup açıklıyorsun: \"<b>çünkü</b>...\""],
+  "people":["PİPOLULAR","Meydanı dolduran <b>pipolu</b> adamlar. Bir sürü var — o yüzden <b>zaten çoğul</b>, \"peoples\" deme."],
+  "money":["MANİ","<b>Para</b> manisine tutulmuş adam, gece gündüz sayıyor."],
+  "water":["VATER","Ustanın <b>vateri</b> (su terazisi) — içindeki <b>su</b> kabarcığı doğruyu söyler."],
+  "friend":["FREN","Gerçek <b>arkadaş</b> seni kötü bir şey yapmadan <b>frenler</b>."],
+  "answer":["ANSIRMAK","Öğretmen sorunca <b>cevap</b> ağzından <b>hapşırık</b> gibi fırlıyor."],
+  "question":["KES + ÇENE","Öğretmen <b>çeneni kesip</b> bir <b>soru</b> soruyor."],
+  "important":["İMPARATOR","<b>İmparator</b> salona giriyor, herkes ayağa kalkıyor. Çünkü <b>önemli</b>."],
+  "easy":["İZ","Karda bırakılmış <b>izleri</b> takip ediyorsun — düşünmeye gerek yok, <b>kolay</b>."],
+  "try":["TRAY (tepsi)","Elinde dolu bir <b>tepsi</b>, dökmeden taşımaya <b>çalışıyorsun</b>."],
+  "job":["CEP","Sabah gidip akşam <b>cebine</b> para koyan şey — <b>iş</b>."],
+  "team":["TİM","Özel harekât <b>timi</b> — beş kişi, tek yürek. <b>Ekip</b>."],
+  "improve ":["",""],
+  "solve a problem":["SOLVENT","Yapışkan lekeye <b>solvent</b> döküyorsun, leke kayboluyor. <b>Sorunu çözmek</b>."],
+  "communication":["KOMÜNİKASYON","Türkçede de var: <b>komünikasyon</b>. İki kişi arasındaki köprü — <b>iletişim</b>."],
+  "interested in":["İNTERES + İÇİNDE","Bir konunun <b>içine</b> (in) girecek kadar meraklısın. \"interested <b>with</b>\" deme — içine girilir."],
+  "finish":["FİNİŞ","Koşunun <b>finiş</b> çizgisini geçiyorsun. <b>Bitirmek</b>."],
+  "plan":["PLAN","Türkçede aynı: masaya serilmiş bir <b>plan</b>, üstünde oklar ve tarihler."]
+};
+
+/* ================= OKUMA BANKASI =================
+   Araştırma: metin %95-98 bilinen kelimeden oluşmazsa girdi gürültüye döner.
+   Bu yüzden metinler uygulamanın kendi kelime listesinden yazıldı. */
+const READINGS=[
+  {topic:"Günlük hayat",type:"hikaye",lvl:1,
+   en:"I wake up early every day. I make coffee and I eat bread. Then I go to work. My work is not easy, but I like it. In the evening I come home. I am tired but happy.",
+   tr:"Her gün erken uyanırım. Kahve yapar ve ekmek yerim. Sonra işe giderim. İşim kolay değil ama seviyorum. Akşam eve gelirim. Yorgunum ama mutluyum.",
+   vocab:"wake up = uyanmak\nearly = erken\ntired = yorgun"},
+  {topic:"Günlük hayat",type:"hikaye",lvl:2,
+   en:"Today is Monday. I have a lot of work. I plan my day in the morning: first the report, then the meeting. I finish the report before lunch. The meeting is at two o'clock. It is a long day, but I finish everything on time.",
+   tr:"Bugün Pazartesi. Çok işim var. Sabah günümü planlarım: önce rapor, sonra toplantı. Raporu öğle yemeğinden önce bitiririm. Toplantı saat ikide. Uzun bir gün ama her şeyi zamanında bitiririm.",
+   vocab:"a lot of = bir sürü\nbefore = önce\non time = zamanında"},
+  {topic:"Günlük hayat",type:"diyalog",lvl:1,
+   en:"A: Good morning! How are you?\nB: I am fine, thank you. And you?\nA: I am a little tired. I have a lot of work today.\nB: I understand. Do you want a coffee?\nA: Yes, please. That is a good idea.",
+   tr:"A: Günaydın! Nasılsın?\nB: İyiyim, teşekkürler. Ya sen?\nA: Biraz yorgunum. Bugün çok işim var.\nB: Anlıyorum. Kahve ister misin?\nA: Evet, lütfen. İyi fikir.",
+   vocab:"a little = biraz\nI understand = anlıyorum\nthat is a good idea = iyi fikir"},
+  {topic:"Mülakat",type:"hikaye",lvl:3,
+   en:"My name is Ali. I am a student at a university in Istanbul. I study engineering. Last year I worked in a small company. I was responsible for the reports. I learned a lot from that job. Now I am looking for an internship.",
+   tr:"Adım Ali. İstanbul'da bir üniversitede öğrenciyim. Mühendislik okuyorum. Geçen yıl küçük bir şirkette çalıştım. Raporlardan sorumluydum. O işten çok şey öğrendim. Şimdi bir staj arıyorum.",
+   vocab:"responsible for = -den sorumlu\nlearn from = -den öğrenmek\nlook for = aramak"},
+  {topic:"Mülakat",type:"diyalog",lvl:3,
+   en:"A: Tell me about yourself.\nB: I am a management engineering student. I am in my third year.\nA: What is your biggest strength?\nB: I learn quickly. For example, I learned a new program in one week.\nA: Very good. Do you have any questions for us?\nB: Yes. What does a normal day look like in this position?",
+   tr:"A: Bana kendinden bahset.\nB: İşletme mühendisliği öğrencisiyim. Üçüncü sınıftayım.\nA: En güçlü yönün ne?\nB: Hızlı öğrenirim. Örneğin yeni bir programı bir haftada öğrendim.\nA: Çok iyi. Bize sormak istediğin bir şey var mı?\nB: Evet. Bu pozisyonda normal bir gün nasıl geçiyor?",
+   vocab:"strength = güçlü yön\nfor example = örneğin\nposition = pozisyon"},
+  {topic:"Mülakat",type:"hikaye",lvl:4,
+   en:"In my last project, we had a problem. A big order was late. I called the supplier and I changed the plan. I worked with my team and we finished the work in two days. The customer was happy. What I learned from that was: do not wait, ask for help early.",
+   tr:"Son projemde bir sorunumuz vardı. Büyük bir sipariş gecikti. Tedarikçiyi aradım ve planı değiştirdim. Ekibimle çalıştım ve işi iki günde bitirdik. Müşteri memnun kaldı. Bundan öğrendiğim şey şu: bekleme, erken yardım iste."
+   ,vocab:"late = geç\nchange = değiştirmek\nask for help = yardım istemek"},
+  {topic:"Teknoloji",type:"hikaye",lvl:2,
+   en:"I use my phone every day. I read the news in the morning and I listen to music on the bus. Sometimes I use my phone too much. Now I have a new plan: no phone after ten o'clock. It is difficult, but I sleep better.",
+   tr:"Telefonumu her gün kullanırım. Sabah haberleri okur, otobüste müzik dinlerim. Bazen telefonu çok fazla kullanıyorum. Şimdi yeni bir planım var: saat ondan sonra telefon yok. Zor ama daha iyi uyuyorum.",
+   vocab:"too much = çok fazla\ndifficult = zor\nbetter = daha iyi"},
+  {topic:"Teknoloji",type:"diyalog",lvl:2,
+   en:"A: I can't find my keys.\nB: Are they on the table?\nA: No, I looked there. I am looking for them everywhere.\nB: Call your phone. Maybe the keys are with your bag.\nA: Good idea! Thank you very much.",
+   tr:"A: Anahtarlarımı bulamıyorum.\nB: Masanın üstünde mi?\nA: Hayır, oraya baktım. Her yerde arıyorum.\nB: Telefonunu ara. Belki anahtarlar çantanın yanındadır.\nA: İyi fikir! Çok teşekkürler.",
+   vocab:"can't find = bulamıyorum\neverywhere = her yerde\nmaybe = belki"},
+  {topic:"Seyahat",type:"hikaye",lvl:2,
+   en:"Last year I went to a small city near the sea. The people were very friendly. The food was good and not expensive. Every morning I walked and I looked at the sea. I want to go there again next year.",
+   tr:"Geçen yıl denize yakın küçük bir şehre gittim. İnsanlar çok cana yakındı. Yemek güzeldi ve pahalı değildi. Her sabah yürüdüm ve denize baktım. Gelecek yıl yine gitmek istiyorum.",
+   vocab:"near = yakın\nfriendly = cana yakın\nexpensive = pahalı"},
+  {topic:"Seyahat",type:"diyalog",lvl:1,
+   en:"A: Excuse me, where is the bathroom?\nB: It is over there, on the left.\nA: Sorry, can you speak more slowly?\nB: Of course. Go there, then look on the left.\nA: Thank you! I understand now.",
+   tr:"A: Affedersiniz, tuvalet nerede?\nB: Şurada, solda.\nA: Pardon, daha yavaş konuşabilir misiniz?\nB: Tabii. Oraya gidin, sonra sola bakın.\nA: Teşekkürler! Şimdi anladım.",
+   vocab:"excuse me = affedersiniz\non the left = solda\nof course = tabii"},
+  {topic:"Yemek",type:"hikaye",lvl:1,
+   en:"My mother makes very good food. On Sunday all the family comes to our home. We eat together and we speak about the week. I am happy on those days, because I love my family.",
+   tr:"Annem çok güzel yemek yapar. Pazar günü bütün aile evimize gelir. Birlikte yeriz ve haftayı konuşuruz. O günlerde mutluyum çünkü ailemi seviyorum.",
+   vocab:"together = birlikte\nspeak about = hakkında konuşmak\nthose days = o günler"},
+  {topic:"Yemek",type:"diyalog",lvl:2,
+   en:"A: Can I have the bill, please?\nB: Of course. Did you like the food?\nA: Yes, it was very good. How much is it?\nB: It is two hundred lira.\nA: Here you are. Thank you, have a nice day!",
+   tr:"A: Hesabı alabilir miyim, lütfen?\nB: Tabii. Yemeği beğendiniz mi?\nA: Evet, çok güzeldi. Ne kadar?\nB: İki yüz lira.\nA: Buyurun. Teşekkürler, iyi günler!",
+   vocab:"bill = hesap\nhow much = ne kadar\nhere you are = buyurun"}
+];
+
+/* ================= TUZAK TARAYICI (çevrimdışı) =================
+   Türkçe konuşanların corpus araştırmalarında en sık çıkan hataları yakalar.
+   Yüksek kesinlik ilkesi: emin olmadığın kalıbı işaretleme (yanlış alarm güveni bozar).
+   ponytail: tam gramer denetleyicisi değil — kapalı kalıp listesi. Yeni tuzak = yeni kural. */
+const V_BASE='go|come|work|study|like|want|need|know|think|see|make|get|have|speak|talk|learn|use|find|give|tell|ask|love|help|try|finish|plan|solve|manage|improve|apply|achieve|live|play|read|write|eat|drink|start|stop|open|close|walk|run|feel|look|listen|watch|buy|sell|drive|teach|call|meet|send|take|put|keep|leave|stay|arrive|understand|remember|forget|prepare|check|fix|build|create|design|test|answer|explain|decide|choose|change|move|grow|win|lose|sleep|wake|enjoy|prefer|hope|believe|agree';
+const V_JOB='teacher|student|engineer|doctor|nurse|driver|manager|worker|lawyer|designer|developer|intern|supervisor|programmer|architect|dentist|artist|writer|farmer|waiter|chef|pilot|soldier|scientist|singer|player';
+const PRE_AUX='can|could|will|would|shall|should|may|might|must|do|does|did|to|not|never|also|always|usually|often|sometimes|only|still|and|or|but|who|that|let';
+
+function third(v){
+  v=v.toLowerCase();
+  const irr={have:'has',go:'goes',do:'does',be:'is'};
+  if(irr[v])return irr[v];
+  if(/(o|s|x|z|ch|sh)$/.test(v))return v+'es';
+  if(/[^aeiou]y$/.test(v))return v.slice(0,-1)+'ies';
+  return v+'s';
+}
+
+const TRAPS=[
+  {id:'tobe_bare',
+   re:new RegExp('\\b(am|is|are|was|were)\\s+('+V_BASE+')\\b','i'),
+   ttl:'Gereksiz "to be"',
+   why:'Türkçede "gidiyorum" tek kelime, İngilizcede ya <b>to be</b> ya normal fiil olur — ikisi yan yana gelmez.',
+   fix:(s,m)=>s.replace(m[0],m[2]),
+   alt:(s,m)=>s.replace(m[0],m[1]+' '+m[2].replace(/e$/,'')+'ing')},
+  {id:'third_s',
+   re:new RegExp('(^|[^a-z])(he|she|it)\\s+('+V_BASE+')\\b','i'),
+   guard:(s,m)=>!new RegExp('\\b('+PRE_AUX+')\\s+'+m[3]+'\\b','i').test(s),
+   ttl:'3. tekil şahıs -s eksik',
+   why:'Corpus araştırmalarında Türkçe konuşanların <b>en sık</b> fiil hatası. <b>he / she / it</b> ile geniş zamanda fiile <b>-s</b> eklenir.',
+   fix:(s,m)=>s.replace(m[0],m[1]+m[2]+' '+third(m[3]))},
+  {id:'job_article',
+   re:new RegExp('\\b(am|is|are)\\s+('+V_JOB+')\\b','i'),
+   ttl:'Artikel (a/an) eksik',
+   why:'Türkçede "Ben mühendisim" dersin, artikel yok. İngilizcede sayılabilen tekil isimden önce <b>a/an</b> şart.',
+   fix:(s,m)=>s.replace(m[0],m[1]+' '+(/^[aeiou]/i.test(m[2])?'an':'a')+' '+m[2])},
+  {id:'no_be',
+   re:new RegExp('(^|[.!?]\\s*)(he|she|it|i|you|we|they)\\s+(a|an)\\s+('+V_JOB+')\\b','i'),
+   ttl:'"be" (am/is/are) eksik',
+   why:'Türkçede "O mühendis" derken fiil yok. İngilizcede <b>am/is/are</b> asla atlanmaz.',
+   fix:(s,m)=>{const p=m[2].toLowerCase();const be=p==='i'?'am':(p==='you'||p==='we'||p==='they')?'are':'is';
+     const art=/^[aeiou]/i.test(m[4])?'an':'a';/* a/an'ı isme göre düzelt */
+     return s.replace(m[0],m[1]+m[2]+' '+be+' '+art+' '+m[4]);}},
+  {id:'resp_from',re:/\bresponsible\s+from\b/i,
+   ttl:'responsible <b>from</b> ✗',
+   why:'Türkçe "-den sorumlu" doğrudan çevrilmiş. Doğrusu <b>responsible for</b>.',
+   fix:s=>s.replace(/\bresponsible\s+from\b/i,'responsible for')},
+  {id:'interested_with',re:/\binterested\s+(with|to|about)\b/i,
+   ttl:'interested <b>in</b> olmalı',
+   why:'"-ile ilgileniyorum" düşüncesiyle <i>with</i> denir. Doğrusu <b>interested in</b>.',
+   fix:s=>s.replace(/\binterested\s+(with|to|about)\b/i,'interested in')},
+  {id:'apply_to',re:/\b(appl(?:y|ied|ying))\s+to\s+(a|an|the|this)?\s*(job|position|internship)\b/i,
+   ttl:'apply <b>for</b> olmalı',
+   why:'Pozisyona başvururken <b>apply for</b>, kuruma başvururken <b>apply to</b>.',
+   fix:(s,m)=>s.replace(new RegExp('\\b'+m[1]+'\\s+to\\b','i'),m[1]+' for')},
+  {id:'lower_i',re:/(^|[\s(])i(?=[\s'.,!?]|$)/,
+   ttl:'"I" her zaman büyük',
+   why:'İngilizcede "ben" anlamındaki <b>I</b> cümlenin neresinde olursa olsun büyük yazılır.',
+   fix:s=>s.replace(/(^|[\s(])i(?=[\s'.,!?]|$)/g,'$1I')},
+  {id:'am_agree',re:/\b(am|is|are)\s+agree\b/i,
+   ttl:'"agree" fiildir',
+   why:'<b>agree</b> zaten fiil — yanına am/is/are gelmez.',
+   fix:s=>s.replace(/\b(am|is|are)\s+agree\b/i,'agree')},
+  /* Sadece yaş anlamında ateşle. "two years of experience" DOĞRU cümledir — dokunma. */
+  {id:'have_years',re:/\b(i|he|she|we|they|you)\s+(have|has)\s+(\d+|one|two|three|ten|twenty|thirty)\s+years?(\s+old)?\b(?!\s*(?:of|in|at|experience|working))/i,
+   ttl:'Yaş: "be" ile söylenir',
+   why:'Türkçe "20 yaşındayım" → <i>I have 20 years</i> değil. Doğrusu <b>I am 20 years old</b>.',
+   fix:(s,m)=>{const p=m[1].toLowerCase();const be=p==='i'?'am':(p==='you'||p==='we'||p==='they')?'are':'is';
+     return s.replace(m[0],m[1]+' '+be+' '+m[3]+' years old');}},
+  {id:'plural_s',
+   re:/\b(two|three|four|five|six|seven|eight|nine|ten|many|several|\d+)\s+(year|day|hour|week|month|book|car|friend|people_|project|report|word|question|problem|skill|company|team|job|student|thing|time)\b(?!s)/i,
+   ttl:'Çoğul -s eksik',
+   why:'Türkçede "üç kitap" dersin, kelime tekil kalır. İngilizcede sayıdan sonra <b>-s</b> gelir.',
+   fix:(s,m)=>s.replace(m[0],m[1]+' '+(m[2]==='company'?'companies':m[2]+'s'))},
+  {id:'peoples',re:/\b(peoples|informations|advices|childrens|equipments|softwares)\b/i,
+   ttl:'Bu kelime çoğul olmaz',
+   why:'<b>people, information, advice, children, equipment, software</b> — bunlara -s eklenmez.',
+   fix:s=>s.replace(/\b(peoples|informations|advices|childrens|equipments|softwares)\b/i,x=>({peoples:'people',informations:'information',advices:'advice',childrens:'children',equipments:'equipment',softwares:'software'})[x.toLowerCase()])},
+  {id:'every_days',re:/\bevery\s+(days|years|weeks|months|mornings|nights)\b/i,
+   ttl:'"every" + tekil',
+   why:'<b>every</b> tekil ister: every <b>day</b>, every <b>year</b>.',
+   fix:s=>s.replace(/\bevery\s+(days|years|weeks|months|mornings|nights)\b/i,(x,w)=>'every '+w.slice(0,-1))},
+  {id:'more_better',re:/\bmore\s+(better|worse|bigger|easier|harder|faster)\b/i,
+   ttl:'Çifte karşılaştırma',
+   why:'<b>better</b> zaten "daha iyi" demek — başına <i>more</i> gelmez.',
+   fix:s=>s.replace(/\bmore\s+(better|worse|bigger|easier|harder|faster)\b/i,'$1')},
+  {id:'speak_than',re:/\b(speak|talk|speaking|talking)\s+(than|from)\b/i,
+   ttl:'"about" olmalı',
+   why:'Türkçe "-dan bahsetmek" doğrudan çevrilmiş. Bir konu hakkında konuşmak = <b>talk about</b>.',
+   fix:s=>s.replace(/\b(speak|talk|speaking|talking)\s+(than|from)\b/i,'$1 about')}
+];
+
+function checkEnglish(text){
+  let cur=String(text).trim(), found=[], alt=null;
+  TRAPS.forEach(t=>{
+    const m=cur.match(t.re);
+    if(!m)return;
+    if(t.guard&&!t.guard(cur,m))return;
+    const before=cur;
+    cur=t.fix(cur,m);
+    if(cur===before)return;
+    if(t.alt&&!alt)alt=t.alt(before,m);
+    found.push({ttl:t.ttl,why:t.why});
+  });
+  if(cur&&!/[.!?]$/.test(cur))cur+='.';
+  cur=cur.charAt(0).toUpperCase()+cur.slice(1);
+  return {fixed:cur,found,alt};
+}
+
 /* ================= STORAGE ================= */
 const mem = {};
 const store = {
@@ -655,22 +868,9 @@ function speak(text,rate){
 let toastTimer;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1900);}
 
-/* ================= AI (Claude-in-Claude) ================= */
-async function askClaude(prompt){
-  const ctrl=new AbortController();
-  const timer=setTimeout(()=>ctrl.abort(),45000);
-  try{
-    const r=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json"},signal:ctrl.signal,
-      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:prompt}]})
-    });
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    const data=await r.json();
-    const text=(data.content||[]).filter(b=>b&&b.type==="text").map(b=>b.text).join("\n").trim();
-    if(!text)throw new Error("empty");
-    return text;
-  }finally{clearTimeout(timer);}
-}
+/* Not: eski sürüm buradan Anthropic API'sine istek atıyordu. Tarayıcı bu çağrıyı
+   engelliyor (CORS) ve anahtar da yok — bu yüzden tüm koçluk özellikleri
+   çevrimdışı çalışacak şekilde yeniden yazıldı. Ağ gerektiren kod kalmadı. */
 
 /* ================= SRS (expanding intervals) ================= */
 function isMastered(st){return st&&(st.box>=6||(st.interval||0)>=35);}
@@ -895,39 +1095,26 @@ function revealAnswer(w,card){
     <div class="ex-en"><button class="say sm" aria-label="Cümleyi dinle" data-say="${esc(w.exEn)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><span>${esc(w.exEn)}</span></div>
     <div class="ex-tr">${esc(w.exTr)}</div>
     ${w.tip?`<div class="tip"><div class="tt">💡 Türkçe konuşana ipucu</div>${w.tip}</div>`:''}
-    ${((states[w.id]&&states[w.id].box)||0)<3?'<button class="mnem-btn" id="mnemBtn">🧠 Hafıza ipucu üret (AI)</button>':''}
+    ${(((states[w.id]&&states[w.id].box)||0)<3&&mnemFor(w))?'<button class="mnem-btn" id="mnemBtn">🧠 Hafıza ipucu göster</button>':''}
     <div id="mnemSlot"></div>
     <div class="rate"><button class="again" data-r="again">Tekrar<small>&lt; 1 dk</small></button><button class="hard" data-r="hard">Zor<small>kısa aralık</small></button><button class="easy" data-r="easy">Kolay<small>uzun aralık</small></button></div>
   </div>`);
   prompt.appendChild(ans);
   ans.querySelector('.say').addEventListener('click',e=>speak(e.currentTarget.dataset.say));
-  const mb=ans.querySelector('#mnemBtn');if(mb)mb.addEventListener('click',()=>genMnemonic(w,ans));
+  const mb=ans.querySelector('#mnemBtn');if(mb)mb.addEventListener('click',()=>showMnemonic(w,ans));
   ans.querySelectorAll('.rate button').forEach(b=>b.addEventListener('click',()=>answerCard(w.id,b.dataset.r)));
 }
 
-async function genMnemonic(w,ans){
-  const btn=ans.querySelector('#mnemBtn');const slot=ans.querySelector('#mnemSlot');
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Düşünüyor...';
-  const prompt=`Sen Türkçe konuşan, İngilizceye yeni başlayan bir öğrenciye yardım eden bir hafıza (mnemonik) uzmanısın. "Anahtar kelime yöntemi"ni kullan: İngilizce kelimeye SES olarak benzeyen bir Türkçe kelime bul, sonra o Türkçe kelime ile İngilizce kelimenin anlamını birleştiren CANLI, komik ve abartılı bir zihinsel sahne anlat. Kısa ve akılda kalıcı olsun.
+function mnemFor(w){return MNEM[cleanForSpeech(w.en).toLowerCase()]||null;}
 
-İngilizce kelime: "${cleanForSpeech(w.en)}"
-Anlamı: "${w.tr}"
-
-Tam olarak şu formatta, SADECE Türkçe yaz (başka açıklama ekleme):
-🔑 Ses köprüsü: (kelime nasıl okunur + hangi Türkçe kelimeyi çağrıştırıyor)
-🎬 Hayal et: (2-3 cümlelik canlı, komik sahne)
-
-Toplam 65 kelimeyi geçme.`;
-  try{
-    const out=await askClaude(prompt);
-    slot.innerHTML='';
-    slot.appendChild(el(`<div class="mnem-box"><div class="mh">🧠 Anahtar kelime yöntemi</div>${mdLite(out)}</div>`));
-    btn.style.display='none';
-  }catch(e){
-    slot.innerHTML='';
-    slot.appendChild(el(`<div class="ai-err">Hafıza ipucu şu an üretilemedi. İnternet/bağlantı gerektirir — birazdan tekrar dene.</div>`));
-    btn.disabled=false;btn.innerHTML='🧠 Hafıza ipucu üret (AI)';
-  }
+function showMnemonic(w,ans){
+  const btn=ans.querySelector('#mnemBtn'),slot=ans.querySelector('#mnemSlot'),m=mnemFor(w);
+  if(!m)return;
+  slot.innerHTML='';
+  slot.appendChild(el(`<div class="mnem-box"><div class="mh">🧠 Anahtar kelime yöntemi</div>
+    <div><b>🔑 Ses köprüsü:</b> ${m[0]}</div>
+    <div style="margin-top:7px;"><b>🎬 Hayal et:</b> ${m[1]}</div></div>`));
+  btn.style.display='none';
 }
 
 function answerCard(id,rating){
@@ -990,14 +1177,14 @@ function renderAI(){
 
 function renderAIRead(){
   const area=$('#aiRead');area.innerHTML='';
-  const topics=["Günlük hayat","Fotoğrafçılık","Teknoloji","Seyahat","Yemek"];
+  const topics=["Günlük hayat","Mülakat","Teknoloji","Seyahat","Yemek"];
   const wrap=el(`<div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">Konu seç:</div>
     <div class="chips" id="topicChips"></div>
     <div class="segment" id="typeSeg" style="margin-bottom:14px;"><button data-t="hikaye" class="on">Kısa hikâye</button><button data-t="diyalog">Diyalog</button></div>
-    <button class="ai-btn" id="genReadBtn">✨ Seviyeme uygun metin üret</button>
+    <button class="ai-btn" id="genReadBtn">📖 Seviyeme uygun metin getir</button>
     <div id="readOut"></div>
-    <div class="ai-note">Metin, bildiğin kelimelerin biraz üstünde (i+1) ve senin seviyene göre üretilir — araştırmaların \"anlaşılır girdi\" ilkesi.</div>
+    <div class="ai-note">Metinler bu uygulamanın kelime listesinden yazıldı — yani neredeyse tamamı tanıdık gelir. Araştırma: metnin %95'i bilinmiyorsa girdi öğretmez, gürültü olur.</div>
   </div>`);
   area.appendChild(wrap);
   const chips=wrap.querySelector('#topicChips');
@@ -1012,104 +1199,83 @@ function renderAIRead(){
   wrap.querySelector('#genReadBtn').addEventListener('click',()=>genReading());
 }
 
-async function genReading(){
-  const btn=$('#genReadBtn');const out=$('#readOut');
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Yazıyor...';
-  out.innerHTML='';
+let readSeen=[];
+function genReading(){
+  const out=$('#readOut');out.innerHTML='';
+  // Seviyeye göre süz: ilerledikçe daha uzun metinler açılır
   const seenCount=Object.values(states).filter(s=>s.seen).length;
-  const level=seenCount<20?"çok basit (A1, sadece en temel kelimeler ve am/is/are, basit geniş zaman)":seenCount<45?"basit (A1-A2)":"A2 seviyesi";
-  const prompt=`Sen İngilizce öğreten sabırlı bir öğretmensin. Türkçe konuşan, İngilizceye yeni başlayan bir öğrenci için ${level} bir İngilizce ${aiType==='hikaye'?'kısa hikâye':'kısa diyalog'} yaz. Konu: "${aiTopic}". 
-
-Kurallar:
-- 4-6 kısa cümle.
-- Sadece çok yaygın kelimeler kullan.
-- Cümleler kısa ve net olsun.
-
-Tam olarak şu formatta yaz (etiketleri aynen kullan):
-[EN]
-(İngilizce metin buraya)
-[TR]
-(Türkçe çeviri buraya)
-[KELIME]
-kelime1 = anlamı
-kelime2 = anlamı
-kelime3 = anlamı
-
-Başka hiçbir açıklama ekleme.`;
-  try{
-    const raw=await askClaude(prompt);
-    out.appendChild(buildReadCard(raw));
-  }catch(e){
-    out.appendChild(el(`<div class="ai-err">Metin şu an üretilemedi (bağlantı gerekir). Birazdan tekrar dene.</div>`));
-  }
-  btn.disabled=false;btn.innerHTML='✨ Seviyeme uygun metin üret';
+  const maxLvl=seenCount<20?2:seenCount<50?3:5;
+  let pool=READINGS.filter(r=>r.topic===aiTopic&&r.type===aiType&&r.lvl<=maxLvl);
+  if(!pool.length)pool=READINGS.filter(r=>r.topic===aiTopic);
+  if(!pool.length)pool=READINGS.filter(r=>r.lvl<=maxLvl);
+  if(!pool.length)pool=READINGS;
+  // aynı metni üst üste verme
+  let fresh=pool.filter(r=>!readSeen.includes(r.en));
+  if(!fresh.length){readSeen=[];fresh=pool;}
+  const r=fresh[Math.floor(Math.random()*fresh.length)];
+  readSeen.push(r.en);
+  out.appendChild(buildReadCard(r));
 }
 
-function buildReadCard(raw){
-  let en="",tr="",vocab="";
-  const enM=raw.match(/\[EN\]([\s\S]*?)(\[TR\]|$)/i);
-  const trM=raw.match(/\[TR\]([\s\S]*?)(\[KELIME\]|$)/i);
-  const vM=raw.match(/\[KELIME\]([\s\S]*)$/i);
-  en=(enM?enM[1]:raw).trim();tr=(trM?trM[1]:"").trim();vocab=(vM?vM[1]:"").trim();
+function buildReadCard(r){
   const card=el(`<div class="ai-out">
-    <div class="en-text">${mdLite(en)}</div>
-    <button class="ai-btn" id="playRead" style="margin-top:14px;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Dinle</button>
-    ${tr?`<div class="lbl">Türkçe</div><div class="tr-text">${mdLite(tr)}</div>`:''}
-    ${vocab?`<div class="lbl">Yeni kelimeler</div><div class="vocab">${mdLite(vocab)}</div>`:''}
+    <div class="en-text">${mdLite(r.en)}</div>
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button class="ai-btn" id="playRead" style="flex:1;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Dinle</button>
+      <button class="ai-btn" id="playSlow" style="width:auto;padding:11px 16px;background:var(--bg3);color:var(--violet);font-size:13.5px;">🐢</button>
+    </div>
+    <button class="ai-btn" id="showTr" style="margin-top:8px;background:var(--bg3);color:#EDEEF7;font-size:13px;padding:10px;">🇹🇷 Türkçesini göster</button>
+    <div id="trSlot" hidden><div class="lbl">Türkçe</div><div class="tr-text">${mdLite(r.tr)}</div></div>
+    <div class="lbl">Kilit kelimeler</div><div class="vocab">${mdLite(r.vocab)}</div>
   </div>`);
-  card.querySelector('#playRead').addEventListener('click',()=>speak(en.replace(/\n/g,' '),0.85));
+  const flat=r.en.replace(/\n/g,' ').replace(/^A:|B:/g,'');
+  card.querySelector('#playRead').addEventListener('click',()=>speak(flat,0.85));
+  card.querySelector('#playSlow').addEventListener('click',()=>speak(flat,0.6));
+  const trSlot=card.querySelector('#trSlot'),trBtn=card.querySelector('#showTr');
+  trBtn.addEventListener('click',()=>{
+    trSlot.hidden=!trSlot.hidden;
+    trBtn.textContent=trSlot.hidden?'🇹🇷 Türkçesini göster':'🙈 Türkçesini gizle';
+  });
   return card;
 }
 
 function renderAIWrite(){
   const area=$('#aiWrite');area.innerHTML='';
   const wrap=el(`<div>
-    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">İngilizce bir cümle yaz — AI, Türkçe konuşanların sık yaptığı hatalara göre nazikçe düzeltsin. <b>Üretmek, hataları görmenin en hızlı yoludur.</b></div>
-    <textarea class="taread" id="writeInput" placeholder="Örn: I go to school every day. She go to work..."></textarea>
-    <button class="ai-btn" id="checkWriteBtn" style="margin-top:12px;">✍️ Kontrol et ve düzelt</button>
+    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">İngilizce bir cümle yaz — Türkçe konuşanların <b>en sık 15 tuzağını</b> tarayıp düzeltirim. <b>Üretmek, hataları görmenin en hızlı yoludur.</b></div>
+    <textarea class="taread" id="writeInput" placeholder="Örn: She go to work. I am go to school. I am teacher..."></textarea>
+    <button class="ai-btn" id="checkWriteBtn" style="margin-top:12px;">🔍 Tuzakları tara</button>
     <div id="writeOut"></div>
   </div>`);
   area.appendChild(wrap);
   wrap.querySelector('#checkWriteBtn').addEventListener('click',()=>checkWriting());
 }
 
-async function checkWriting(){
-  const input=$('#writeInput');const out=$('#writeOut');const btn=$('#checkWriteBtn');
+function checkWriting(){
+  const input=$('#writeInput'),out=$('#writeOut');
   const text=input.value.trim();
   if(!text){toast('Önce bir cümle yaz');return;}
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Kontrol ediyor...';
   out.innerHTML='';
-  const prompt=`Sen nazik ve cesaretlendirici bir İngilizce öğretmenisin. Öğrenci Türkçe konuşan bir başlangıç seviyesi öğrencisi. Onun yazdığı İngilizce cümleyi kontrol et. Türkçe konuşanların sık yaptığı şu hatalara özellikle dikkat et: artikel (a/an/the) eksikliği, çoğul -s eksikliği, üçüncü tekil şahıs -s (he goes), gereksiz "to be" (I am go → yanlış), kelime sırası, edat hataları.
-
-Öğrencinin cümlesi: "${text}"
-
-Tam olarak şu formatta, Türkçe açıklamayla yaz (etiketleri aynen kullan):
-[DOGRU]
-(düzeltilmiş İngilizce cümle — cümle zaten doğruysa aynen yaz)
-[ACIKLAMA]
-(kısaca neyi neden değiştirdin; Türkçe; nazik ve kısa. Doğruysa "Harika, cümlen doğru!" de ve küçük bir ipucu ekle)
-
-Başka hiçbir şey yazma.`;
-  try{
-    const raw=await askClaude(prompt);
-    out.appendChild(buildWriteCard(raw));
-  }catch(e){
-    out.appendChild(el(`<div class="ai-err">Kontrol şu an yapılamadı (bağlantı gerekir). Birazdan tekrar dene.</div>`));
-  }
-  btn.disabled=false;btn.innerHTML='✍️ Kontrol et ve düzelt';
+  out.appendChild(buildCheckCard(text,checkEnglish(text)));
 }
 
-function buildWriteCard(raw){
-  const cM=raw.match(/\[DOGRU\]([\s\S]*?)(\[ACIKLAMA\]|$)/i);
-  const aM=raw.match(/\[ACIKLAMA\]([\s\S]*)$/i);
-  const corrected=(cM?cM[1]:raw).trim();const expl=(aM?aM[1]:"").trim();
+/* Tuzak taramasının sonucunu kart olarak bas. ref = varsa doğru çeviri (Çevir modu). */
+function buildCheckCard(original,res,ref){
+  const clean=!res.found.length;
   const card=el(`<div class="ai-out">
-    <div class="lbl" style="color:var(--mint);">✅ Doğru hâli</div>
-    <div class="en-text">${mdLite(corrected)}</div>
-    <button class="ai-btn" id="playCorr" style="margin-top:12px;background:var(--bg3);color:var(--mint);font-size:13.5px;padding:11px;">🔊 Doğru cümleyi dinle</button>
-    ${expl?`<div class="lbl">📝 Açıklama</div><div class="tr-text">${mdLite(expl)}</div>`:''}
+    <div class="lbl" style="color:${clean?'var(--mint)':'var(--accent)'};">${clean?'✅ Bilinen tuzaklara takılmadın':'🔧 Düzeltilmiş hâli'}</div>
+    <div class="en-text">${esc(res.fixed)}</div>
+    <button class="ai-btn" id="playCorr" style="margin-top:12px;background:var(--bg3);color:var(--mint);font-size:13.5px;padding:11px;">🔊 Dinle</button>
+    ${res.alt?`<div class="lbl">Şu an oluyorsa</div><div class="tr-text">${esc(res.alt)}</div>`:''}
+    ${res.found.length?`<div class="lbl">📝 Yakalananlar</div>${res.found.map(f=>
+        `<div class="vocab" style="margin-bottom:7px;"><b style="color:var(--accent);">${f.ttl}</b><br>${f.why}</div>`).join('')}`
+      :`<div class="lbl">📝 Not</div><div class="tr-text">Türkçe konuşanların en sık 15 tuzağını taradım, hiçbirine takılmamışsın. Bu tam bir dilbilgisi denetimi değil — kelime seçimi ve doğallık için ${ref?'aşağıdaki örnek çeviriye bak.':'aynı cümleyi <b>Cümle → Çevir</b> bölümünde dene, orada karşılaştırma yapabilirsin.'}</div>`}
+    ${ref?`<div class="lbl" style="color:var(--violet);">🎯 Örnek çeviri</div><div class="en-text" style="font-size:15px;">${esc(ref)}</div>
+      <button class="ai-btn" id="playRef" style="margin-top:10px;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Örneği dinle</button>`:''}
   </div>`);
-  card.querySelector('#playCorr').addEventListener('click',()=>speak(corrected.replace(/\n/g,' '),0.85));
+  card.querySelector('#playCorr').addEventListener('click',()=>speak(res.fixed,0.85));
+  const pr=card.querySelector('#playRef');
+  if(pr)pr.addEventListener('click',()=>speak(ref,0.85));
   return card;
 }
 
@@ -1189,41 +1355,50 @@ function renderSentTiles(){
 function renderSentTranslate(){
   const area=$('#sentTranslate');
   if(area.dataset.init)return;area.dataset.init='1';
-  const prompts=["Ben her gün İngilizce çalışırım.","O bir ofiste çalışıyor.","Yardımına ihtiyacım var.","Bu pozisyona başvurdum.","Ekip içinde çalışmayı severim.","Yarın seninle konuşmak istiyorum.","Sorunu hızlıca çözdük.","İki yıllık deneyimim var."];
+  const prompts=[
+    {tr:"Ben her gün İngilizce çalışırım.",en:"I study English every day."},
+    {tr:"O bir ofiste çalışıyor.",en:"He works in an office."},
+    {tr:"Yardımına ihtiyacım var.",en:"I need your help."},
+    {tr:"Bu pozisyona başvurdum.",en:"I applied for this position."},
+    {tr:"Ekip içinde çalışmayı severim.",en:"I like working in a team."},
+    {tr:"Yarın seninle konuşmak istiyorum.",en:"I want to talk to you tomorrow."},
+    {tr:"Sorunu hızlıca çözdük.",en:"We solved the problem quickly."},
+    {tr:"İki yıllık deneyimim var.",en:"I have two years of experience."},
+    {tr:"Raporlardan ben sorumluydum.",en:"I was responsible for the reports."},
+    {tr:"O bir mühendis.",en:"He is an engineer."},
+    {tr:"Projeyi zamanında bitirdik.",en:"We finished the project on time."},
+    {tr:"Baskı altında iyi çalışırım.",en:"I work well under pressure."},
+    {tr:"Yirmi yaşındayım.",en:"I am twenty years old."},
+    {tr:"Şirketinizle ilgileniyorum.",en:"I am interested in your company."},
+    {tr:"Üç kitabım var.",en:"I have three books."}
+  ];
   const wrap=el(`<div>
-    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">Türkçe cümleyi İngilizceye çevir — AI kontrol etsin. Bu, cümle kurmanın en zorlu ve en öğretici hali.</div>
+    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">Türkçe cümleyi İngilizceye çevir. Tuzak taraması + örnek çeviri ile karşılaştırma alırsın. Bu, cümle kurmanın en zorlu ve en öğretici hali.</div>
     <div class="scard" style="margin-bottom:13px;"><div class="strq" id="trPrompt"></div>
       <button class="btn ghost" id="trNew" style="width:auto;padding:8px 14px;font-size:12.5px;margin-top:8px;background:var(--bg3);color:var(--muted);border:1px solid var(--line2);">🔀 Başka cümle</button>
     </div>
     <textarea class="taread" id="trInput" placeholder="İngilizcesini buraya yaz..."></textarea>
-    <button class="ai-btn" id="trCheck" style="margin-top:12px;">✍️ AI kontrol etsin</button>
+    <button class="ai-btn" id="trCheck" style="margin-top:12px;">🔍 Kontrol et</button>
     <div id="trOut"></div>
   </div>`);
   area.appendChild(wrap);
-  const pick=()=>{wrap.querySelector('#trPrompt').textContent=prompts[Math.floor(Math.random()*prompts.length)];wrap.querySelector('#trInput').value='';wrap.querySelector('#trOut').innerHTML='';};
+  let cur=prompts[0];
+  const pick=()=>{
+    cur=prompts[Math.floor(Math.random()*prompts.length)];
+    wrap.querySelector('#trPrompt').textContent=cur.tr;
+    wrap.querySelector('#trInput').value='';wrap.querySelector('#trOut').innerHTML='';
+  };
   pick();
   wrap.querySelector('#trNew').addEventListener('click',pick);
-  wrap.querySelector('#trCheck').addEventListener('click',async()=>{
-    const tr=wrap.querySelector('#trPrompt').textContent;
+  wrap.querySelector('#trCheck').addEventListener('click',()=>{
     const attempt=wrap.querySelector('#trInput').value.trim();
-    const out=wrap.querySelector('#trOut');const btn=wrap.querySelector('#trCheck');
+    const out=wrap.querySelector('#trOut');
     if(!attempt){toast('Önce çevirini yaz');return;}
-    btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Kontrol ediyor...';out.innerHTML='';
-    const prompt=`Sen nazik bir İngilizce öğretmenisin. Türkçe konuşan başlangıç seviyesi öğrenci şu Türkçe cümleyi İngilizceye çevirdi.
-
-Türkçe cümle: "${tr}"
-Öğrencinin çevirisi: "${attempt}"
-
-Türkçe konuşanların tipik hatalarına dikkat et (artikel, çoğul -s, 3. tekil -s, gereksiz to be, kelime sırası, edatlar). Tam olarak şu formatta yaz:
-[DOGRU]
-(en doğal İngilizce çeviri)
-[ACIKLAMA]
-(Türkçe, kısa ve nazik: çeviri doğruysa öv; değilse neyi neden düzelttiğini açıkla)
-
-Başka bir şey yazma.`;
-    try{const raw=await askClaude(prompt);out.appendChild(buildWriteCard(raw));}
-    catch(e){out.appendChild(el('<div class="ai-err">Kontrol şu an yapılamadı (bağlantı gerekir). Birazdan tekrar dene.</div>'));}
-    btn.disabled=false;btn.innerHTML='✍️ AI kontrol etsin';
+    out.innerHTML='';
+    const res=checkEnglish(attempt);
+    const exact=normAns(res.fixed)===normAns(cur.en);
+    out.appendChild(buildCheckCard(attempt,res,cur.en));
+    if(exact)toast('🎯 Örnek çeviriyle birebir aynı!');
   });
 }
 
@@ -1270,7 +1445,21 @@ const INTERVIEW_QA=[
    tr:"Bir sınav haftasından önce proje teslimim de vardı. Basit bir plan yaptım, kısa bloklar hâlinde çalıştım ve takım arkadaşımdan yardım istedim. Her şeyi zamanında bitirdik.",
    note:"\"under pressure\" kalıbını aynen kullan. Panik değil yöntem anlat: plan + öncelik + yardım istemek."}
 ];
-let mockHistory=[];// {role,content}
+/* Her soruda görüşmecinin duymak istediği anahtar kalıplar — cevap kapsaması bunlarla ölçülür */
+const MOCK_KEYS={
+  "Tell me about yourself.":["student","study","university","experience","learn"],
+  "What are your strengths.":["strength","learn","example","quickly"],
+  "What are your strengths?":["strength","learn","example","quickly"],
+  "What is your weakness?":["weakness","improve","but","now"],
+  "Tell me about a challenge you solved.":["problem","team","result","finish","solve"],
+  "Why do you want to work here?":["company","skill","team","interested"],
+  "Where do you see yourself in five years?":["years","learn","responsibility","grow"],
+  "Do you have any questions for us?":["question","position","success","normal day"],
+  "What do you want to learn from this internship?":["learn","team","skill","experience"],
+  "Tell me about a course project you worked on.":["project","responsible","team","report"],
+  "Tell me about a time you worked under pressure.":["pressure","plan","time","help","finish"]
+};
+let mockIdx=0;
 
 /* ===== Konuşma tanıma (özellik algılamalı — Chrome/Edge; file:// ve Firefox'ta yok) ===== */
 const SRCls=window.SpeechRecognition||window.webkitSpeechRecognition||null;
@@ -1397,14 +1586,14 @@ function renderMock(){
   const area=$('#intMock');
   if(area.dataset.init)return;area.dataset.init='1';
   area.appendChild(el(`<div>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">AI görüşmeci rolünde. Sorulara <b>İngilizce</b> cevap ver; her cevabından sonra kısa Türkçe geri bildirim + daha iyi hali gelir. Gerçek görüşme stresi olmadan pratik yap.</p>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">Görüşmeci 10 soruyu sırayla soruyor. Sorulara <b>İngilizce</b> cevap ver; her cevaptan sonra tuzak taraması, anahtar kalıp kontrolü ve örnek cevap gelir. Gerçek görüşme stresi olmadan pratik yap.</p>
     <div class="chat" id="chatLog"></div>
     <div class="chatrow">${SRCls?'<button class="micbtn" id="chatMic" aria-label="Sesli cevap ver">🎙</button>':''}<textarea id="chatInput" placeholder="Cevabını İngilizce yaz${SRCls?' veya 🎙 ile söyle':''}..." rows="2"></textarea><button class="send" id="chatSend" aria-label="Gönder">➤</button></div>
+    <button class="btn" id="mockReset" style="margin-top:10px;background:var(--bg3);color:var(--muted);border:1px solid var(--line2);font-size:13px;padding:10px;">↺ Mülakatı baştan başlat</button>
   </div>`));
-  const firstQ="Hello! Welcome to the interview. Let's start with an easy question: Can you tell me about yourself?";
-  addBubble('ai',firstQ,"Merhaba! Mülakata hoş geldin. Kolay bir soruyla başlayalım: Bana kendinden bahseder misin?");
-  mockHistory=[{role:"assistant",content:firstQ}];
+  startMock();
   $('#chatSend').addEventListener('click',sendMock);
+  $('#mockReset').addEventListener('click',startMock);
   $('#chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMock();}});
   if(SRCls){
     const mic=$('#chatMic');let mrec=null;
@@ -1416,53 +1605,84 @@ function renderMock(){
   }
 }
 
+function startMock(){
+  mockIdx=0;
+  $('#chatLog').innerHTML='';
+  $('#chatSend').disabled=false;
+  addBubble('ai',"Hello! Welcome to the interview. Thank you for coming today.","Merhaba! Mülakata hoş geldin. Bugün geldiğin için teşekkürler.");
+  askMockQ();
+}
+
+function askMockQ(){
+  const q=INTERVIEW_QA[mockIdx];
+  addBubble('ai',q.q,q.qtr);
+  setTimeout(()=>speak(q.q,0.85),350);
+}
+
+function sendMock(){
+  const input=$('#chatInput'),send=$('#chatSend');
+  const text=input.value.trim();
+  if(!text)return;
+  const q=INTERVIEW_QA[mockIdx];
+  input.value='';
+  addBubble('me',text);
+
+  // 1) tuzak taraması  2) anahtar kalıp kapsaması  3) uzunluk
+  const res=checkEnglish(text);
+  const keys=MOCK_KEYS[q.q]||[];
+  const low=' '+text.toLowerCase()+' ';
+  const hit=keys.filter(k=>low.includes(k.toLowerCase()));
+  const miss=keys.filter(k=>!hit.includes(k));
+  const words=text.split(/\s+/).filter(Boolean).length;
+
+  let fb='';
+  if(res.found.length){
+    fb+='⚠️ '+res.found.map(f=>f.ttl.replace(/<[^>]+>/g,'')).join(', ')+'<br><b>Daha iyi hali:</b> '+esc(res.fixed);
+  }else{
+    fb+='✅ Bilinen dilbilgisi tuzaklarına takılmadın.';
+  }
+  if(words<8)fb+='<br>📏 Cevap kısa ('+words+' kelime). Mülakatta 25-45 kelime hedefle — bir örnek ekle.';
+  else if(words>90)fb+='<br>📏 Biraz uzun ('+words+' kelime). 30-45 saniye yeterli, özet konuş.';
+  if(keys.length){
+    fb+='<br>🎯 Anahtar kalıplar: '+(hit.length?'<b>'+hit.join(', ')+'</b> ✓':'—');
+    if(miss.length)fb+=' &nbsp;·&nbsp; eksik: '+miss.join(', ');
+  }
+
+  addBubble('ai','',null,fb);
+  // örnek cevabı göster
+  const log=$('#chatLog');
+  const model=el(`<div class="bubble ai" style="max-width:100%;">
+    <div style="font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--violet);font-weight:700;margin-bottom:6px;">📖 Örnek cevap</div>
+    <div>${esc(q.en)}</div>
+    <div class="b-tr">${esc(q.tr)}</div>
+    <button class="b-say">🔊 Dinle</button>
+  </div>`);
+  model.querySelector('.b-say').addEventListener('click',()=>speak(q.en,0.85));
+  log.appendChild(model);
+
+  mockIdx++;
+  if(mockIdx>=INTERVIEW_QA.length){
+    addBubble('ai',"That's all my questions. Thank you for your time. We will contact you soon!","Sorularım bu kadar. Vaktin için teşekkürler. Yakında sana döneceğiz! 🎉 Mülakatı bitirdin — istersen aşağıdan baştan başlat.");
+    send.disabled=true;
+    return;
+  }
+  setTimeout(askMockQ,700);
+}
+
+/* fb HAM HTML olarak basılır (çağıran taraf kaçışı kendi yapar); text kaçırılır. */
 function addBubble(who,text,tr,fb){
   const log=$('#chatLog');
-  const b=el(`<div class="bubble ${who}"><div>${mdLite(text)}</div>${tr?`<div class="b-tr">${mdLite(tr)}</div>`:''}${fb?`<div class="b-fb">📝 ${mdLite(fb)}</div>`:''}${who==='ai'?'<button class="b-say">🔊 Dinle</button>':''}</div>`);
-  if(who==='ai')b.querySelector('.b-say').addEventListener('click',()=>speak(text,0.85));
+  const hasText=!!(text&&String(text).trim());
+  const b=el(`<div class="bubble ${who}"${fb&&!hasText?' style="max-width:100%;"':''}>${
+      hasText?`<div>${mdLite(text)}</div>`:''
+    }${tr?`<div class="b-tr">${mdLite(tr)}</div>`:''
+    }${fb?`<div class="b-fb"${hasText?'':' style="border-top:none;margin-top:0;padding-top:0;"'}>📝 ${fb}</div>`:''
+    }${(who==='ai'&&hasText)?'<button class="b-say">🔊 Dinle</button>':''}</div>`);
+  const say=b.querySelector('.b-say');
+  if(say)say.addEventListener('click',()=>speak(text,0.85));
   log.appendChild(b);
   b.scrollIntoView({behavior:'smooth',block:'end'});
   return b;
-}
-
-async function sendMock(){
-  const input=$('#chatInput');const send=$('#chatSend');
-  const text=input.value.trim();
-  if(!text)return;
-  input.value='';send.disabled=true;
-  addBubble('me',text);
-  mockHistory.push({role:"user",content:text});
-  const thinking=addBubble('ai','...');
-  const sys=`Sen bir iş görüşmesi simülasyonu yapan, Türkçe konuşan başlangıç seviyesi İngilizce öğrencisiyle çalışan nazik bir görüşmecisin. Görevin:
-1. Öğrencinin son cevabına kısa TÜRKÇE geri bildirim ver (varsa 1-2 hatayı nazikçe düzelt, doğru İngilizce halini göster; iyiyse öv).
-2. Sonra BASİT İngilizceyle bir SONRAKİ mülakat sorusunu sor (yaygın mülakat soruları: strengths, weakness, why this company, a challenge you solved, teamwork, five years, questions for us... sırayla ilerle, aynı soruyu tekrarlama).
-3. Sorunun Türkçe çevirisini ekle.
-
-Tam olarak şu formatta yaz, başka bir şey ekleme:
-[GERIBILDIRIM]
-(Türkçe geri bildirim; gerekiyorsa "Daha iyi hali: ..." ile düzeltilmiş İngilizce cümle)
-[SORU]
-(Basit İngilizce yeni soru)
-[CEVIRI]
-(Sorunun Türkçesi)`;
-  const convo=mockHistory.map(m=>(m.role==='user'?'Aday: ':'Görüşmeci: ')+m.content).join('\n');
-  try{
-    const raw=await askClaude(sys+"\n\nŞimdiye kadarki görüşme:\n"+convo);
-    const fbM=raw.match(/\[GERIBILDIRIM\]([\s\S]*?)(\[SORU\]|$)/i);
-    const qM=raw.match(/\[SORU\]([\s\S]*?)(\[CEVIRI\]|$)/i);
-    const cM=raw.match(/\[CEVIRI\]([\s\S]*)$/i);
-    const fb=(fbM?fbM[1]:'').trim();
-    const q=(qM?qM[1]:raw).trim();
-    const c=(cM?cM[1]:'').trim();
-    thinking.remove();
-    addBubble('ai',q,c,fb);
-    mockHistory.push({role:"assistant",content:q});
-    if(mockHistory.length>18)mockHistory=mockHistory.slice(-12);
-  }catch(e){
-    thinking.remove();
-    addBubble('ai','Sorry, connection problem. Please try again.','Bağlantı sorunu — tekrar dene.');
-  }
-  send.disabled=false;
 }
 
 /* ================= PROGRESS ================= */
@@ -1587,7 +1807,7 @@ async function init(){
 }
 init();
 
-/* Çevrimdışı çalışsın diye service worker — sadece güvenli bağlamda (https/localhost) */
+/* Çevrimdışı çalışsın diye service worker — sadece güvenli bağlamda (https) */
 if('serviceWorker' in navigator && location.protocol==='https:'){
   addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }

@@ -1,5 +1,5 @@
 /* Çevrimdışı çalışma. Sürüm değişince eski önbellek silinir. */
-const V = 'ing-v4.1';
+const V = 'ing-v4.2';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
