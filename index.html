@@ -1188,7 +1188,9 @@ function buildSession(){
   due=due.filter(w=>!warm.includes(w));
   // tekrar yığılması varsa yeni kelimeyi duraklat (standart birikme kuralı)
   const remainingNew=(due.length+warm.length>25)?0:Math.max(0,stats.dailyGoal-stats.newToday);
-  const news=WORDS.filter(w=>!states[w.id]||!states[w.id].seen).slice(0,remainingNew);
+  // Yeni kelimeler daima seviye sirasiyla gelir. Dizi sirasina guvenmek, havuza
+  // sonradan eklenen dusuk seviyeli kelimeleri en sona atiyordu (5→1 sicramasi).
+  const news=WORDS.filter(w=>!states[w.id]||!states[w.id].seen).sort((a,b)=>a.lvl-b.lvl).slice(0,remainingNew);
   // serpiştirme: kategoriler karışsın — bloklama yok
   session.queue=[...warm,...shuffleArr([...due,...news])];
   session.relearn=[];session.done=0;session.planned=session.queue.length;session.current=null;
@@ -1517,7 +1519,7 @@ function buildReadCard(r){
 function renderAIWrite(){
   const area=$('#aiWrite');area.innerHTML='';
   const wrap=el(`<div>
-    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">İngilizce bir cümle yaz — Türkçe konuşanların <b>en sık 15 tuzağını</b> tarayıp düzeltirim. <b>Üretmek, hataları görmenin en hızlı yoludur.</b></div>
+    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">İngilizce bir cümle yaz — Türkçe konuşanların <b>en sık ${TRAPS.length} tuzağını</b> tarayıp düzeltirim. <b>Üretmek, hataları görmenin en hızlı yoludur.</b></div>
     <textarea class="taread" id="writeInput" placeholder="Örn: She go to work. I am go to school. I am teacher..."></textarea>
     <button class="ai-btn" id="checkWriteBtn" style="margin-top:12px;">🔍 Tuzakları tara</button>
     <div id="writeOut"></div>
@@ -1544,7 +1546,7 @@ function buildCheckCard(original,res,ref){
     ${res.alt?`<div class="lbl">Şu an oluyorsa</div><div class="tr-text">${esc(res.alt)}</div>`:''}
     ${res.found.length?`<div class="lbl">📝 Yakalananlar</div>${res.found.map(f=>
         `<div class="vocab" style="margin-bottom:7px;"><b style="color:var(--accent);">${f.ttl}</b><br>${f.why}</div>`).join('')}`
-      :`<div class="lbl">📝 Not</div><div class="tr-text">Türkçe konuşanların en sık 15 tuzağını taradım, hiçbirine takılmamışsın. Bu tam bir dilbilgisi denetimi değil — kelime seçimi ve doğallık için ${ref?'aşağıdaki örnek çeviriye bak.':'aynı cümleyi <b>Cümle → Çevir</b> bölümünde dene, orada karşılaştırma yapabilirsin.'}</div>`}
+      :`<div class="lbl">📝 Not</div><div class="tr-text">Türkçe konuşanların en sık ${TRAPS.length} tuzağını taradım, hiçbirine takılmamışsın. Bu tam bir dilbilgisi denetimi değil — kelime seçimi ve doğallık için ${ref?'aşağıdaki örnek çeviriye bak.':'aynı cümleyi <b>Cümle → Çevir</b> bölümünde dene, orada karşılaştırma yapabilirsin.'}</div>`}
     ${ref?`<div class="lbl" style="color:var(--violet);">🎯 Örnek çeviri</div><div class="en-text" style="font-size:15px;">${esc(ref)}</div>
       <button class="ai-btn" id="playRef" style="margin-top:10px;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Örneği dinle</button>`:''}
   </div>`);
