@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>İngilizce v4 · Kanıta Dayalı Öğrenme</title>
 <meta name="theme-color" content="#16182F">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -503,7 +503,167 @@ const WORDS = [
   {id:107,lvl:4,en:"easy",tr:"kolay",pos:"sıfat",exEn:"This question is easy.",exTr:"Bu soru kolay."},
   {id:108,lvl:4,en:"difficult",tr:"zor",pos:"sıfat",exEn:"The exam was difficult but I passed.",exTr:"Sınav zordu ama geçtim."},
   {id:109,lvl:4,en:"try",tr:"denemek",pos:"fiil",exEn:"I always try my best.",exTr:"Her zaman elimden geleni yaparım."},
-  {id:110,lvl:4,en:"finish",tr:"bitirmek",pos:"fiil",exEn:"I finish my work before the deadline.",exTr:"İşimi son teslim tarihinden önce bitiririm."}
+  {id:110,lvl:4,en:"finish",tr:"bitirmek",pos:"fiil",exEn:"I finish my work before the deadline.",exTr:"İşimi son teslim tarihinden önce bitiririm."},
+
+  /* --- Seviye 1: iyelik ve temel nezaket --- */
+  {id:111,lvl:1,en:"my",tr:"benim",pos:"iyelik",exEn:"My name is Zahit.",exTr:"Benim adım Zahit."},
+  {id:112,lvl:1,en:"your",tr:"senin / sizin",pos:"iyelik",exEn:"Your idea is good.",exTr:"Senin fikrin güzel."},
+  {id:113,lvl:1,en:"our",tr:"bizim",pos:"iyelik",exEn:"Our team is small.",exTr:"Bizim takımımız küçük."},
+  {id:114,lvl:1,en:"their",tr:"onların",pos:"iyelik",exEn:"Their office is new.",exTr:"Onların ofisi yeni."},
+  {id:115,lvl:1,en:"hello",tr:"merhaba",pos:"selamlama",exEn:"Hello, I am Zahit.",exTr:"Merhaba, ben Zahit."},
+  {id:116,lvl:1,en:"goodbye",tr:"hoşça kal",pos:"selamlama",exEn:"Goodbye, see you tomorrow.",exTr:"Hoşça kal, yarın görüşürüz."},
+  {id:117,lvl:1,en:"sorry",tr:"özür dilerim",pos:"nezaket",exEn:"Sorry, I am late.",exTr:"Özür dilerim, geç kaldım."},
+  {id:118,lvl:1,en:"excuse me",tr:"affedersiniz",pos:"kalıp",exEn:"Excuse me, can I ask a question?",exTr:"Affedersiniz, bir soru sorabilir miyim?",tip:"<b>sorry</b> bir hata için özür dilerken, <b>excuse me</b> dikkat çekerken kullanılır."},
+  {id:119,lvl:1,en:"nice to meet you",tr:"tanıştığımıza memnun oldum",pos:"kalıp",exEn:"Nice to meet you, Mr. Kaya.",exTr:"Tanıştığımıza memnun oldum, Bay Kaya.",tip:"Mülakatın ilk cümlesi. Tokalaşırken söylenir; ayrılırken <b>It was nice to meet you</b> olur."},
+  {id:120,lvl:1,en:"big",tr:"büyük",pos:"sıfat",exEn:"It is a big company.",exTr:"Büyük bir şirket."},
+  {id:121,lvl:1,en:"small",tr:"küçük",pos:"sıfat",exEn:"I work in a small team.",exTr:"Küçük bir takımda çalışıyorum."},
+  {id:122,lvl:1,en:"new",tr:"yeni",pos:"sıfat",exEn:"I want to learn new things.",exTr:"Yeni şeyler öğrenmek istiyorum."},
+
+  /* --- Seviye 2: yardımcı fiiller, edatlar, zaman --- */
+  {id:123,lvl:2,en:"can",tr:"-ebilmek",pos:"yardımcı fiil",exEn:"I can speak English.",exTr:"İngilizce konuşabilirim.",tip:"<b>can</b>'den sonra fiil daima yalın: <b>I can go</b> ✓ / <i>I can to go</i> ✗ / <i>I can going</i> ✗"},
+  {id:124,lvl:2,en:"will",tr:"-ecek",pos:"yardımcı fiil",exEn:"I will call you tomorrow.",exTr:"Yarın seni arayacağım."},
+  {id:125,lvl:2,en:"with",tr:"ile",pos:"edat",exEn:"I work with a good team.",exTr:"İyi bir takımla çalışıyorum."},
+  {id:126,lvl:2,en:"for",tr:"için",pos:"edat",exEn:"This report is for my manager.",exTr:"Bu rapor müdürüm için."},
+  {id:127,lvl:2,en:"from",tr:"-den",pos:"edat",exEn:"I am from Istanbul.",exTr:"İstanbulluyum."},
+  {id:128,lvl:2,en:"about",tr:"hakkında",pos:"edat",exEn:"Tell me about your project.",exTr:"Bana projenden bahset."},
+  {id:129,lvl:2,en:"today",tr:"bugün",pos:"zaman",exEn:"I have a meeting today.",exTr:"Bugün bir toplantım var."},
+  {id:130,lvl:2,en:"tomorrow",tr:"yarın",pos:"zaman",exEn:"The interview is tomorrow.",exTr:"Mülakat yarın."},
+  {id:131,lvl:2,en:"yesterday",tr:"dün",pos:"zaman",exEn:"I sent the email yesterday.",exTr:"E-postayı dün gönderdim.",tip:"<b>yesterday</b> gördüğün an fiil geçmiş zamana geçer: <b>I went</b>, <i>I go</i> değil."},
+  {id:132,lvl:2,en:"morning",tr:"sabah",pos:"isim",exEn:"I study in the morning.",exTr:"Sabahları çalışırım."},
+  {id:133,lvl:2,en:"evening",tr:"akşam",pos:"isim",exEn:"I go home in the evening.",exTr:"Akşam eve giderim."},
+  {id:134,lvl:2,en:"week",tr:"hafta",pos:"isim",exEn:"I work four days a week.",exTr:"Haftada dört gün çalışırım."},
+  {id:135,lvl:2,en:"month",tr:"ay",pos:"isim",exEn:"The internship is three months.",exTr:"Staj üç ay."},
+  {id:136,lvl:2,en:"school",tr:"okul",pos:"isim",exEn:"I go to school every day.",exTr:"Her gün okula giderim."},
+  {id:137,lvl:2,en:"house",tr:"ev",pos:"isim",exEn:"Our house is near the school.",exTr:"Evimiz okula yakın."},
+  {id:138,lvl:2,en:"book",tr:"kitap",pos:"isim",exEn:"I read a book every month.",exTr:"Her ay bir kitap okurum."},
+  {id:139,lvl:2,en:"car",tr:"araba",pos:"isim",exEn:"I do not have a car.",exTr:"Arabam yok."},
+  {id:140,lvl:2,en:"phone",tr:"telefon",pos:"isim",exEn:"My phone is on the table.",exTr:"Telefonum masanın üstünde."},
+  {id:141,lvl:2,en:"city",tr:"şehir",pos:"isim",exEn:"Istanbul is a big city.",exTr:"İstanbul büyük bir şehir."},
+  {id:142,lvl:2,en:"happy",tr:"mutlu",pos:"sıfat",exEn:"I am happy to be here.",exTr:"Burada olduğum için mutluyum."},
+  {id:143,lvl:2,en:"tired",tr:"yorgun",pos:"sıfat",exEn:"I am tired but I finish the work.",exTr:"Yorgunum ama işi bitiriyorum."},
+  {id:144,lvl:2,en:"some",tr:"biraz / bazı",pos:"belirteç",exEn:"I have some experience.",exTr:"Biraz deneyimim var."},
+  {id:145,lvl:2,en:"many",tr:"çok (sayılabilen)",pos:"belirteç",exEn:"I have many friends at school.",exTr:"Okulda çok arkadaşım var.",tip:"Sayılabilenlerde <b>many</b> (many books), sayılamayanlarda <b>much</b> (much water)."},
+  {id:146,lvl:2,en:"also",tr:"ayrıca / da",pos:"zarf",exEn:"I also speak a little German.",exTr:"Ayrıca biraz Almanca konuşurum."},
+  {id:147,lvl:2,en:"more",tr:"daha (fazla)",pos:"belirteç",exEn:"I want to learn more.",exTr:"Daha fazla öğrenmek istiyorum."},
+
+  /* --- Seviye 3: günlük fiiller --- */
+  {id:148,lvl:3,en:"start",tr:"başlamak",pos:"fiil",exEn:"I start work at nine.",exTr:"İşe dokuzda başlarım."},
+  {id:149,lvl:3,en:"stop",tr:"durmak / durdurmak",pos:"fiil",exEn:"We stop at twelve for lunch.",exTr:"Öğle yemeği için on ikide ara veririz."},
+  {id:150,lvl:3,en:"open",tr:"açmak",pos:"fiil",exEn:"Please open the file.",exTr:"Lütfen dosyayı aç."},
+  {id:151,lvl:3,en:"close",tr:"kapatmak",pos:"fiil",exEn:"I close my laptop at six.",exTr:"Dizüstümü altıda kapatırım."},
+  {id:152,lvl:3,en:"read",tr:"okumak",pos:"fiil",exEn:"I read the report before the meeting.",exTr:"Toplantıdan önce raporu okurum.",tip:"Geçmiş hâli de <b>read</b> yazılır ama \"red\" gibi okunur."},
+  {id:153,lvl:3,en:"write",tr:"yazmak",pos:"fiil",exEn:"I write short emails.",exTr:"Kısa e-postalar yazarım."},
+  {id:154,lvl:3,en:"listen",tr:"dinlemek",pos:"fiil",exEn:"I listen to English podcasts.",exTr:"İngilizce podcast dinlerim.",tip:"Daima <b>listen to</b> — nesne alırken <i>to</i> düşmez."},
+  {id:155,lvl:3,en:"watch",tr:"izlemek",pos:"fiil",exEn:"I watch videos to practice.",exTr:"Pratik için video izlerim."},
+  {id:156,lvl:3,en:"eat",tr:"yemek",pos:"fiil",exEn:"We eat lunch together.",exTr:"Öğle yemeğini birlikte yeriz."},
+  {id:157,lvl:3,en:"buy",tr:"satın almak",pos:"fiil",exEn:"I want to buy a new laptop.",exTr:"Yeni bir dizüstü almak istiyorum."},
+  {id:158,lvl:3,en:"live",tr:"yaşamak",pos:"fiil",exEn:"I live in Istanbul with my family.",exTr:"Ailemle İstanbul'da yaşıyorum."},
+  {id:159,lvl:3,en:"stay",tr:"kalmak",pos:"fiil",exEn:"I stay calm under pressure.",exTr:"Baskı altında sakin kalırım."},
+  {id:160,lvl:3,en:"meet",tr:"tanışmak / buluşmak",pos:"fiil",exEn:"I met the team last week.",exTr:"Takımla geçen hafta tanıştım."},
+  {id:161,lvl:3,en:"call",tr:"aramak",pos:"fiil",exEn:"I will call you after the meeting.",exTr:"Toplantıdan sonra seni arayacağım."},
+  {id:162,lvl:3,en:"send",tr:"göndermek",pos:"fiil",exEn:"I send the report every Friday.",exTr:"Raporu her cuma gönderirim."},
+  {id:163,lvl:3,en:"take",tr:"almak",pos:"fiil",exEn:"I take notes in every meeting.",exTr:"Her toplantıda not alırım."},
+  {id:164,lvl:3,en:"keep",tr:"tutmak / sürdürmek",pos:"fiil",exEn:"I keep a list of my tasks.",exTr:"Görevlerimin listesini tutarım."},
+  {id:165,lvl:3,en:"leave",tr:"ayrılmak / bırakmak",pos:"fiil",exEn:"I leave the office at six.",exTr:"Ofisten altıda çıkarım."},
+  {id:166,lvl:3,en:"remember",tr:"hatırlamak",pos:"fiil",exEn:"I remember your name.",exTr:"Adını hatırlıyorum."},
+  {id:167,lvl:3,en:"forget",tr:"unutmak",pos:"fiil",exEn:"I never forget a deadline.",exTr:"Bir teslim tarihini asla unutmam."},
+  {id:168,lvl:3,en:"understand",tr:"anlamak",pos:"fiil",exEn:"I understand the question.",exTr:"Soruyu anlıyorum.",tip:"Durum fiili: <i>I am understanding</i> denmez, <b>I understand</b> ✓"},
+  {id:169,lvl:3,en:"explain",tr:"açıklamak",pos:"fiil",exEn:"Let me explain my answer.",exTr:"Cevabımı açıklayayım."},
+  {id:170,lvl:3,en:"decide",tr:"karar vermek",pos:"fiil",exEn:"We decided to change the plan.",exTr:"Planı değiştirmeye karar verdik."},
+  {id:171,lvl:3,en:"choose",tr:"seçmek",pos:"fiil",exEn:"I chose this university for engineering.",exTr:"Bu üniversiteyi mühendislik için seçtim."},
+  {id:172,lvl:3,en:"change",tr:"değiştirmek",pos:"fiil",exEn:"We changed the design after the feedback.",exTr:"Geri bildirimden sonra tasarımı değiştirdik."},
+  {id:173,lvl:3,en:"hour",tr:"saat (süre)",pos:"isim",exEn:"I study two hours every day.",exTr:"Her gün iki saat çalışırım."},
+  {id:174,lvl:3,en:"student",tr:"öğrenci",pos:"isim",exEn:"I am a third-year student.",exTr:"Üçüncü sınıf öğrencisiyim."},
+  {id:175,lvl:3,en:"teacher",tr:"öğretmen",pos:"isim",exEn:"My teacher helped me a lot.",exTr:"Öğretmenim bana çok yardım etti."},
+  {id:176,lvl:3,en:"number",tr:"sayı / numara",pos:"isim",exEn:"Can I have your phone number?",exTr:"Telefon numaranızı alabilir miyim?"},
+  {id:177,lvl:3,en:"place",tr:"yer",pos:"isim",exEn:"This is a good place to learn.",exTr:"Burası öğrenmek için iyi bir yer."},
+  {id:178,lvl:3,en:"thing",tr:"şey",pos:"isim",exEn:"I learned three things from that project.",exTr:"O projeden üç şey öğrendim."},
+  {id:179,lvl:3,en:"life",tr:"hayat",pos:"isim",exEn:"Work is an important part of life.",exTr:"İş, hayatın önemli bir parçası."},
+  {id:180,lvl:3,en:"always",tr:"her zaman",pos:"zarf",exEn:"I always prepare before a meeting.",exTr:"Toplantıdan önce her zaman hazırlanırım."},
+  {id:181,lvl:3,en:"never",tr:"asla",pos:"zarf",exEn:"I never give up.",exTr:"Asla pes etmem.",tip:"<b>never</b> zaten olumsuz — yanına ikinci olumsuzluk gelmez: <i>I don't never</i> ✗"},
+  {id:182,lvl:3,en:"together",tr:"birlikte",pos:"zarf",exEn:"We solved the problem together.",exTr:"Sorunu birlikte çözdük."},
+
+  /* --- Seviye 4: sık kullanılan öbek fiiller ve konuşma kalıpları --- */
+  {id:183,lvl:4,en:"usually",tr:"genellikle",pos:"zarf",exEn:"I usually start with the hardest task.",exTr:"Genellikle en zor işle başlarım."},
+  {id:184,lvl:4,en:"sometimes",tr:"bazen",pos:"zarf",exEn:"Sometimes I work at the weekend.",exTr:"Bazen hafta sonu çalışırım."},
+  {id:185,lvl:4,en:"hard",tr:"zor / sıkı",pos:"sıfat",exEn:"I am a hard worker.",exTr:"Sıkı çalışan biriyim.",tip:"<b>hardly</b> \"zorlukla\" değil, \"neredeyse hiç\" demektir — karıştırma."},
+  {id:186,lvl:4,en:"early",tr:"erken",pos:"zarf",exEn:"I arrive early for interviews.",exTr:"Mülakatlara erken giderim."},
+  {id:187,lvl:4,en:"late",tr:"geç",pos:"zarf",exEn:"I am never late for a meeting.",exTr:"Toplantıya asla geç kalmam."},
+  {id:188,lvl:4,en:"get up",tr:"kalkmak",pos:"öbek fiil",exEn:"I get up at seven every day.",exTr:"Her gün yedide kalkarım."},
+  {id:189,lvl:4,en:"take care of",tr:"ilgilenmek / bakmak",pos:"öbek fiil",exEn:"I took care of the customer emails.",exTr:"Müşteri e-postalarıyla ben ilgilendim."},
+  {id:190,lvl:4,en:"find out",tr:"öğrenmek / keşfetmek",pos:"öbek fiil",exEn:"I found out the reason for the delay.",exTr:"Gecikmenin sebebini öğrendim."},
+  {id:191,lvl:4,en:"give up",tr:"pes etmek",pos:"öbek fiil",exEn:"I do not give up when a task is hard.",exTr:"İş zorlaşınca pes etmem."},
+  {id:192,lvl:4,en:"come up with",tr:"(fikir) üretmek",pos:"öbek fiil",exEn:"I came up with a simple solution.",exTr:"Basit bir çözüm buldum.",tip:"Mülakatta hikâye anlatırken çok işe yarar: <b>I came up with…</b>"},
+  {id:193,lvl:4,en:"deal with",tr:"başa çıkmak",pos:"öbek fiil",exEn:"I know how to deal with pressure.",exTr:"Baskıyla nasıl başa çıkacağımı bilirim."},
+  {id:194,lvl:4,en:"look forward to",tr:"dört gözle beklemek",pos:"kalıp",exEn:"I look forward to hearing from you.",exTr:"Sizden haber almayı dört gözle bekliyorum.",tip:"Buradaki <b>to</b> edattır: sonrasında fiil <b>-ing</b> alır — <i>to hear</i> ✗, <b>to hearing</b> ✓. E-posta kapanışının standart cümlesi."},
+  {id:195,lvl:4,en:"take notes",tr:"not almak",pos:"kalıp",exEn:"I always take notes during meetings.",exTr:"Toplantılarda hep not alırım."},
+  {id:196,lvl:4,en:"make a decision",tr:"karar vermek",pos:"kalıp",exEn:"We had to make a decision quickly.",exTr:"Hızlı karar vermemiz gerekiyordu."},
+  {id:197,lvl:4,en:"at the moment",tr:"şu anda",pos:"kalıp",exEn:"At the moment I am looking for an internship.",exTr:"Şu anda staj arıyorum."},
+  {id:198,lvl:4,en:"as soon as possible",tr:"en kısa sürede",pos:"kalıp",exEn:"I will send it as soon as possible.",exTr:"En kısa sürede göndereceğim."},
+  {id:199,lvl:4,en:"in my opinion",tr:"bence",pos:"kalıp",exEn:"In my opinion, teamwork is the key.",exTr:"Bence takım çalışması anahtar."},
+  {id:200,lvl:4,en:"I think that",tr:"bence / sanırım",pos:"kalıp",exEn:"I think that I am a good fit for this role.",exTr:"Bu rol için uygun olduğumu düşünüyorum."},
+  {id:201,lvl:4,en:"could you repeat that",tr:"tekrar eder misiniz",pos:"kalıp",exEn:"Sorry, could you repeat that?",exTr:"Pardon, tekrar eder misiniz?",tip:"Mülakatta anlamadığında sessiz kalma — bu cümle profesyonel durur, panik değil."},
+  {id:202,lvl:4,en:"of course",tr:"tabii ki",pos:"kalıp",exEn:"Of course, I can start in June.",exTr:"Tabii ki, haziranda başlayabilirim."},
+  {id:203,lvl:4,en:"at least",tr:"en azından",pos:"kalıp",exEn:"It took at least two weeks.",exTr:"En az iki hafta sürdü."},
+  {id:204,lvl:4,en:"already",tr:"çoktan / zaten",pos:"zarf",exEn:"I have already finished the task.",exTr:"Görevi çoktan bitirdim."},
+  {id:205,lvl:4,en:"still",tr:"hâlâ",pos:"zarf",exEn:"I am still learning English.",exTr:"Hâlâ İngilizce öğreniyorum."},
+  {id:206,lvl:4,en:"enough",tr:"yeterli",pos:"sıfat",exEn:"We did not have enough time.",exTr:"Yeterli zamanımız yoktu.",tip:"Sıfattan <b>sonra</b>, isimden <b>önce</b> gelir: <b>good enough</b> ama <b>enough time</b>."},
+  {id:207,lvl:4,en:"each other",tr:"birbirimiz",pos:"kalıp",exEn:"We help each other in the team.",exTr:"Takımda birbirimize yardım ederiz."},
+  {id:208,lvl:4,en:"instead of",tr:"yerine",pos:"kalıp",exEn:"I used a table instead of a long text.",exTr:"Uzun metin yerine tablo kullandım."},
+  {id:209,lvl:4,en:"such as",tr:"gibi / örneğin",pos:"kalıp",exEn:"I use tools such as Excel and Python.",exTr:"Excel ve Python gibi araçlar kullanırım."},
+  {id:210,lvl:4,en:"however",tr:"ancak / fakat",pos:"bağlaç",exEn:"The plan was good; however, we had no time.",exTr:"Plan iyiydi; ancak zamanımız yoktu."},
+  {id:211,lvl:4,en:"so that",tr:"-mesi için",pos:"bağlaç",exEn:"I made a checklist so that nothing is forgotten.",exTr:"Hiçbir şey unutulmasın diye bir kontrol listesi yaptım."},
+  {id:212,lvl:4,en:"if",tr:"eğer",pos:"bağlaç",exEn:"If I get the internship, I will work hard.",exTr:"Stajı alırsam, çok çalışacağım.",tip:"<b>if</b>'ten sonraki fiil geniş zaman kalır, gelecek <b>will</b> diğer yarıda olur: <i>if I will get</i> ✗"},
+  {id:213,lvl:4,en:"while",tr:"-iken",pos:"bağlaç",exEn:"I studied while I was working part-time.",exTr:"Yarı zamanlı çalışırken okudum."},
+  {id:214,lvl:4,en:"before",tr:"-den önce",pos:"edat",exEn:"I check my work before I send it.",exTr:"Göndermeden önce işimi kontrol ederim."},
+  {id:215,lvl:4,en:"after",tr:"-den sonra",pos:"edat",exEn:"After the meeting, I write a summary.",exTr:"Toplantıdan sonra bir özet yazarım."},
+  {id:216,lvl:4,en:"during",tr:"boyunca / sırasında",pos:"edat",exEn:"I learned a lot during the project.",exTr:"Proje sırasında çok şey öğrendim."},
+  {id:217,lvl:4,en:"between",tr:"arasında",pos:"edat",exEn:"The meeting is between two and three.",exTr:"Toplantı iki ile üç arasında."},
+  {id:218,lvl:4,en:"quickly",tr:"hızlıca",pos:"zarf",exEn:"I learn new tools quickly.",exTr:"Yeni araçları hızlı öğrenirim."},
+  {id:219,lvl:4,en:"carefully",tr:"dikkatlice",pos:"zarf",exEn:"I read the instructions carefully.",exTr:"Talimatları dikkatlice okurum."},
+  {id:220,lvl:4,en:"successfully",tr:"başarıyla",pos:"zarf",exEn:"We finished the project successfully.",exTr:"Projeyi başarıyla bitirdik."},
+
+  /* --- Seviye 5: mülakat ve iş dünyası --- */
+  {id:221,lvl:5,en:"candidate",tr:"aday",pos:"isim",exEn:"I am a candidate for the internship.",exTr:"Staj için adayım."},
+  {id:222,lvl:5,en:"CV / resume",tr:"özgeçmiş",pos:"isim",exEn:"I sent my CV last week.",exTr:"Özgeçmişimi geçen hafta gönderdim."},
+  {id:223,lvl:5,en:"cover letter",tr:"ön yazı / niyet mektubu",pos:"isim",exEn:"I wrote a short cover letter.",exTr:"Kısa bir ön yazı yazdım."},
+  {id:224,lvl:5,en:"interview",tr:"mülakat / görüşme",pos:"isim",exEn:"The interview is on Monday.",exTr:"Mülakat pazartesi."},
+  {id:225,lvl:5,en:"recruiter",tr:"işe alım uzmanı",pos:"isim",exEn:"The recruiter called me yesterday.",exTr:"İşe alım uzmanı beni dün aradı."},
+  {id:226,lvl:5,en:"department",tr:"departman / bölüm",pos:"isim",exEn:"I want to work in the finance department.",exTr:"Finans departmanında çalışmak istiyorum."},
+  {id:227,lvl:5,en:"supervisor",tr:"amir / yönetici",pos:"isim",exEn:"My supervisor gave me good feedback.",exTr:"Amirim bana iyi geri bildirim verdi."},
+  {id:228,lvl:5,en:"salary",tr:"maaş",pos:"isim",exEn:"I am open about the salary.",exTr:"Maaş konusunda esneğim.",tip:"Staj mülakatında maaşı önce sen açma; sorulursa <b>I am flexible</b> güvenli bir cevaptır."},
+  {id:229,lvl:5,en:"full-time",tr:"tam zamanlı",pos:"sıfat",exEn:"I can work full-time in the summer.",exTr:"Yazın tam zamanlı çalışabilirim."},
+  {id:230,lvl:5,en:"part-time",tr:"yarı zamanlı",pos:"sıfat",exEn:"I worked part-time during the semester.",exTr:"Dönem içinde yarı zamanlı çalıştım."},
+  {id:231,lvl:5,en:"schedule",tr:"program / takvim",pos:"isim",exEn:"My schedule is flexible.",exTr:"Programım esnek."},
+  {id:232,lvl:5,en:"task",tr:"görev",pos:"isim",exEn:"I finished every task on time.",exTr:"Her görevi zamanında bitirdim."},
+  {id:233,lvl:5,en:"responsibility",tr:"sorumluluk",pos:"isim",exEn:"I want more responsibility.",exTr:"Daha fazla sorumluluk istiyorum."},
+  {id:234,lvl:5,en:"challenge",tr:"zorluk",pos:"isim",exEn:"The biggest challenge was the short deadline.",exTr:"En büyük zorluk kısa teslim süresiydi.",tip:"\"Bir zorluğu anlat\" sorusunun anahtar kelimesi. Kalıp: <b>The challenge was… / I solved it by…</b>"},
+  {id:235,lvl:5,en:"result",tr:"sonuç",pos:"isim",exEn:"As a result, we saved two days.",exTr:"Sonuç olarak iki gün kazandık.",tip:"Hikâyeni <b>sonuçla</b> bitir — mülakatçı sonucu duymak ister."},
+  {id:236,lvl:5,en:"feedback",tr:"geri bildirim",pos:"isim",exEn:"I ask for feedback after every project.",exTr:"Her projeden sonra geri bildirim isterim."},
+  {id:237,lvl:5,en:"training",tr:"eğitim",pos:"isim",exEn:"I am ready for training.",exTr:"Eğitime hazırım."},
+  {id:238,lvl:5,en:"knowledge",tr:"bilgi",pos:"isim",exEn:"I have basic knowledge of Excel.",exTr:"Temel Excel bilgim var.",tip:"Sayılamaz: <i>knowledges</i> ✗ — <b>knowledge</b> hep tekil."},
+  {id:239,lvl:5,en:"background",tr:"geçmiş / altyapı",pos:"isim",exEn:"My background is in management engineering.",exTr:"Altyapım işletme mühendisliği."},
+  {id:240,lvl:5,en:"teamwork",tr:"takım çalışması",pos:"isim",exEn:"Teamwork is important for me.",exTr:"Takım çalışması benim için önemli."},
+  {id:241,lvl:5,en:"leadership",tr:"liderlik",pos:"isim",exEn:"I had a leadership role in the project.",exTr:"Projede liderlik rolüm vardı."},
+  {id:242,lvl:5,en:"time management",tr:"zaman yönetimi",pos:"kalıp",exEn:"Time management is one of my strengths.",exTr:"Zaman yönetimi güçlü yönlerimden biri."},
+  {id:243,lvl:5,en:"attention to detail",tr:"detaylara dikkat",pos:"kalıp",exEn:"I have strong attention to detail.",exTr:"Detaylara dikkatim güçlüdür."},
+  {id:244,lvl:5,en:"take initiative",tr:"inisiyatif almak",pos:"kalıp",exEn:"I took initiative and fixed the report.",exTr:"İnisiyatif alıp raporu düzelttim."},
+  {id:245,lvl:5,en:"meet a deadline",tr:"teslim tarihine yetişmek",pos:"kalıp",exEn:"I always meet my deadlines.",exTr:"Teslim tarihlerine hep yetişirim.",tip:"<b>meet</b> burada \"buluşmak\" değil, \"karşılamak\" demek. <i>catch the deadline</i> ✗"},
+  {id:246,lvl:5,en:"handle",tr:"üstesinden gelmek",pos:"fiil",exEn:"I can handle several tasks at once.",exTr:"Aynı anda birkaç işi yürütebilirim."},
+  {id:247,lvl:5,en:"contribute",tr:"katkıda bulunmak",pos:"fiil",exEn:"I want to contribute to your team.",exTr:"Takımınıza katkıda bulunmak istiyorum.",tip:"Daima <b>contribute to</b> — \"katkıda bulunmak\" için standart edat."},
+  {id:248,lvl:5,en:"develop",tr:"geliştirmek",pos:"fiil",exEn:"I developed my Excel skills last year.",exTr:"Excel becerilerimi geçen yıl geliştirdim."},
+  {id:249,lvl:5,en:"organize",tr:"düzenlemek",pos:"fiil",exEn:"I organized the data in one file.",exTr:"Veriyi tek dosyada topladım."},
+  {id:250,lvl:5,en:"present",tr:"sunmak",pos:"fiil",exEn:"I presented the results to my class.",exTr:"Sonuçları sınıfıma sundum."},
+  {id:251,lvl:5,en:"analyze",tr:"analiz etmek",pos:"fiil",exEn:"I analyzed the sales data.",exTr:"Satış verisini analiz ettim."},
+  {id:252,lvl:5,en:"support",tr:"desteklemek",pos:"fiil",exEn:"I supported two senior colleagues.",exTr:"İki kıdemli çalışana destek verdim."},
+  {id:253,lvl:5,en:"in charge of",tr:"-den sorumlu",pos:"kalıp",exEn:"I was in charge of the weekly report.",exTr:"Haftalık rapordan ben sorumluydum."},
+  {id:254,lvl:5,en:"work well with others",tr:"insanlarla iyi çalışmak",pos:"kalıp",exEn:"I work well with others.",exTr:"İnsanlarla iyi çalışırım."},
+  {id:255,lvl:5,en:"a good fit",tr:"uygun kişi",pos:"kalıp",exEn:"I think I am a good fit for this position.",exTr:"Bu pozisyon için uygun olduğumu düşünüyorum."},
+  {id:256,lvl:5,en:"willing to learn",tr:"öğrenmeye istekli",pos:"kalıp",exEn:"I am willing to learn anything.",exTr:"Her şeyi öğrenmeye istekliyim."},
+  {id:257,lvl:5,en:"strong point",tr:"güçlü yön",pos:"kalıp",exEn:"My strong point is planning.",exTr:"Güçlü yönüm planlama."},
+  {id:258,lvl:5,en:"work experience",tr:"iş deneyimi",pos:"kalıp",exEn:"I do not have much work experience yet.",exTr:"Henüz fazla iş deneyimim yok.",tip:"Deneyimsizliği saklama; <b>yet</b> ekle — \"henüz\" demek, kapıyı açık bırakır."},
+  {id:259,lvl:5,en:"thank you for your time",tr:"zaman ayırdığınız için teşekkürler",pos:"kalıp",exEn:"Thank you for your time today.",exTr:"Bugün zaman ayırdığınız için teşekkürler.",tip:"Mülakatı bununla kapat — kısa, kibar, her yerde işe yarar."},
+  {id:260,lvl:5,en:"I would say",tr:"diyebilirim ki",pos:"kalıp",exEn:"I would say my main strength is discipline.",exTr:"Ana güçlü yönüm disiplin diyebilirim.",tip:"Doğrudan iddia yerine yumuşatır, daha doğal ve özgüvenli durur."}
 ];
 
 /* ================= CHUNKS (formulaic sequences) ================= */
@@ -562,6 +722,29 @@ const CHUNKS = [
     {en:"Just a moment, please.",tr:"Bir dakika, lütfen."},
     {en:"I'm sorry, I'm late.",tr:"Üzgünüm, geç kaldım."},
     {en:"Let me check.",tr:"Bir bakayım / kontrol edeyim."}
+  ]},
+  {cat:"Mülakat · zor sorular",items:[
+    {en:"That's a good question. Let me think for a second.",tr:"Güzel soru. Bir saniye düşüneyim."},
+    {en:"I don't have experience with that yet, but I learn quickly.",tr:"Bu konuda henüz deneyimim yok ama hızlı öğreniyorum."},
+    {en:"My weakness is that I ask too many questions, but it helps me avoid mistakes.",tr:"Zayıf yönüm çok soru sormam ama bu hata yapmamı engelliyor."},
+    {en:"I would say my main strength is time management.",tr:"Ana güçlü yönüm zaman yönetimi diyebilirim."},
+    {en:"I am flexible about the schedule.",tr:"Program konusunda esneğim."},
+    {en:"Could you tell me more about the team?",tr:"Takım hakkında biraz daha bilgi verebilir misiniz?"}
+  ]},
+  {cat:"Mülakat · kapanış",items:[
+    {en:"Thank you for your time today.",tr:"Bugün zaman ayırdığınız için teşekkürler."},
+    {en:"I look forward to hearing from you.",tr:"Sizden haber almayı bekliyorum."},
+    {en:"When can I expect to hear back?",tr:"Ne zaman dönüş bekleyebilirim?"},
+    {en:"It was nice to meet you.",tr:"Tanıştığımıza memnun oldum."},
+    {en:"Please let me know if you need anything else from me.",tr:"Benden başka bir şey gerekirse lütfen haber verin."}
+  ]},
+  {cat:"Telefon & e-posta",items:[
+    {en:"Hello, this is Zahit speaking.",tr:"Merhaba, ben Zahit."},
+    {en:"Sorry, the line is bad. Could you say that again?",tr:"Pardon, hat kötü. Tekrar söyler misiniz?"},
+    {en:"I am writing to apply for the internship.",tr:"Staja başvurmak için yazıyorum."},
+    {en:"Please find my CV attached.",tr:"Özgeçmişimi ekte bulabilirsiniz."},
+    {en:"Thank you in advance.",tr:"Şimdiden teşekkürler."},
+    {en:"Best regards,",tr:"Saygılarımla,"}
   ]}
 ];
 
@@ -705,7 +888,23 @@ const READINGS=[
   {topic:"Yemek",type:"diyalog",lvl:2,
    en:"A: Can I have the bill, please?\nB: Of course. Did you like the food?\nA: Yes, it was very good. How much is it?\nB: It is two hundred lira.\nA: Here you are. Thank you, have a nice day!",
    tr:"A: Hesabı alabilir miyim, lütfen?\nB: Tabii. Yemeği beğendiniz mi?\nA: Evet, çok güzeldi. Ne kadar?\nB: İki yüz lira.\nA: Buyurun. Teşekkürler, iyi günler!",
-   vocab:"bill = hesap\nhow much = ne kadar\nhere you are = buyurun"}
+   vocab:"bill = hesap\nhow much = ne kadar\nhere you are = buyurun"},
+  {topic:"Mülakat",type:"diyalog",lvl:3,
+   en:"A: Good morning. Please have a seat.\nB: Good morning. Thank you for your time.\nA: Tell me about yourself.\nB: I am a third-year management engineering student at ITU. At the moment I am looking for a summer internship.\nA: Why do you want to work here?\nB: Your company is growing fast, and I want to learn from a strong team.",
+   tr:"A: Günaydın. Lütfen oturun.\nB: Günaydın. Zaman ayırdığınız için teşekkürler.\nA: Bana kendinizden bahsedin.\nB: İTÜ'de üçüncü sınıf işletme mühendisliği öğrencisiyim. Şu anda yaz stajı arıyorum.\nA: Neden burada çalışmak istiyorsunuz?\nB: Şirketiniz hızla büyüyor ve güçlü bir takımdan öğrenmek istiyorum.",
+   vocab:"have a seat = buyurun oturun\nat the moment = şu anda\ngrow fast = hızlı büyümek"},
+  {topic:"Mülakat",type:"hikaye",lvl:4,
+   en:"Last semester our group project was almost late. Two people left the team and we had only one week. I made a simple plan and gave every person one task. I checked the work every evening. We finished the report on time and the teacher gave us a high grade. I learned that a short plan is better than a long meeting.",
+   tr:"Geçen dönem grup projemiz neredeyse gecikiyordu. İki kişi takımdan ayrıldı ve sadece bir haftamız vardı. Basit bir plan yaptım ve herkese bir görev verdim. Her akşam işi kontrol ettim. Raporu zamanında bitirdik ve öğretmen bize yüksek not verdi. Kısa bir planın uzun bir toplantıdan iyi olduğunu öğrendim.",
+   vocab:"almost = neredeyse\non time = zamanında\ngrade = not"},
+  {topic:"İş hayatı",type:"hikaye",lvl:3,
+   en:"My first week at the office was difficult. I did not understand every word in the meetings. I took notes and asked my supervisor after the meeting. After two weeks it became easier. Now I understand most of the words, and I ask fewer questions.",
+   tr:"Ofisteki ilk haftam zordu. Toplantılardaki her kelimeyi anlamıyordum. Not aldım ve toplantıdan sonra amirime sordum. İki hafta sonra kolaylaştı. Şimdi kelimelerin çoğunu anlıyorum ve daha az soru soruyorum.",
+   vocab:"become easier = kolaylaşmak\nmost of = çoğu\nfewer = daha az (sayılabilen)"},
+  {topic:"İş hayatı",type:"diyalog",lvl:4,
+   en:"A: Can you finish this report by Friday?\nB: Yes, but I need the sales data first.\nA: I will send it this afternoon.\nB: Perfect. Then I can send you a draft on Thursday.\nA: That works. Let me know if you have any problem.\nB: Sure, I will keep you updated.",
+   tr:"A: Bu raporu cumaya kadar bitirebilir misin?\nB: Evet ama önce satış verisine ihtiyacım var.\nA: Bugün öğleden sonra göndereceğim.\nB: Harika. O zaman perşembe sana bir taslak gönderebilirim.\nA: Olur. Bir sorun olursa haber ver.\nB: Tabii, seni haberdar ederim.",
+   vocab:"by Friday = cumaya kadar\ndraft = taslak\nkeep you updated = seni haberdar etmek"}
 ];
 
 /* ================= TUZAK TARAYICI (çevrimdışı) =================
@@ -725,13 +924,73 @@ function third(v){
   return v+'s';
 }
 
+/* -ing hâli. Sondaki "e" her zaman düşmez: see→seeing, agree→agreeing.
+   Vurgusu son hecede olan CVC fiiller ünsüzü çiftler: stop→stopping. */
+const V_DOUBLE=/^(get|put|plan|stop|run|win|forget|prefer|begin|sit|swim|shop|drop)$/i;
+function ing(v){
+  v=v.toLowerCase();
+  if(/ee$/.test(v))return v+'ing';
+  if(V_DOUBLE.test(v))return v+v.slice(-1)+'ing';
+  if(/[^aeiou]e$/.test(v))return v.slice(0,-1)+'ing';
+  return v+'ing';
+}
+/* Durum fiilleri continuous almaz — "I am knowing" diye bir şey yok.
+   Bu fiiller için "şu an oluyorsa" alternatifi ÜRETİLMEZ. */
+const V_STATIVE=/^(like|love|know|need|want|understand|prefer|believe|see|have|agree|remember|forget|hate|own|seem)$/i;
+
+/* Düzensiz geçmiş zaman. Listede yoksa düzenli -ed kuralı uygulanır. */
+const PAST_IRR={go:'went',come:'came',see:'saw',make:'made',get:'got',have:'had',take:'took',give:'gave',find:'found',tell:'told',think:'thought',know:'knew',speak:'spoke',write:'wrote',read:'read',eat:'ate',drink:'drank',run:'ran',buy:'bought',sell:'sold',drive:'drove',teach:'taught',meet:'met',send:'sent',put:'put',keep:'kept',leave:'left',understand:'understood',forget:'forgot',build:'built',choose:'chose',grow:'grew',win:'won',lose:'lost',sleep:'slept',wake:'woke',feel:'felt',do:'did',begin:'began',become:'became'};
+function past(v){
+  v=v.toLowerCase();
+  if(PAST_IRR[v])return PAST_IRR[v];
+  if(/e$/.test(v))return v+'d';
+  if(/[^aeiou]y$/.test(v))return v.slice(0,-1)+'ied';
+  if(V_DOUBLE.test(v))return v+v.slice(-1)+'ed';
+  return v+'ed';
+}
+/* Kapalı liste: "I sing / I bring" gibi kökü -ing ile biten fiilleri yanlışlıkla
+   yakalamamak için sadece V_BASE'den türetilen biçimler aranır. */
+const V_ING=V_BASE.split('|').map(ing).join('|');
+
 const TRAPS=[
+  /* "agree" özel: fiil olduğu için tobe_bare'den ÖNCE gelmeli, yoksa hiç ateşlenmez. */
+  {id:'am_agree',re:/\b(am|is|are)\s+agree\b/i,
+   ttl:'"agree" fiildir',
+   why:'<b>agree</b> zaten fiil — yanına am/is/are gelmez. "Katılıyorum" = <b>I agree</b>.',
+   fix:s=>s.replace(/\b(am|is|are)\s+agree\b/i,'agree')},
   {id:'tobe_bare',
    re:new RegExp('\\b(am|is|are|was|were)\\s+('+V_BASE+')\\b','i'),
    ttl:'Gereksiz "to be"',
    why:'Türkçede "gidiyorum" tek kelime, İngilizcede ya <b>to be</b> ya normal fiil olur — ikisi yan yana gelmez.',
    fix:(s,m)=>s.replace(m[0],m[2]),
-   alt:(s,m)=>s.replace(m[0],m[1]+' '+m[2].replace(/e$/,'')+'ing')},
+   alt:(s,m)=>V_STATIVE.test(m[2])?null:s.replace(m[0],m[1]+' '+ing(m[2]))},
+  /* Zaman zarfı varsa fiil de geçmişe çekilir. third_s'den ÖNCE gelmeli, yoksa
+     "Yesterday he go" önce "he goes" olur ve geçmiş zaman hatası kaçar.
+     ponytail: zarf cümlenin herhangi bir yerinde aranır — çok cümlelik girdide
+     ikinci cümledeki geniş zaman fiili de geçmişe çekilebilir. Tek cümlelik
+     alıştırma girdisi için yeterli; cümle bölme gerekirse burası genişletilir. */
+  {id:'past_marker',
+   re:new RegExp('\\b(i|you|we|they|he|she|it)\\s+('+V_BASE+')\\b','i'),
+   guard:s=>/\b(yesterday|last\s+(week|year|month|night|summer|semester|term)|(\d+|a\s+few|two|three|four|five|ten)\s+(days?|weeks?|years?|months?)\s+ago)\b/i.test(s),
+   ttl:'Geçmiş zaman: fiil de değişir',
+   why:'Türkçede "dün gittim" derken zaman <b>ekte</b>. İngilizcede zaman zarfı yetmez — <b>fiilin kendisi</b> geçmiş hâle geçer: go → <b>went</b>.',
+   fix:(s,m)=>s.replace(m[0],m[1]+' '+past(m[2]))},
+  {id:'third_neg',
+   re:/\b(he|she|it)\s+(don'?t|do\s+not)\b/i,
+   ttl:'3. tekilde <b>doesn\'t</b>',
+   why:'<b>he / she / it</b> ile olumsuzluk <b>doesn\'t</b> olur, <i>don\'t</i> değil. Yardımcı fiil -s\'i üstlenir, ana fiil yalın kalır: <b>She doesn\'t like</b> coffee.',
+   fix:(s,m)=>s.replace(m[0],m[1]+" doesn't")},
+  {id:'missing_be_ing',
+   re:new RegExp('\\b(i|you|we|they|he|she|it)\\s+('+V_ING+')\\b','i'),
+   ttl:'"am / is / are" eksik',
+   why:'Türkçede "çalışıyorum" tek kelime. İngilizcede şimdiki zaman iki parçadır: <b>be + fiil-ing</b>. <i>I studying</i> ✗ → <b>I am studying</b> ✓',
+   fix:(s,m)=>{const p=m[1].toLowerCase();const be=p==='i'?'am':(p==='you'||p==='we'||p==='they')?'are':'is';
+     return s.replace(m[0],m[1]+' '+be+' '+m[2]);}},
+  {id:'very_verb',
+   re:/\b(very)\s+(like|love|want|need|enjoy|prefer|miss)\b/i,
+   ttl:'"very" fiili nitelemez',
+   why:'Türkçe "çok seviyorum" doğrudan çevrilince <i>I very like</i> çıkar. <b>very</b> sadece sıfat/zarf içindir. Fiil için <b>really</b> ya da sonuna <b>very much</b>.',
+   fix:(s,m)=>s.replace(m[0],'really '+m[2])},
   {id:'third_s',
    re:new RegExp('(^|[^a-z])(he|she|it)\\s+('+V_BASE+')\\b','i'),
    guard:(s,m)=>!new RegExp('\\b('+PRE_AUX+')\\s+'+m[3]+'\\b','i').test(s),
@@ -766,10 +1025,6 @@ const TRAPS=[
    ttl:'"I" her zaman büyük',
    why:'İngilizcede "ben" anlamındaki <b>I</b> cümlenin neresinde olursa olsun büyük yazılır.',
    fix:s=>s.replace(/(^|[\s(])i(?=[\s'.,!?]|$)/g,'$1I')},
-  {id:'am_agree',re:/\b(am|is|are)\s+agree\b/i,
-   ttl:'"agree" fiildir',
-   why:'<b>agree</b> zaten fiil — yanına am/is/are gelmez.',
-   fix:s=>s.replace(/\b(am|is|are)\s+agree\b/i,'agree')},
   /* Sadece yaş anlamında ateşle. "two years of experience" DOĞRU cümledir — dokunma. */
   {id:'have_years',re:/\b(i|he|she|we|they|you)\s+(have|has)\s+(\d+|one|two|three|ten|twenty|thirty)\s+years?(\s+old)?\b(?!\s*(?:of|in|at|experience|working))/i,
    ttl:'Yaş: "be" ile söylenir',
@@ -850,8 +1105,26 @@ function cleanForSpeech(s){return s.replace(/\s*\/.*$/,'').replace(/\s*\(.*$/,''
 function mdLite(s){let t=esc(s);t=t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');t=t.replace(/\n/g,'<br>');return t;}
 
 let voices=[];
-function loadVoices(){try{voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];}catch(e){voices=[];}}
+let chosenVoice=null;
+function loadVoices(){try{voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];}catch(e){voices=[];}chosenVoice=null;}
 if('speechSynthesis' in window){loadVoices();window.speechSynthesis.onvoiceschanged=loadVoices;}
+
+/* Ses seçimi. macOS'ta İngilizce seslerin çoğu şaka/karakter sesi (Albert, Boing,
+   Zarvox…) ve alfabetik olarak en başta geliyorlar — "ilk en-US sesi al" demek
+   telaffuzu kurbağa sesiyle öğretmek demekti. Önce bilinen iyi sesler, sonra
+   kara listede olmayan herhangi bir ses. */
+const GOOD_VOICE=/(Samantha|Alex|Ava|Allison|Susan|Tom|Nicky|Aaron|Joelle|Google (US|UK) English|Microsoft (Aria|Jenny|Guy|Zira|David|Mark)|Siri|Daniel|Karen|Moira|Tessa|Rishi|Serena)/i;
+const BAD_VOICE=/(Albert|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Hysterical|Jester|Junior|Kathy|Organ|Org\b|Pipe|Ralph|Superstar|Trinoids|Whisper|Wobble|Zarvox|Fred|Princess|Bruce|Agnes|Victoria|Grandma|Grandpa|Rocko|Shelley|Sandy|Flo|Eddy|Reed|Bad News|Good News|İyi Haber|Kötü Haber|Novelty)/i;
+function pickVoice(){
+  if(chosenVoice)return chosenVoice;
+  const en=voices.filter(v=>/^en/i.test(v.lang));
+  if(!en.length)return null;
+  const us=en.filter(v=>/en[-_]?US/i.test(v.lang));
+  const pools=[us,en];
+  for(const p of pools){const hit=p.find(v=>GOOD_VOICE.test(v.name));if(hit)return chosenVoice=hit;}
+  for(const p of pools){const hit=p.find(v=>!BAD_VOICE.test(v.name));if(hit)return chosenVoice=hit;}
+  return chosenVoice=en[0];
+}
 function speak(text,rate){
   try{
     if(!('speechSynthesis' in window))return;
@@ -859,7 +1132,7 @@ function speak(text,rate){
     const u=new SpeechSynthesisUtterance(text);
     u.lang='en-US';u.rate=rate||0.82;
     if(!voices.length)loadVoices();
-    const v=voices.find(v=>/en[-_]?US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+    const v=pickVoice();
     if(v)u.voice=v;
     window.speechSynthesis.speak(u);
   }catch(e){}
@@ -1177,7 +1450,9 @@ function renderAI(){
 
 function renderAIRead(){
   const area=$('#aiRead');area.innerHTML='';
-  const topics=["Günlük hayat","Mülakat","Teknoloji","Seyahat","Yemek"];
+  /* Konu listesi metinlerin kendisinden gelir — yeni metin eklenince sekmede
+     kendiliğinden görünür. Elle tutulan kopya liste yeni konuları gizliyordu. */
+  const topics=[...new Set(READINGS.map(r=>r.topic))];
   const wrap=el(`<div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">Konu seç:</div>
     <div class="chips" id="topicChips"></div>
@@ -1564,14 +1839,14 @@ function renderDrill(){
 
 function renderInterviewPrep(){
   const area=$('#intPrep');area.innerHTML='';
-  area.appendChild(el(`<p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">En sık sorulan 7 soru, kalıp şablonlar ve basit İngilizceyle örnek cevaplar. Örnekleri kendine uyarlayıp <b>sesli</b> çalış — sonra Sahte Mülakat'ta dene. Mülakat kelimeleri <b>Öğren</b> sekmesine eklendi (Seviye 5).</p>`));
+  area.appendChild(el(`<p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">En sık sorulan ${INTERVIEW_QA.length} soru, kalıp şablonlar ve basit İngilizceyle örnek cevaplar. Örnekleri kendine uyarlayıp <b>sesli</b> çalış — sonra Sahte Mülakat'ta dene. Mülakat kelimeleri <b>Öğren</b> sekmesine eklendi (Seviye 5).</p>`));
   INTERVIEW_QA.forEach(item=>{
     const acc=el(`<div class="qa"><button aria-expanded="false"><span>${esc(item.q)}</span><span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></button>
       <div class="body"><div class="body-in">
         <div class="tmpl">${esc(item.tmpl)}</div>
         <div>${esc(item.note)}</div>
         <div class="model">
-          <div class="m-en"><button class="say sm" data-say="${esc(item.en)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><span>${esc(item.en)}</span></div>
+          <div class="m-en"><button class="say sm" aria-label="Cümleyi dinle" data-say="${esc(item.en)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><span>${esc(item.en)}</span></div>
           <div class="m-tr">${esc(item.tr)}</div>
         </div>
       </div></div></div>`);
@@ -1820,15 +2095,29 @@ if(location.hash==='#test'){
     T('checkAnswer parantez', checkAnswer({en:'be (am / is / are)'},'are')===true);
     T('checkAnswer yanlış', checkAnswer({en:'work'},'walk')===false);
     T('normAns noktalama', normAns("It's easy!")==='its easy');
+    T('ing yazımı', ing('see')==='seeing'&&ing('agree')==='agreeing'&&ing('make')==='making'&&ing('stop')==='stopping'&&ing('study')==='studying');
+    T('past düzensiz+düzenli', past('go')==='went'&&past('buy')==='bought'&&past('study')==='studied'&&past('plan')==='planned');
+    T('durum fiiline continuous önerilmez', checkEnglish('I am know it').alt===null&&checkEnglish('I am go home').alt==='I am going home');
+    T('3. tekil olumsuz', checkEnglish("She don't like coffee").fixed==="She doesn't like coffee.");
+    T('eksik be', checkEnglish('I studying now').fixed==='I am studying now.');
+    T('very + fiil', checkEnglish('I very like it').fixed==='I really like it.');
+    T('geçmiş zaman zarfı', checkEnglish('Yesterday I go home').fixed==='Yesterday I went home.');
+    T('doğru cümleye dokunmaz', checkEnglish('I sing every day.').found.length===0&&checkEnglish('She goes to work every day.').found.length===0);
     const s={interval:10,box:3,seen:true};states[9999]=s;
     grade(9999,'easy');
     T('grade easy büyür', s.interval>=17&&s.interval<=30);
     delete states[9999];
     const keep={...stats};
-    stats.lastStudy='2026-7-17';stats.streak=5;stats.freezes=2;
+    /* Bugüne göreli: 3 gün önce çalışılmış → 2 gün kaçmış → 2 dondurma kapatır. */
+    const d=new Date(Date.now()-3*DAY);
+    stats.lastStudy=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    stats.streak=5;stats.freezes=2;
     bumpStreak();
-    T('freeze 2 gün kapatır (17→20)', stats.streak===6&&stats.freezes===0);
+    T('freeze 2 gün kapatır', stats.streak===6&&stats.freezes===0);
     Object.assign(stats,keep);
+    /* grade() içindeki persist() sahte 9999 kaydını diske yazdı — temiz hâli
+       geri yaz, yoksa "Görülen" sayacı kalıcı olarak 1 fazla kalır. */
+    persist();
     console.log('test bitti — durum kalıcı olarak DEĞİŞMEDİ');
   },800);
 }
