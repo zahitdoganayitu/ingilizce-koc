@@ -952,6 +952,11 @@ function past(v){
    yakalamamak için sadece V_BASE'den türetilen biçimler aranır. */
 const V_ING=V_BASE.split('|').map(ing).join('|');
 
+/* Çoğul özne 3. tekil kurallarına girmez: -s ile bitenler ve düzensiz çoğullar.
+   Şüpheli durumda elemek güvenli taraftır — düzeltmemek, yanlış düzeltmekten iyi. */
+const PLURAL_SUBJ=/(?:s|\bpeople|\bchildren|\bmen|\bwomen|\bpolice|\bstaff|\bfeet|\bteeth|\bmice)$/i;
+const isPluralSubj=s=>PLURAL_SUBJ.test(String(s).trim());
+
 const TRAPS=[
   /* "agree" özel: fiil olduğu için tobe_bare'den ÖNCE gelmeli, yoksa hiç ateşlenmez. */
   {id:'am_agree',re:/\b(am|is|are)\s+agree\b/i,
@@ -966,9 +971,7 @@ const TRAPS=[
    alt:(s,m)=>V_STATIVE.test(m[2])?null:s.replace(m[0],m[1]+' '+ing(m[2]))},
   /* Zaman zarfı varsa fiil de geçmişe çekilir. third_s'den ÖNCE gelmeli, yoksa
      "Yesterday he go" önce "he goes" olur ve geçmiş zaman hatası kaçar.
-     ponytail: zarf cümlenin herhangi bir yerinde aranır — çok cümlelik girdide
-     ikinci cümledeki geniş zaman fiili de geçmişe çekilebilir. Tek cümlelik
-     alıştırma girdisi için yeterli; cümle bölme gerekirse burası genişletilir. */
+     Zarf yalnızca kendi cümlesinde aranır — checkEnglish metni cümlelere böler. */
   {id:'past_marker',
    re:new RegExp('\\b(i|you|we|they|he|she|it)\\s+('+V_BASE+')\\b','i'),
    guard:s=>/\b(yesterday|last\s+(week|year|month|night|summer|semester|term)|(\d+|a\s+few|two|three|four|five|ten)\s+(days?|weeks?|years?|months?)\s+ago)\b/i.test(s),
@@ -976,9 +979,12 @@ const TRAPS=[
    why:'Türkçede "dün gittim" derken zaman <b>ekte</b>. İngilizcede zaman zarfı yetmez — <b>fiilin kendisi</b> geçmiş hâle geçer: go → <b>went</b>.',
    fix:(s,m)=>s.replace(m[0],m[1]+' '+past(m[2]))},
   {id:'third_neg',
-   re:/\b(he|she|it)\s+(don'?t|do\s+not)\b/i,
+   /* Özne zamir olabildiği gibi isim de olabilir: "My friend don't…".
+      Çoğul özne don't alır, ona dokunulmaz — guard -s ile biteni eler. */
+   re:/\b(he|she|it|(?:my|his|her|your|our|their|the|this)\s+[a-z]+)\s+(don'?t|do\s+not)\b/i,
+   guard:(s,m)=>!isPluralSubj(m[1]),
    ttl:'3. tekilde <b>doesn\'t</b>',
-   why:'<b>he / she / it</b> ile olumsuzluk <b>doesn\'t</b> olur, <i>don\'t</i> değil. Yardımcı fiil -s\'i üstlenir, ana fiil yalın kalır: <b>She doesn\'t like</b> coffee.',
+   why:'<b>he / she / it</b> ya da tekil bir isim öznesiyle olumsuzluk <b>doesn\'t</b> olur, <i>don\'t</i> değil. Yardımcı fiil -s\'i üstlenir, ana fiil yalın kalır: <b>My friend doesn\'t like</b> coffee.',
    fix:(s,m)=>s.replace(m[0],m[1]+" doesn't")},
   {id:'missing_be_ing',
    re:new RegExp('\\b(i|you|we|they|he|she|it)\\s+('+V_ING+')\\b','i'),
@@ -992,10 +998,11 @@ const TRAPS=[
    why:'Türkçe "çok seviyorum" doğrudan çevrilince <i>I very like</i> çıkar. <b>very</b> sadece sıfat/zarf içindir. Fiil için <b>really</b> ya da sonuna <b>very much</b>.',
    fix:(s,m)=>s.replace(m[0],'really '+m[2])},
   {id:'third_s',
-   re:new RegExp('(^|[^a-z])(he|she|it)\\s+('+V_BASE+')\\b','i'),
-   guard:(s,m)=>!new RegExp('\\b('+PRE_AUX+')\\s+'+m[3]+'\\b','i').test(s),
+   /* Özne zamir ya da tekil isim ("My friend works…"). Çoğul özne -s almaz. */
+   re:new RegExp('(^|[^a-z])(he|she|it|(?:my|his|her|your|our|their|the|this)\\s+[a-z]+)\\s+('+V_BASE+')\\b','i'),
+   guard:(s,m)=>!isPluralSubj(m[2])&&!new RegExp('\\b('+PRE_AUX+')\\s+'+m[3]+'\\b','i').test(s),
    ttl:'3. tekil şahıs -s eksik',
-   why:'Corpus araştırmalarında Türkçe konuşanların <b>en sık</b> fiil hatası. <b>he / she / it</b> ile geniş zamanda fiile <b>-s</b> eklenir.',
+   why:'Corpus araştırmalarında Türkçe konuşanların <b>en sık</b> fiil hatası. <b>he / she / it</b> ya da tekil bir isim öznesiyle geniş zamanda fiile <b>-s</b> eklenir.',
    fix:(s,m)=>s.replace(m[0],m[1]+m[2]+' '+third(m[3]))},
   {id:'job_article',
    re:new RegExp('\\b(am|is|are)\\s+('+V_JOB+')\\b','i'),
@@ -1054,21 +1061,54 @@ const TRAPS=[
    fix:s=>s.replace(/\b(speak|talk|speaking|talking)\s+(than|from)\b/i,'$1 about')}
 ];
 
-function checkEnglish(text){
+/* Tek cümle denetimi. Bir kural aynı cümlede birden fazla kez geçebilir
+   ("He go to work and she go home"), o yüzden her kural değişiklik durana
+   kadar tekrarlanır — MAX_PASS sonsuz döngüye karşı emniyet kemeri. */
+const MAX_PASS=6;
+function checkSentence(text){
   let cur=String(text).trim(), found=[], alt=null;
+  if(!cur)return {fixed:'',found,alt};
   TRAPS.forEach(t=>{
-    const m=cur.match(t.re);
-    if(!m)return;
-    if(t.guard&&!t.guard(cur,m))return;
-    const before=cur;
-    cur=t.fix(cur,m);
-    if(cur===before)return;
-    if(t.alt&&!alt)alt=t.alt(before,m);
-    found.push({ttl:t.ttl,why:t.why});
+    let hit=false;
+    for(let pass=0;pass<MAX_PASS;pass++){
+      const m=cur.match(t.re);
+      if(!m)break;
+      if(t.guard&&!t.guard(cur,m))break;
+      const before=cur;
+      cur=t.fix(cur,m);
+      if(cur===before)break;
+      if(t.alt&&!alt)alt=t.alt(before,m);
+      hit=true;
+    }
+    if(hit)found.push({ttl:t.ttl,why:t.why});
   });
   if(cur&&!/[.!?]$/.test(cur))cur+='.';
   cur=cur.charAt(0).toUpperCase()+cur.slice(1);
   return {fixed:cur,found,alt};
+}
+
+/* Paragrafı cümlelere böler: . ! ? sonrası yeni cümle başlar.
+   ponytail: kısaltma listesi yok — "Mr. Kaya" iki parçaya ayrılır. Zararsız,
+   çünkü parçalar denetimden geçip aynı boşlukla birleşiyor; kısaltmanın kendi
+   içinde dilbilgisi hatası olmuyor. */
+function splitSentences(text){
+  return (String(text).match(/[^.!?]+[.!?]*/g)||[]).filter(s=>s.trim());
+}
+
+/* Paragraf denetimi: her cümle kendi başına taranır. Bu, zaman zarfına bakan
+   past_marker kuralının komşu cümleyi geçmişe çekmesini de engeller. */
+function checkEnglish(text){
+  const parts=splitSentences(text);
+  if(parts.length<2)return checkSentence(text);
+  const found=[], fixed=[];
+  let alt=null;
+  parts.forEach(p=>{
+    const r=checkSentence(p);
+    if(r.fixed)fixed.push(r.fixed);
+    if(!alt&&r.alt)alt=r.alt;
+    r.found.forEach(f=>{if(!found.some(x=>x.ttl===f.ttl))found.push(f);});
+  });
+  return {fixed:fixed.join(' '),found,alt};
 }
 
 /* ================= STORAGE ================= */
@@ -1519,8 +1559,8 @@ function buildReadCard(r){
 function renderAIWrite(){
   const area=$('#aiWrite');area.innerHTML='';
   const wrap=el(`<div>
-    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">İngilizce bir cümle yaz — Türkçe konuşanların <b>en sık ${TRAPS.length} tuzağını</b> tarayıp düzeltirim. <b>Üretmek, hataları görmenin en hızlı yoludur.</b></div>
-    <textarea class="taread" id="writeInput" placeholder="Örn: She go to work. I am go to school. I am teacher..."></textarea>
+    <div style="font-size:13.5px;color:var(--muted);margin-bottom:11px;line-height:1.5;">İngilizce yaz — tek cümle ya da tam paragraf. Türkçe konuşanların <b>en sık ${TRAPS.length} tuzağını</b> her cümlede ayrı ayrı tarayıp düzeltirim. <b>Üretmek, hataları görmenin en hızlı yoludur.</b></div>
+    <textarea class="taread" id="writeInput" placeholder="Örn: I am a student. Yesterday I go to an interview. She don't ask difficult questions."></textarea>
     <button class="ai-btn" id="checkWriteBtn" style="margin-top:12px;">🔍 Tuzakları tara</button>
     <div id="writeOut"></div>
   </div>`);
@@ -2105,6 +2145,13 @@ if(location.hash==='#test'){
     T('very + fiil', checkEnglish('I very like it').fixed==='I really like it.');
     T('geçmiş zaman zarfı', checkEnglish('Yesterday I go home').fixed==='Yesterday I went home.');
     T('doğru cümleye dokunmaz', checkEnglish('I sing every day.').found.length===0&&checkEnglish('She goes to work every day.').found.length===0);
+    T('paragraf: her cümle ayrı denetlenir', checkEnglish('Yesterday I go to the office. Now I work here.').fixed==='Yesterday I went to the office. Now I work here.');
+    T('paragraf: çok cümlede çok hata', checkEnglish("She don't like coffee. I studying now.").fixed==="She doesn't like coffee. I am studying now.");
+    T('aynı kural cümlede iki kez', checkEnglish('He go to work and she go home.').fixed==='He goes to work and she goes home.');
+    T('paragraf doğru metne dokunmaz', checkEnglish('I am a student. I want to improve my English.').found.length===0);
+    T('isim öznesi 3. tekil', checkEnglish("My friend don't finish his part.").fixed==="My friend doesn't finish his part."&&checkEnglish('The manager go home early.').fixed==='The manager goes home early.');
+    T('çoğul özneye dokunmaz', checkEnglish("My friends don't like it.").found.length===0&&checkEnglish('My friends go home.').found.length===0);
+    T('düzensiz çoğula dokunmaz', ['The people go home.','My children go to school.','The men work here.','The women work in the office.'].every(x=>checkEnglish(x).found.length===0));
     const s={interval:10,box:3,seen:true};states[9999]=s;
     grade(9999,'easy');
     T('grade easy büyür', s.interval>=17&&s.interval<=30);
