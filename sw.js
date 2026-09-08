@@ -1,5 +1,5 @@
 /* Çevrimdışı çalışma. Sürüm değişince eski önbellek silinir. */
-const V = 'ing-v4.3';
+const V = 'ing-v5.0';
 /* Yazı tipleri Google'dan geliyor. Same-origin şartı bunları önbelleğe almıyordu,
    uçak modunda sayfa sistem fontuna düşüyordu. Bu iki kaynak da önbelleklenir. */
 const FONT_HOSTS = /^https:\/\/fonts\.(googleapis|gstatic)\.com$/;
@@ -28,7 +28,7 @@ self.addEventListener('fetch', e => {
       caches.match(e.request).then(hit => hit || fetch(e.request).then(r => {
         if (r.ok || r.type === 'opaque') {
           const copy = r.clone();
-          caches.open(V).then(c => c.put(e.request, copy));
+          e.waitUntil(caches.open(V).then(c => c.put(e.request, copy)));
         }
         return r;
       }).catch(() => new Response('', { status: 504 })))
@@ -42,7 +42,8 @@ self.addEventListener('fetch', e => {
       .then(r => {
         if (r.ok && origin === location.origin) {
           const copy = r.clone();
-          caches.open(V).then(c => c.put(e.request, copy));
+          /* waitUntil: SW erken kapanırsa put düşmesin */
+          e.waitUntil(caches.open(V).then(c => c.put(e.request, copy)));
         }
         return r;
       })
