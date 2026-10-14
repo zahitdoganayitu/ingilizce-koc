@@ -9,6 +9,20 @@ Ajan betikleri ve vaka dosyaları: `araclar/ajan-2026-10-14/`.
 
 Uzlaşma özeti ve kullanıcı kararları: aşağıda "Uzlaşma" bölümü (kullanıcı onayından sonra karar satırı eklenecek).
 
+## Kullanıcı kararı ve uygulama (2026-10-14)
+
+Kullanıcı: "sıradan yapalım". Dalga 1 ve Dalga 2 uygulandı:
+- `c0e2ca0` Dalga 1 — motor yaması (fp.js 40/40; regresyon 72→123), düzeltme kartı (diffWords, ✅/Dinle kuralı),
+  9 içerik hatası, Cümle Diz zarf sırası, görsel/erişilebilirlik paketi.
+- `722b14a` Dalga 2a — Benim cevaplarım (KITS, 217 birleşim self-test'te), Hızlı/Tam prova + rapor kartı,
+  etkinlik günlüğü + üretimle seri, Bugün · 3 adım, dürüst hazırlık, öğrenme adımında TR→EN.
+- `eac7c67` Dalga 2b — okumada cümle vurgusu, kalıp dilimleri, dönüş karşılaması, .ics, kulak paraphrase + ses çiftleri.
+
+Bekleyen: **Dalga 3** (motor kesinlik katmanı + 500 vakalık korpus; içerik doğrulama protokolü → +250 kelime →
+ünite; 2 dk seviye yoklaması; SVG ikon seti, self-host font, maskable simge, aydınlık tema). İçerik protokolü
+kullanıcının Türkçe kontrolünü ister — ayrı oturum.
+Açık sorular: ilk örnek cevaptaki "worked as a supervisor" gerçek mi; havuzda kaç kelime görüldü (+250 önceliği).
+
 ---
 
 ## Brief
