@@ -142,6 +142,11 @@
   .chip.on{background:var(--accent);color:#3d2b06;border-color:var(--accent);}
   .ai-btn{width:100%;background:linear-gradient(160deg,#6a56d8,#5643c4);/* beyaz yazı ≥5.3:1 (eski mor 2.8:1) */border:none;color:#fff;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,filter .15s;}
   .ai-btn:hover{filter:brightness(1.08);}
+  /* İkincil düğme: koyu zemin + renkli yazı. Renk: varsayılan mor, .a amber, .n nötr. Yeni bileşen inline stil yazmasın. */
+  .ai-btn.sec{background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;}
+  .ai-btn.sec.a{color:var(--accent);}
+  .ai-btn.sec.n{color:#EDEEF7;font-size:13px;padding:10px;}
+  .ai-btn.auto{width:auto;padding:11px 16px;}
   .ai-btn:active{transform:translateY(1px) scale(.995);}
   .ai-btn:disabled{opacity:.6;cursor:default;}
   .ai-out{margin-top:16px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:18px;font-size:15px;line-height:1.65;color:#EDEEF7;animation:pop .3s ease;}
@@ -154,6 +159,34 @@
   .ai-out .cmp ins{color:#EDEEF7;background:rgba(255,255,255,.1);font-weight:500;}
   .ai-out .cmp del{color:var(--muted);}
   .ai-out .mine{color:var(--muted);font-size:14.5px;}
+  /* Cevap kurucu */
+  .kit{margin-top:12px;background:var(--bg2);border:1px solid var(--line2);border-radius:14px;padding:14px;}
+  .kit-h{font-weight:700;color:#EDEEF7;font-size:14.5px;}
+  .kit-note{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .kit-ln{margin-top:12px;}
+  .kit-s{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--violet);font-weight:700;margin-bottom:4px;}
+  .kit-p{font-size:14.5px;line-height:2.3;color:#EDEEF7;}
+  .kit-sel,.kit-in{font:inherit;font-weight:600;color:var(--accent);background:var(--bg3);border:1px solid var(--line2);border-radius:9px;padding:6px 8px;min-height:40px;max-width:100%;vertical-align:middle;}
+  .kit-in{color:#EDEEF7;min-width:9em;margin-left:4px;}
+  .kit-w{white-space:nowrap;}
+  .kit-prev{margin-top:14px;padding:12px;border-radius:11px;background:var(--bg3);font-size:14.5px;line-height:1.6;color:#fff;}
+  .kit-acts{display:flex;gap:8px;margin-top:10px;}
+  .kit-acts .ai-btn{flex:1;}
+  .kit-badge{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13.5px;color:#EDEEF7;margin-bottom:12px;}
+  .kit-badge b{color:var(--accent);}
+  .plan{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:12px 12px 6px;margin-bottom:10px;}
+  .plan.all{padding:11px 14px;color:var(--mint);font-weight:600;font-size:13.5px;}
+  .plan-h{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--violet);font-weight:700;margin:0 2px 6px;}
+  .plan-h span{color:var(--muted);}
+  .plan-r{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;background:none;border:none;border-top:1px solid var(--line);color:#EDEEF7;font:inherit;font-size:14px;text-align:left;padding:6px 2px;cursor:pointer;}
+  div.plan-r{cursor:default;border-top:none;}
+  .plan-r .pc{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--bg4);font-size:12px;font-weight:700;flex-shrink:0;}
+  .plan-r.ok{color:var(--muted);}
+  .plan-r.ok .pc{background:rgba(79,209,165,.2);color:var(--mint);}
+  .plan-r .go{margin-left:auto;color:var(--muted);font-size:18px;}
+  .pr-ln{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);}
+  .mine-ans{margin-top:12px;padding:12px;border-radius:12px;background:rgba(244,183,64,.08);border:1px solid rgba(244,183,64,.25);font-size:14px;line-height:1.55;color:#EDEEF7;}
+  .kit-slot{margin-top:10px;}
   .ai-out .vocab{background:var(--bg3);border-radius:11px;padding:11px 13px;margin-top:6px;font-size:13.5px;color:#cfd2e8;}
   .taread{width:100%;background:var(--surface);color:var(--ink);border:2px solid transparent;border-radius:14px;padding:14px 15px;font-family:inherit;font-size:16px;font-weight:500;outline:none;resize:vertical;min-height:80px;transition:border-color .15s;}
   .taread:focus{border-color:var(--accent);}
@@ -289,6 +322,10 @@
   .transcript{margin-top:12px;background:var(--bg);border:1px dashed var(--line2);border-radius:12px;padding:12px 14px;font-size:14px;color:#cfd2e8;min-height:44px;line-height:1.55;}
   .ready-panel .track{height:14px;background:var(--bg3);border-radius:999px;overflow:hidden;}
   .ready-panel .track > i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--accent));border-radius:999px;transition:width .6s ease;}
+  .parts{margin-top:12px;display:grid;gap:6px;}
+  .parts .pt{display:grid;grid-template-columns:70px 1fr;gap:8px;align-items:center;font-size:12px;color:var(--muted);}
+  .parts .track{height:6px;background:var(--bg4);border-radius:999px;overflow:hidden;}
+  .parts .track > i{display:block;height:100%;background:var(--accent);border-radius:999px;}
   .miles{margin-top:13px;display:flex;flex-direction:column;gap:8px;}
   .miles .mi{display:flex;gap:9px;font-size:12.5px;color:var(--muted);align-items:baseline;}
   .miles .mi b{color:var(--muted2);font-size:11px;width:34px;flex-shrink:0;}
@@ -325,6 +362,7 @@
 
   <main>
     <section class="view active" id="v-study">
+      <div id="todayPlan"></div>
       <div class="progressbar" id="sessBar" role="progressbar" aria-label="Seans ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="sessProg"></i></div>
       <div id="studyArea"></div>
     </section>
@@ -1290,7 +1328,7 @@ function grade(id,rating){
   /* Öğrenme adımı: yeni kart ilk görüşte planlanmaz, aynı seansta bir kez daha
      hatırlanır (Karpicke & Roediger 2008); aralık ikinci başarıda başlar. */
   /* bugünün sayacı ve yeni kelimeleri (bitiş ekranı: sayfa yeniden açılınca da kaybolmasın) */
-  stats.dayN=(stats.dayN||0)+1;if(isNew)(stats.todayNew=stats.todayNew||[]).push(id);
+  stats.dayN=(stats.dayN||0)+1;if(isNew)(stats.todayNew=stats.todayNew||[]).push(id);logAct('srs');
   if(isNew&&rating!=='again'){st.box=1;st.interval=0;st.nextReview=Date.now();stats.reviews++;stats.newToday++;bumpStreak();persist();return {sameSession:true};}
   if(rating==='again'){st.box=1;st.interval=0;}
   else if(rating==='hard'){st.interval=(!st.interval||st.interval<1)?1:Math.max(1,Math.round(st.interval*1.2));st.box=Math.max(1,st.box);}
@@ -1315,6 +1353,18 @@ function bumpStreak(){
   }else{stats.streak=1;}
   stats.lastStudy=t;
   if(stats.streak===7)setTimeout(()=>toast('🎉 7 gün seri! Alışkanlık oturuyor.'),900);
+}
+/* Etkinlik günlüğü: gün başına tür sayacı, son 90 gün. Bugün planı, hazırlık yüzdesi ve seri bunu okur.
+   Seri artık yalnız kelime kartıyla değil her ÜRETİM alıştırmasıyla da sürer (cümle, çeviri, yazı, prova, akıcılık, cevap). */
+let actLog={};
+const PRODUCTION=new Set(['diz','cevir','yaz','prova','akici','cevap']);
+const todayLog=()=>actLog[todayStr()]||{};
+function logAct(k,n=1){
+  const t=todayStr();const d=actLog[t]=actLog[t]||{};d[k]=(d[k]||0)+n;
+  const ks=Object.keys(actLog);
+  if(ks.length>90)ks.sort((a,b)=>parseDay(a)-parseDay(b)).slice(0,ks.length-90).forEach(x=>delete actLog[x]);
+  store.set('log',actLog);
+  if(PRODUCTION.has(k)){bumpStreak();persist();renderHeader();}
 }
 function rolloverDay(){const t=todayStr();if(stats.newDate!==t){stats.newToday=0;stats.newDate=t;stats.dayN=0;stats.todayNew=[];}}
 async function persist(){await store.set('srs:states',states);await store.set('srs:stats',stats);}
@@ -1348,10 +1398,26 @@ function buildSession(){
 function nextCard(){if(session.queue.length){session.current=session.queue.shift();return session.current;}if(session.relearn.length){session.current=session.relearn.shift();return session.current;}session.current=null;return null;}
 function updateSessProg(){const total=Math.max(1,session.planned),p=Math.min(100,Math.round((session.done/total)*100));$('#sessProg').style.width=p+'%';$('#sessBar').setAttribute('aria-valuenow',p);}
 
+/* Bugün · 3 adım: kelime + cümle + mülakat. Eskiden günlük döngü yalnız kelimeydi; kullanıcının en zayıf yanı
+   (cümle kurma) ve asıl hedefi (mülakat) hiç önerilmiyordu. Mevcut ekranlara götürür, yeni içerik istemez. */
+function renderPlan(){
+  const box=$('#todayPlan');if(!box)return;
+  const L=todayLog(),left=session.queue.length+session.relearn.length+(session.current?1:0);
+  const s1=left===0,cnt=(L.diz||0)+(L.cevir||0),s2=cnt>=3,s3=(L.prova||0)+(L.cevap||0)>=1;
+  const n=[s1,s2,s3].filter(Boolean).length,hasAns=INTERVIEW_QA.some(q=>answers[q.q]);
+  if(n===3){box.innerHTML='<div class="plan all">✓ Bugün · 3/3 — günün tamam</div>';return;}
+  box.innerHTML=`<div class="plan"><div class="plan-h">Bugün · 3 adım <span>${n}/3</span></div>
+    <div class="plan-r ${s1?'ok':''}"><span class="pc">${s1?'✓':'1'}</span><span>Kelimeler — ${s1?'bitti':left+' kart, ~'+Math.max(1,Math.round(left/4))+' dk'}</span></div>
+    <button class="plan-r ${s2?'ok':''}" data-go="sentence"><span class="pc">${s2?'✓':'2'}</span><span>Cümle kur — ${Math.min(cnt,3)}/3 cümle</span><span class="go">›</span></button>
+    <button class="plan-r ${s3?'ok':''}" data-go="interview"><span class="pc">${s3?'✓':'3'}</span><span>Mülakat — ${s3?'bitti':hasAns?'1 soru prova, sesli':'ilk cevabını kur'}</span><span class="go">›</span></button></div>`;
+  box.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{switchTab(b.dataset.go);
+    if(b.dataset.go==='interview'&&hasAns)$('#intSeg button[data-m="mock"]').click();}));
+}
+
 function renderStudy(){
   const area=$('#studyArea');
   if(!session.current)nextCard();
-  updateSessProg();
+  updateSessProg();renderPlan();
   if(!session.current){
     const t=todayStr();
     const canBonus=stats.bonusDate!==t&&WORDS.some(w=>!states[w.id]||!states[w.id].seen);
@@ -1381,7 +1447,10 @@ function renderStudy(){
   const box=(st&&st.seen)?(st.box||0):0;
   area.innerHTML='';
   // Format merdiveni: kutu yükseldikçe tanımadan üretime (araştırma: recall > recognition)
-  if(box<=1)renderCardClassic(w,area);
+  /* Öğrenme adımının ikinci görüşü TR→EN: yeni kelime aynı gün üretilir. Eskiden ikinci görüş de tanıma
+     kartıydı ve ilk "yazarak üret" kartı ancak ~41. günde geliyordu (pedagoji simülasyonu, 2026-10-14). */
+  if(st&&st.seen&&st.box===1&&!st.interval)renderCardReverse(w,area,true);
+  else if(box<=1)renderCardClassic(w,area);
   else if(box===2)renderCardListen(w,area);
   else if(box===3)renderCardReverse(w,area);
   else if(box===4)renderCardCloze(w,area);
@@ -1405,14 +1474,13 @@ function checkAnswer(w,val,loose){const v=normAns(val);const ws=loose?WORDS.filt
 
 function renderCardClassic(w,area){
   const lvlName=['','Seviye 1 · Temel','Seviye 2 · Günlük','Seviye 3 · İletişim','Seviye 4 · Kalıplar','Seviye 5 · Mülakat'][w.lvl];
-  const st=states[w.id];const second=st&&st.seen&&st.box===1&&!st.interval;
   const card=el(`<div class="card">
     <span class="tag">${lvlName}</span>
     <div class="word-row"><span class="word">${esc(w.en)}</span>
       <button class="say" aria-label="Telaffuzu dinle" data-say="${esc(cleanForSpeech(w.en))}">${SPK}</button>
     </div>
     <div class="pos">${esc(w.pos)}</div>
-    <div class="prompt" id="prompt"><div class="hint-line">${second?'Yeni kelime — bugün bir kez daha, yarın değil.':'Türkçesini düşün, sonra kontrol et.'}</div><button class="btn reveal" id="revealBtn">Cevabı gör</button></div>
+    <div class="prompt" id="prompt"><div class="hint-line">Türkçesini düşün, sonra kontrol et.</div><button class="btn reveal" id="revealBtn">Cevabı gör</button></div>
   </div>`);
   area.appendChild(card);
   card.querySelector('.say').addEventListener('click',e=>speak(e.currentTarget.dataset.say));
@@ -1462,12 +1530,12 @@ function renderCardListen(w,area){
   setTimeout(say,300);
 }
 
-function renderCardReverse(w,area){
+function renderCardReverse(w,area,learning){
   const card=el(`<div class="card">
     <span class="tag">🔁 Türkçeden hatırla</span>
     <div class="word-row"><span class="word" style="font-size:32px;">${esc(w.tr)}</span></div>
     <div class="pos">${esc(w.pos)} · “${esc(w.exTr)}”</div>
-    <div class="prompt"><div class="hint-line">İngilizcesini önce SESLİ söyle, sonra bak.</div><button class="btn reveal">İngilizcesini gör</button></div>
+    <div class="prompt"><div class="hint-line">${learning?'Az önce gördün — şimdi İngilizcesini sen hatırla. Önce SESLİ söyle.':'İngilizcesini önce SESLİ söyle, sonra bak.'}</div><button class="btn reveal">İngilizcesini gör</button></div>
   </div>`);
   area.appendChild(card);
   card.querySelector('.btn').addEventListener('click',()=>{
@@ -1668,16 +1736,16 @@ function buildReadCard(r){
   const card=el(`<div class="ai-out">
     <div class="en-text">${mdLite(r.en)}</div>
     <div style="display:flex;gap:8px;margin-top:14px;">
-      <button class="ai-btn" id="playRead" style="flex:1;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Dinle</button>
-      <button class="ai-btn" id="playSlow" aria-label="Yavaş dinle" style="width:auto;padding:11px 16px;background:var(--bg3);color:var(--violet);font-size:13.5px;">🐢</button>
+      <button class="ai-btn sec" id="playRead" style="flex:1;">🔊 Dinle</button>
+      <button class="ai-btn sec auto" id="playSlow" aria-label="Yavaş dinle">🐢</button>
     </div>
-    <button class="ai-btn" id="showTr" style="margin-top:8px;background:var(--bg3);color:#EDEEF7;font-size:13px;padding:10px;">Türkçesini göster</button>
+    <button class="ai-btn sec n" id="showTr" style="margin-top:8px;">Türkçesini göster</button>
     <div id="trSlot" hidden><div class="lbl">Türkçe</div><div class="tr-text">${mdLite(r.tr)}</div></div>
     <div class="lbl">Kilit kelimeler</div><div class="vocab">${mdLite(r.vocab)}</div>
   </div>`);
   /* "A:/B:" her satır başında silinir (eski /^A:|B:/ yalnız ilk A:'yı siliyordu, TTS "A" diye okuyordu) */
   const flat=r.en.replace(/^[AB]:\s*/gm,'').replace(/\n/g,' ');
-  card.querySelector('#playRead').addEventListener('click',()=>speak(flat,0.85));
+  card.querySelector('#playRead').addEventListener('click',()=>{speak(flat,0.85);logAct('oku');});
   card.querySelector('#playSlow').addEventListener('click',()=>speak(flat,0.6));
   const trSlot=card.querySelector('#trSlot'),trBtn=card.querySelector('#showTr');
   trBtn.addEventListener('click',()=>{
@@ -1704,7 +1772,7 @@ function checkWriting(){
   const text=input.value.trim();
   if(!text){toast('Önce bir cümle yaz');return;}
   out.innerHTML='';
-  out.appendChild(buildCheckCard(text,checkEnglish(text)));
+  out.appendChild(buildCheckCard(text,checkEnglish(text)));logAct('yaz');
 }
 
 /* Kelime düzeyi fark (LCS): b'yi basar, a'ya göre eklenen/değişen <ins>, silinen <del>.
@@ -1737,14 +1805,14 @@ function buildCheckCard(original,res,ref){
   const card=el(`<div class="ai-out">
     ${ref?`<div class="lbl" style="color:${exact?'var(--mint)':'var(--violet)'};">${exact?'✅ Örnekle aynı':'🎯 Örnek çeviri'}</div>
       <div class="en-text">${esc(ref)}</div>
-      <button class="ai-btn" id="playRef" style="margin-top:10px;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Örneği dinle</button>
+      <button class="ai-btn sec" id="playRef" style="margin-top:10px;">🔊 Örneği dinle</button>
       ${cmp?`<div class="lbl" style="color:var(--muted);">Seninki · örnekten farklı</div>
         <div class="mine cmp" id="cmpTxt">${yakin?cmp.html:esc(res.fixed)}</div>
         ${yakin?'':'<button class="chip" id="cmpBtn" style="margin-top:8px;">Farkı göster</button>'}
         <div class="tr-text" style="margin-top:6px;font-size:12.5px;">Farklı olması yanlış demek değil — aynı şeyi söylemenin başka yolu da olabilir.</div>`:''}`:''}
     ${fixedN?`<div class="lbl" style="color:var(--accent);">🔧 Düzeltilmiş hâli</div>
       <div class="en-text">${d.html}</div>${d.more?`<div class="tr-text" style="font-size:12.5px;">+${d.more} düzeltme daha</div>`:''}
-      ${ref?'':`<button class="ai-btn" id="playCorr" style="margin-top:12px;background:var(--bg3);color:var(--accent);font-size:13.5px;padding:11px;">🔊 Düzeltilmiş hâlini dinle</button>`}
+      ${ref?'':`<button class="ai-btn sec a" id="playCorr" style="margin-top:12px;">🔊 Düzeltilmiş hâlini dinle</button>`}
       ${res.alt?`<div class="lbl">Şu an oluyorsa</div><div class="tr-text">${esc(res.alt)}</div>`:''}
       <div class="lbl">📝 Yakalananlar</div>${res.found.map(f=>
         `<div class="vocab" style="margin-bottom:7px;"><b style="color:var(--accent);">${f.ttl}</b><br>${f.why}</div>`).join('')}`
@@ -1820,6 +1888,7 @@ function renderSentTiles(){
     const attempt=sent.placed.map(x=>x.tok).join(' ').toLowerCase();
     const fb=card.querySelector('#sFb');
     if(!attempt){fb.className='sfeedback no';fb.textContent='Önce kelimeleri diz.';return;}
+    logAct('diz');
     /* setTimeout sırasında sekme değişmiş olabilir: sadece hâlâ aynı soruysa yenile */
     const next=ms=>setTimeout(()=>{if(sent.q===q){sent.q=null;renderSentTiles();}},ms);
     if(attempt===q.answerKey||attempt===q.altKey){
@@ -1884,7 +1953,7 @@ function renderSentTranslate(){
     if(!attempt){toast('Önce çevirini yaz');return;}
     out.innerHTML='';
     const res=checkEnglish(attempt);
-    out.appendChild(buildCheckCard(attempt,res,cur.en));
+    out.appendChild(buildCheckCard(attempt,res,cur.en));logAct('cevir');
   });
 }
 
@@ -1969,7 +2038,89 @@ const MOCK_KEYS={
   "Tell me about a mistake you made and what you learned.":["mistake","learned","fixed","check"],
   "Tell me about a time you disagreed with a teammate.":["talked","together","middle ground","agreed"]
 };
-let mockIdx=0,mockTry=0;
+/* ===== Benim cevaplarım: doğrulanmış çerçeve + seçenek (2026-10-14, üç uzman uzlaşısı) =====
+   Mülakatın en yüksek getirili hazırlığı 3-5 kendi hikâyeni önceden kurmak. A1-A2'de serbest yazı yanlış
+   İngilizceyi ezberletir; burada her satır sabit bir çerçeve, boşluklar önceden doğrulanmış seçenekler.
+   Satır = {s:'adım (TR)', p:[parça...]}; parça ya string ya {o:[seçenekler], f:'serbest ipucu'}.
+   KURAL: bir boşluğun her seçeneği o satırdaki diğer tüm seçeneklerle dilbilgisi olarak doğru birleşmeli —
+   self-test (#test) her satırın tüm birleşimlerini motordan geçirir. Serbest boşluk (f) yalnız isim öbeği alır. */
+const KITS={
+ "Tell me about yourself.":[
+  {s:'Şimdi',p:['I am a ',{o:['third-year','second-year','fourth-year','first-year']},' ',{o:['management engineering','industrial engineering','computer engineering','business administration'],f:'bölümün (İngilizce)'},' student at ',{o:['ITU','Istanbul Technical University'],f:'üniversiten'},'.']},
+  {s:'Geçmiş',p:['Last ',{o:['summer','year']},', I ',{o:['worked part-time at a café','worked in a student club','did a short internship','helped in my family\'s business','worked on a team project at university']},'.']},
+  {s:'Ne öğrendin',p:['There, I learned ',{o:['teamwork','how to plan my time','how to work with customers','how to solve problems quickly']},'.']},
+  {s:'Gelecek',p:['Now, I want to ',{o:['learn from a strong team','use my skills in a real company','improve my planning skills','get real work experience']},'.']}],
+ "What are your strengths?":[
+  {s:'Güçlü yön',p:['My biggest strength is that I ',{o:['learn quickly','plan my time well','work well with others','stay calm under pressure']},'.']},
+  {s:'Kanıt',p:['For example, ',{o:['in my last project','at my part-time job','in a student club']},', I ',{o:['learned a new tool in one week','finished every task before the deadline','helped my team finish on time','solved a problem with a customer']},'.']}],
+ "What is your weakness?":[
+  {s:'Zayıf yön',p:['My weakness is that sometimes I ',{o:['accept too many tasks','speak too quietly in meetings','spend too long on small details','find it hard to ask for help']},'.']},
+  {s:'Nasıl gelişiyorum',p:['But I am improving: now I ',{o:['plan my week first','practice speaking in class','set a time limit for each task','ask my teammates early']},'.']}],
+ "Tell me about a challenge you solved.":[
+  {s:'Durum (S)',p:[{o:['In my last job','In a course project','In a student club']},', ',{o:['a big order was late','our deadline was very short','two people left the team','our data had many mistakes']},'.']},
+  {s:'Görev (T)',p:['I had to ',{o:['find a solution','finish the work on time','inform the customer','fix the data']},'.']},
+  {s:'Eylem (A)',p:['I ',{o:['made a simple plan','talked to my team','called the supplier','checked everything step by step']},', and I ',{o:['asked my manager for help','worked in short blocks','gave every person one task']},'.']},
+  {s:'Sonuç (R)',p:['As a result, we ',{o:['finished on time','saved two days','delivered the order','got a good grade']},'.']}],
+ "Why do you want to work here?":[
+  {s:'Şirket',p:['Your company ',{o:['is growing fast','has a good training program','works on interesting projects']},'.']},
+  {s:'Ben',p:['My ',{o:['planning','teamwork','data analysis','communication']},' skills fit this position.']},
+  {s:'Katkı',p:['I believe I can contribute to your team.']}],
+ "Where do you see yourself in five years?":[
+  {s:'Hedef',p:['In five years, I want to be ',{o:['an expert in my field','a team leader','a good project manager','an engineer with real experience']},'.']},
+  {s:'Sorumluluk',p:['I also want to ',{o:['take more responsibility','work on bigger projects','help new interns']},'.']},
+  {s:'Şirketle',p:['I hope I can grow with this company.']}],
+ "Do you have any questions for us?":[
+  {s:'Evet de',p:['Yes, I have a question.']},
+  {s:'Soru',p:[{o:['What does a normal day look like in this position?','How do you train new interns?','What does success look like in the first six months?','How big is the team I will work with?']}]}],
+ "What do you want to learn from this internship?":[
+  {s:'Öğrenme hedefi',p:['I want to learn how ',{o:['a real production team works','a big company makes decisions','projects are planned and managed','data is used in daily work']},'.']},
+  {s:'Beceri',p:['I also want to improve my ',{o:['planning','Excel','communication','problem-solving']},' skills.']},
+  {s:'Kimden',p:['I hope to learn from experienced ',{o:['engineers','colleagues','managers']},'.']}],
+ "Tell me about a course project you worked on.":[
+  {s:'Durum (S)',p:['In one course project, we ',{o:['analyzed a factory\'s production line','planned a new product','studied a company\'s sales data','designed a simple app']},'.']},
+  {s:'Görev (T)',p:['I was responsible for ',{o:['the data','the report','the presentation','the plan']},'.']},
+  {s:'Eylem (A)',p:['I ',{o:['collected the numbers','wrote the report','prepared the slides','made the timeline']},', and we presented it together.']},
+  {s:'Sonuç (R)',p:['We ',{o:['got a good grade','finished on time','got good feedback from the professor']},'.']}],
+ "Tell me about a time you worked under pressure.":[
+  {s:'Durum (S)',p:['During ',{o:['exam week','my last internship','a busy semester']},', I also had ',{o:['a project deadline','a part-time job','two big reports']},'.']},
+  {s:'Eylem (A)',p:['I made a simple plan, ',{o:['worked in short blocks','did the hardest task first','asked my teammate for help']},', and stayed calm.']},
+  {s:'Sonuç (R)',p:[{o:['We finished everything on time.','I finished everything on time.','I passed my exams and delivered the project.']}]}],
+ "How would you describe your English level?":[
+  {s:'Dürüst',p:['My English is still improving.']},
+  {s:'Kanıt',p:['I can ',{o:['understand and explain my work','read reports and emails','follow simple meetings in English']},', and I study every day.']},
+  {s:'Kurtarma',p:['When I do not understand something, I ask.']}],
+ "Why should we hire you?":[
+  {s:'Güçlü yön',p:['I ',{o:['learn quickly','plan my time well','stay calm under pressure']},', I work well with others, and I am ready to do any task the team needs.']},
+  {s:'Katkı',p:['I think I can contribute to your team from the first week.']}],
+ "When can you start, and how many days a week can you work?":[
+  {s:'Başlangıç',p:['I can start in ',{o:['June','July','September','January']},' and work full-time for ',{o:['two','three']},' months.']},
+  {s:'Dönem içi',p:['During the semester, I can work ',{o:['two','three']},' days a week.']}],
+ "Tell me about a mistake you made and what you learned.":[
+  {s:'Durum (S)',p:[{o:['In a group project','At my part-time job','In a student club']},', I ',{o:['sent a report without checking the numbers','forgot an important email','misunderstood a task']},'.']},
+  {s:'Eylem (A)',p:['I ',{o:['fixed it the same day','told my team quickly','asked for help and fixed it']},', and I apologized.']},
+  {s:'Ne öğrendim',p:['What I learned from that was to ',{o:['check my work before I send it','write my tasks down','ask questions early']},'.']}],
+ "Tell me about a time you disagreed with a teammate.":[
+  {s:'Durum (S)',p:[{o:['In a course project','In a student club','At my part-time job']},', ',{o:['my teammate wanted a long report and I wanted a short one','my teammate wanted a different plan from mine','my teammate and I wanted different deadlines']},'.']},
+  {s:'Eylem (A)',p:['We talked, ',{o:['looked at the requirements together','listened to each other','asked our professor for advice']},', and found a middle ground.']},
+  {s:'Sonuç (R)',p:[{o:['The professor liked the result.','We finished on time.','We worked well together after that.']}]}]
+};
+let answers={};
+/* Satırın varsayılan seçimi: her boşluğun ilk seçeneği */
+const kitDefault=kit=>kit.map(ln=>ln.p.map(x=>typeof x==='string'?null:x.o[0]));
+const kitLine=(ln,pk)=>ln.p.map((x,j)=>typeof x==='string'?x:(pk&&pk[j])||x.o[0]).join('');
+const kitText=(kit,picks)=>kit.map((ln,i)=>kitLine(ln,picks[i])).join(' ');
+/* serbest kelime var mı: seçilen değer o boşluğun seçenekleri arasında değilse öğrencinin kendi metnidir */
+const kitHasFree=(kit,picks)=>kit.some((ln,i)=>ln.p.some((x,j)=>typeof x!=='string'&&picks[i]&&picks[i][j]!=null&&!x.o.includes(picks[i][j])));
+/* Bir satırın tüm seçenek birleşimleri (self-test bunları motordan geçirir) */
+function kitCombos(ln){let out=[''];ln.p.forEach(x=>{const ops=typeof x==='string'?[x]:x.o;out=out.flatMap(a=>ops.map(o=>a+o));});return out;}
+let mockIdx=0,mockTry=0,mockSet=[],mockN=3,mockRun={},mocks={hizli:0,tam:0,last:{}};
+/* Prova seti: hep "kendini tanıt" ile açılır; Hızlı = +1 hikâye +1 diğer, Tam = +2 hikâye +4 diğer + "sorun var mı" kapanışı */
+function provaSet(n){
+  const idx=INTERVIEW_QA.map((_,i)=>i),last=INTERVIEW_QA.findIndex(q=>/^Do you have any questions/.test(q.q));
+  const star=shuffleArr(idx.filter(i=>/^Tell me about a/.test(INTERVIEW_QA[i].q)));
+  const rest=shuffleArr(idx.filter(i=>i!==0&&i!==last&&!star.includes(i)));
+  return n===3?[0,star[0],rest[0]]:[0,...shuffleArr([star[0],star[1],...rest.slice(0,4)]),last];
+}
 
 /* ===== Konuşma tanıma (özellik algılamalı — Chrome/Edge; file:// ve Firefox'ta yok) ===== */
 const SRCls=window.SpeechRecognition||window.webkitSpeechRecognition||null;
@@ -2010,7 +2161,7 @@ function renderEar(){
     const b=el(`<button class="ear-opt">${esc(o.qtr)}</button>`);
     b.addEventListener('click',()=>{
       if(card.dataset.done)return;card.dataset.done='1';
-      const ok=(o===q);earScore.total++;if(ok)earScore.ok++;
+      const ok=(o===q);earScore.total++;if(ok)earScore.ok++;logAct(ok?'kulak':'kulakx');
       b.classList.add(ok?'ok':'no');
       [...box.children].forEach(c=>{if(c.textContent===q.qtr)c.classList.add('ok');});
       card.appendChild(el(`<div class="sfeedback ${ok?'ok':'no'}" style="margin-top:8px;">${ok?'✅':'Doğrusu:'} ${esc(q.q)}</div>`));
@@ -2045,9 +2196,10 @@ function renderDrill(){
   </div>`);
   area.appendChild(card);
   const qEl=card.querySelector('#drillQ'),mTxt=card.querySelector('#drillModelTxt');
-  const updQ=()=>{const q=INTERVIEW_QA[+sel.value];qEl.textContent=q.q;mTxt.innerHTML=mdLite(q.en)+'<br><span style="color:var(--muted2);font-size:12.5px;">'+esc(q.tr)+'</span>';card.querySelectorAll('#drillRounds button').forEach(b=>b.classList.remove('done-r','act'));card.querySelector('#drillT').textContent='—';stopDrill();};
+  const updQ=()=>{const q=INTERVIEW_QA[+sel.value],own=answers[q.q];qEl.textContent=q.q;
+    mTxt.innerHTML=(own?'<b style="color:var(--accent)">📝 Senin cevabın:</b> '+esc(own.text)+'<br><br><span style="color:var(--muted2);font-size:12.5px;">Örnek: </span>':'')+mdLite(q.en)+'<br><span style="color:var(--muted2);font-size:12.5px;">'+esc(q.tr)+'</span>';card.querySelectorAll('#drillRounds button').forEach(b=>b.classList.remove('done-r','act'));card.querySelector('#drillT').textContent='—';stopDrill();};
   sel.addEventListener('change',updQ);updQ();
-  card.querySelector('#drillModel').addEventListener('click',()=>{mTxt.hidden=!mTxt.hidden;if(!mTxt.hidden)speak(INTERVIEW_QA[+sel.value].en,0.85);});
+  card.querySelector('#drillModel').addEventListener('click',()=>{mTxt.hidden=!mTxt.hidden;const q=INTERVIEW_QA[+sel.value],own=answers[q.q];if(!mTxt.hidden)speak(own&&!own.free?own.text:q.en,0.85);});
   const T=card.querySelector('#drillT'),tx=card.querySelector('#drillTx');
   card.querySelectorAll('#drillRounds button').forEach(btn=>{
     btn.addEventListener('click',()=>{
@@ -2065,7 +2217,7 @@ function renderDrill(){
         left--;T.textContent=left;
         if(left<=10)T.classList.add('low');
         if(left<=0){
-          stopDrill();T.textContent='⏰';
+          stopDrill();T.textContent='⏰';logAct('akici');
           btn.classList.remove('act');btn.classList.add('done-r');
           toast(words?('Süre doldu — ≈'+words+' kelime söyledin!'):'Süre doldu — sıradaki tur seni bekliyor');
         }
@@ -2076,7 +2228,9 @@ function renderDrill(){
 
 function renderInterviewPrep(){
   const area=$('#intPrep');area.innerHTML='';
-  area.appendChild(el(`<p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">En sık sorulan ${INTERVIEW_QA.length} soru, kalıp şablonlar ve basit İngilizceyle örnek cevaplar. Örnekleri kendine uyarlayıp <b>sesli</b> çalış — sonra Sahte Mülakat'ta dene. Mülakat kelimeleri <b>Öğren</b> sekmesine eklendi (Seviye 5).</p>`));
+  const nAns=INTERVIEW_QA.filter(q=>answers[q.q]).length;
+  area.appendChild(el(`<p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">En sık sorulan ${INTERVIEW_QA.length} soru, şablon ve örnek cevap. Her soruda <b>kendi cevabını kur</b> — mülakatta en çok işe yarayan hazırlık 3-5 kendi hikâyen. Sonra Akıcılık'ta sesli çalış, Prova'da dene.</p>`));
+  area.appendChild(el(`<div class="kit-badge">📝 Cevaplarım: <b>${nAns}</b> / ${INTERVIEW_QA.length} hazır${nAns?'':' — ilk soruyla başla, 3 dakika sürer'}</div>`));
   INTERVIEW_QA.forEach(item=>{
     const acc=el(`<div class="qa"><button aria-expanded="false"><span>${esc(item.q)}</span><span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></button>
       <div class="body"><div class="body-in">
@@ -2086,12 +2240,68 @@ function renderInterviewPrep(){
           <div class="m-en"><button class="say sm" aria-label="Cümleyi dinle" data-say="${esc(item.en)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><span>${esc(item.en)}</span></div>
           <div class="m-tr">${esc(item.tr)}</div>
         </div>
+        ${answers[item.q]?`<div class="mine-ans"><div class="kit-s">📝 Senin cevabın</div><div>${esc(answers[item.q].text)}</div>${answers[item.q].free?'<div class="kit-note">Kendi metnin · bilinen tuzak yok, tam denetim değil</div>':''}</div>`:''}
+        <div class="kit-slot"><button class="ai-btn sec a kit-open">${answers[item.q]?'✏️ Cevabını düzenle':'✍️ Kendi cevabını kur'}</button></div>
       </div></div></div>`);
     const btn=acc.querySelector('button');const body=acc.querySelector('.body');
+    const slot=acc.querySelector('.kit-slot');
+    slot.querySelector('.kit-open').addEventListener('click',()=>{slot.innerHTML='';buildAnswerKit(item,slot,()=>renderInterviewPrep());body.style.maxHeight='none';});
     btn.addEventListener('click',()=>{const open=acc.classList.toggle('open');btn.setAttribute('aria-expanded',open);body.style.maxHeight=open?body.scrollHeight+'px':'0';});
     acc.querySelector('.say').addEventListener('click',e=>{e.stopPropagation();speak(e.currentTarget.dataset.say,0.85);});
     area.appendChild(acc);
   });
+}
+
+/* Cevap kurucu: Hazırlık'taki her sorunun içinde açılır. Kaydedilen cevap Akıcılık ve Prova'yı besler. */
+function buildAnswerKit(item,host,onSave){
+  const kit=KITS[item.q];if(!kit)return;
+  const saved=answers[item.q];
+  const picks=saved&&saved.picks&&saved.picks.length===kit.length?saved.picks.map(a=>a.slice()):kitDefault(kit);
+  const star=/^Tell me about a/.test(item.q);
+  const box=el(`<div class="kit"><div class="kit-h">✍️ Kendi cevabını kur</div>
+    <div class="kit-note">Her boşlukta sana uyanı seç. Seçenekler kontrol edildi; ✏️ ile kendi kelimeni de yazabilirsin.${star?' Bu bir hikâye sorusu: geçmişi anlat.':''}</div></div>`);
+  kit.forEach((ln,i)=>{
+    const row=el(`<div class="kit-ln"><div class="kit-s">${esc(ln.s)}</div><div class="kit-p"></div></div>`);
+    const p=row.querySelector('.kit-p');let wrap=null;
+    ln.p.forEach((x,j)=>{
+      /* boşluktan hemen sonraki tek noktalama işareti onunla aynı satırda kalsın */
+      if(typeof x==='string'){(wrap&&/^[.,!?:;]$/.test(x)?wrap:p).appendChild(document.createTextNode(x));wrap=null;return;}
+      const sel=document.createElement('select');sel.className='kit-sel';sel.setAttribute('aria-label',ln.s);
+      x.o.forEach(o=>sel.add(new Option(o,o)));
+      let inp=null;
+      if(x.f){sel.add(new Option('✏️ kendi kelimem…','__f'));
+        inp=document.createElement('input');inp.className='kit-in';inp.placeholder=x.f;inp.setAttribute('aria-label',x.f);inp.hidden=true;inp.autocapitalize='off';inp.spellcheck=false;}
+      const cur=picks[i][j];
+      if(cur!=null&&!x.o.includes(cur)&&inp){sel.value='__f';inp.hidden=false;inp.value=cur;}else if(cur!=null)sel.value=cur;
+      sel.addEventListener('change',()=>{if(sel.value==='__f'){inp.hidden=false;inp.focus();picks[i][j]=inp.value.trim()||x.o[0];}else{if(inp)inp.hidden=true;picks[i][j]=sel.value;}upd();});
+      if(inp)inp.addEventListener('input',()=>{picks[i][j]=inp.value.trim()||x.o[0];upd();});
+      wrap=document.createElement('span');wrap.className='kit-w';wrap.appendChild(sel);if(inp)wrap.appendChild(inp);p.appendChild(wrap);
+    });
+    box.appendChild(row);
+  });
+  const prev=el(`<div class="kit-prev"></div>`),acts=el(`<div class="kit-acts"><button class="ai-btn sec" data-k="say">🔊 Dinle</button><button class="ai-btn" data-k="save">Kaydet</button></div>`),out=el(`<div></div>`);
+  box.appendChild(prev);box.appendChild(acts);box.appendChild(out);
+  const upd=()=>{const free=kitHasFree(kit,picks);prev.textContent=kitText(kit,picks);
+    /* anadili sesi doğrulanmamış cümleyi okumaz: kendi kelimen varsa Dinle kayıttan sonra açılır */
+    acts.querySelector('[data-k=say]').hidden=free;};
+  upd();
+  acts.querySelector('[data-k=say]').addEventListener('click',()=>speak(kitText(kit,picks),0.85));
+  const kaydet=text=>{answers[item.q]={text,picks:picks.map(a=>a.slice()),free:kitHasFree(kit,picks),t:todayStr()};
+    store.set('answers',answers);logAct('cevap');toast('Cevabın kaydedildi — Akıcılık ve Prova\'da seni bekliyor',3200);onSave&&onSave();};
+  acts.querySelector('[data-k=save]').addEventListener('click',()=>{
+    const text=kitText(kit,picks);out.innerHTML='';
+    const res=checkEnglish(text);
+    /* Hikâye sorusunda kendi kelimen geniş zaman fiili içeriyorsa düzeltme değil hatırlatma */
+    const pastHint=star&&kitHasFree(kit,picks)&&new RegExp('\\b(i|we)\\s+('+V_BASE+')\\b','i').test(text);
+    if(!res.found.length&&!pastHint){kaydet(text);return;}
+    out.appendChild(buildCheckCard(text,res));
+    if(pastHint)out.appendChild(el(`<div class="kit-note" style="color:var(--accent);">Geçmişi anlatıyorsun — kendi yazdığın fiiller de geçmişte mi? (call → called)</div>`));
+    const r=el(`<div class="kit-acts">${res.found.length?'<button class="ai-btn" data-k="fix">Düzeltilmiş hâliyle kaydet</button>':''}<button class="ai-btn sec n" data-k="asis">Olduğu gibi kaydet</button></div>`);
+    out.appendChild(r);
+    const fx=r.querySelector('[data-k=fix]');if(fx)fx.addEventListener('click',()=>kaydet(res.fixed));
+    r.querySelector('[data-k=asis]').addEventListener('click',()=>kaydet(text));
+  });
+  host.appendChild(box);
 }
 
 function renderMock(){
@@ -2099,13 +2309,16 @@ function renderMock(){
   if(area.dataset.init)return;area.dataset.init='1';
   area.appendChild(el(`<div>
     <p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">Görüşmeci ${INTERVIEW_QA.length} soruyu sırayla soruyor. <b>İngilizce</b> cevap ver; ilk cevabından sonra düzeltmeler ve bir hak daha gelir, örnek cevap ikinci denemeden sonra. Anlamadıysan <i>Could you repeat the question?</i> yaz — gerçek beceri budur.</p>
+    <div class="cue-chips" id="mockModes" style="justify-content:flex-start;margin:0 0 12px;"><button class="chip on" data-n="3">⚡ Hızlı prova · 3 soru</button><button class="chip" data-n="8">🎯 Tam prova · 8 soru</button></div>
     <div class="chat" id="chatLog"></div>
     <div class="chatrow">${SRCls?'<button class="micbtn" id="chatMic" aria-label="Sesli cevap ver">🎙</button>':''}<textarea id="chatInput" placeholder="Cevabını İngilizce yaz${SRCls?' veya 🎙 ile söyle':''}..." rows="2"></textarea><button class="send" id="chatSend" aria-label="Gönder">➤</button></div>
     <button class="btn" id="mockReset" style="margin-top:10px;background:var(--bg3);color:var(--muted);border:1px solid var(--line2);font-size:13px;padding:10px;">↺ Mülakatı baştan başlat</button>
   </div>`));
-  startMock();
+  startMock(3);
   $('#chatSend').addEventListener('click',sendMock);
-  $('#mockReset').addEventListener('click',startMock);
+  $('#mockReset').addEventListener('click',()=>startMock(mockN));
+  $('#mockModes').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    $('#mockModes').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));startMock(+b.dataset.n);}));
   $('#chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMock();}});
   if(SRCls){
     const mic=$('#chatMic');
@@ -2117,20 +2330,22 @@ function renderMock(){
   }
 }
 
-function startMock(){
-  mockIdx=0;
+function startMock(n){
+  mockN=n||3;mockSet=provaSet(mockN);mockRun={};mockIdx=0;
   $('#chatLog').innerHTML='';
   $('#chatSend').disabled=false;
-  addBubble('ai',"Hello! Welcome to the interview. Thank you for coming today.","Merhaba! Mülakata hoş geldin. Bugün geldiğin için teşekkürler.");
+  addBubble('ai',"Hello! Welcome to the interview. Thank you for coming today.","Merhaba! Mülakata hoş geldin. Bugün geldiğin için teşekkürler. ("+(mockN===3?'Hızlı prova · 3 soru':'Tam prova · 8 soru')+")");
   askMockQ();
 }
 
 function askMockQ(){
-  const q=INTERVIEW_QA[mockIdx];mockTry=0;
+  const q=INTERVIEW_QA[mockSet[mockIdx]];mockTry=0;
   addBubble('ai',q.q,q.qtr);
   setTimeout(()=>speak(q.q,0.85),350);
 }
 function showMockModel(q){
+  const own=answers[q.q];
+  if(own)addBubble('ai','',null,'<b>📝 Senin hazırladığın cevap:</b> '+esc(own.text));
   const model=el(`<div class="bubble ai" style="max-width:100%;">
     <div style="font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--violet);font-weight:700;margin-bottom:6px;">📖 Örnek cevap</div>
     <div>${esc(q.en)}</div>
@@ -2140,10 +2355,25 @@ function showMockModel(q){
   model.querySelector('.b-say').addEventListener('click',()=>speak(q.en,0.85));
   $('#chatLog').appendChild(model);
 }
+/* Prova sonu rapor kartı: soru başına bir satır, sayısal not yok; bir önceki provaya göre ↑/↓ */
+function provaRapor(){
+  const prev=mocks.last||{};
+  const lines=mockSet.map(i=>{const q=INTERVIEW_QA[i],r=mockRun[q.q];
+    if(!r)return `<div class="pr-ln"><b>${esc(q.q)}</b><br>cevap yok</div>`;
+    const p=prev[q.q],bits=[r.traps?r.traps+' düzeltme':'bilinen tuzak yok',r.words+' kelime'];
+    if(r.star){bits.push(r.past?'geçmiş zaman ✓':r.genis?`geçmişi mi anlatıyorsun? <i>${esc(r.genis)}</i> → <i>${esc(r.genis.replace(/\S+$/,w=>past(w)))}</i>`:'geçmiş zaman yok');bits.push(r.result?'sonuç cümlesi ✓':'sonuç cümlesi ekle');}
+    const trend=p?(r.traps<p.traps?' · ↑ öncekinden az düzeltme':r.traps>p.traps?' · ↓ öncekinden çok düzeltme':''):'';
+    return `<div class="pr-ln"><b>${esc(q.q)}</b><br>${bits.join(' · ')}${trend}</div>`;}).join('');
+  const eksik=mockSet.filter(i=>!answers[INTERVIEW_QA[i].q]).length;
+  addBubble('ai','',null,`<b>Provan bitti — işte notların</b>${lines}${eksik?`<div class="pr-ln">💡 ${eksik} sorunun hazır cevabı yok — Hazırlık'ta kurduğun cevaplar provada çok daha akıcı gelir.</div>`:''}`);
+  mockSet.forEach(i=>{const q=INTERVIEW_QA[i];if(mockRun[q.q])mocks.last[q.q]={traps:mockRun[q.q].traps,words:mockRun[q.q].words};});
+  mocks[mockN===3?'hizli':'tam']++;store.set('mocks',mocks);
+}
 function advanceMock(){
   mockIdx++;
-  if(mockIdx>=INTERVIEW_QA.length){
-    addBubble('ai',"That's all my questions. Thank you for your time. We will contact you soon!","Sorularım bu kadar. Vaktin için teşekkürler. Yakında sana döneceğiz! 🎉 Mülakatı bitirdin — istersen aşağıdan baştan başlat.");
+  if(mockIdx>=mockSet.length){
+    addBubble('ai',"That's all my questions. Thank you for your time. We will contact you soon!","Sorularım bu kadar. Vaktin için teşekkürler. Yakında sana döneceğiz!");
+    provaRapor();
     $('#chatSend').disabled=true;
     return;
   }
@@ -2154,7 +2384,7 @@ function sendMock(){
   const input=$('#chatInput'),send=$('#chatSend');
   const text=input.value.trim();
   if(!text)return;
-  const q=INTERVIEW_QA[mockIdx];
+  const q=INTERVIEW_QA[mockSet[mockIdx]];
   const words=text.split(/\s+/).filter(Boolean).length;
   addBubble('me',text);
   /* Kurtarma cümlesi: "Could you repeat / say it slowly / what do you mean" → soru yavaş tekrar, hak yanmaz. */
@@ -2163,10 +2393,15 @@ function sendMock(){
     addBubble('ai',"Of course. "+q.q,"Tabii. "+q.qtr+" — soruyu istemek zayıflık değil, gerçek mülakatta da yap.");
     setTimeout(()=>speak(q.q,0.6),350);return;
   }
-  mockTry++;
+  mockTry++;logAct('prova');
 
   // 1) tuzak taraması  2) anahtar kalıp kapsaması  3) uzunluk
   const res=checkEnglish(text);
+  /* rapor kartı için: son deneme kalır. Puan yok — yapı: hikâye sorusunda geçmiş zaman ve sonuç cümlesi var mı */
+  const star=/^Tell me about a/.test(q.q);
+  /* "I/we + yalın fiil" hikâyede geniş zaman kalmış olabilir (zarf başka cümlede olduğu için motor görmez) */
+  const genis=new RegExp('\\b(i|we)\\s+('+V_BASE+')\\b','i').exec(text);
+  mockRun[q.q]={traps:res.found.length,words,star,past:PAST_RE.test(text)&&!genis,genis:genis&&genis[0],result:/\b(as a result|in the end|finally|result)\b|\b(we|i)\s+(finished|delivered|got|saved|passed|learned)\b/i.test(text)};
   const keys=MOCK_KEYS[q.q]||[];
   const low=' '+text.toLowerCase()+' ';
   /* kelime başı sınırı: "know" artık "now" kalıbını, "about" "but" kalıbını karşılamaz */
@@ -2235,17 +2470,21 @@ function renderProgress(){
   const growing=seen.filter(s=>!isMastered(s)&&s.box>=3).length;
   const dueNow=WORDS.filter(w=>{const s=states[w.id];return s&&s.seen&&s.nextReview<=now;}).length;
   const maxBar=Math.max(1,learning,growing,mastered);
-  const intWords=WORDS.filter(w=>w.lvl===5);
-  const intMastered=intWords.filter(w=>isMastered(states[w.id])).length;
-  // Bahşedilmiş ilerleme (Nunes & Drèze): %15 baz kredi — hedefe yaklaşan devam eder.
-  // "Görülen" küçük ağırlıkta: her seans yüzdeyi kıpırdatsın, haftalarca %15'te kalmasın.
-  const readiness=Math.min(100,Math.round(15+85*((seenCount/WORDS.length)*0.2+(mastered/WORDS.length)*0.4+(intMastered/intWords.length)*0.4)));
-  const MILES=[[25,'Kendini 2-3 cümleyle tanıtabilirsin'],[50,'Klasik sorulara cevabın hazır'],[75,'Sahte mülakatı baştan sona götürürsün'],[100,'Kelime + akıcılık pekişti — hazırsın']];
+  // Bahşedilmiş ilerleme (Nunes & Drèze): %15 baz kredi. Dürüst bileşenler: eskiden yalnız kelimeye bakıyordu,
+  // "%25 kendini tanıtabilirsin" taşı tek tanıtım alıştırması yapılmadan açılıyordu (ürün uzmanı ölçümü).
+  const nAns=INTERVIEW_QA.filter(q=>answers[q.q]).length;
+  const earOK=Object.values(actLog).reduce((a,d)=>a+(d.kulak||0),0);
+  const PARCA=[['Kelime',(seenCount*0.3+mastered*0.7)/WORDS.length,.35],['Cevaplar',Math.min(1,nAns/5),.25],
+    ['Prova',Math.min(1,mocks.hizli*0.25+mocks.tam*0.5),.25],['Kulak',Math.min(1,earOK/30),.15]];
+  const readiness=Math.min(100,Math.round(15+85*PARCA.reduce((a,p)=>a+p[1]*p[2],0)));
+  /* kilometre taşı = yapılmış eylem, yüzde eşiği değil */
+  const MILES=[[nAns>=1,'İlk cevabın hazır'],[nAns>=3,'3 soruya cevabın hazır'],[mocks.hizli>=1,'Kısa provayı bitirdin'],[mocks.tam>=1,'Tam provayı bitirdin']];
   area.innerHTML='';
   area.appendChild(el(`<div>
     <div class="panel ready-panel"><h3>🎯 Mülakata hazırlık <span>%${readiness}</span></h3>
       <div class="track"><i style="width:${readiness}%"></i></div>
-      <div class="miles">${MILES.map(m=>`<div class="mi ${readiness>=m[0]?'hit':''}"><b>%${m[0]}</b><span>${m[1]}</span></div>`).join('')}</div>
+      <div class="parts">${PARCA.map(p=>`<div class="pt"><span>${p[0]}</span><span class="track"><i style="width:${Math.round(p[1]*100)}%"></i></span></div>`).join('')}</div>
+      <div class="miles">${MILES.map(m=>`<div class="mi ${m[0]?'hit':''}"><b>${m[0]?'✓':'○'}</b><span>${m[1]}</span></div>`).join('')}</div>
     </div>
     <div class="grid2">
       <div class="stat"><div class="v hl">${stats.streak}<span style="font-size:14px;color:var(--muted2)"> 🧊${stats.freezes||0}</span></div><div class="l">🔥 Seri (+ dondurma hakkı)</div></div>
@@ -2337,6 +2576,7 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
 /* ================= INIT ================= */
 async function init(){
   states=await store.get('srs:states',{});
+  actLog=await store.get('log',{});answers=await store.get('answers',{});mocks=Object.assign({hizli:0,tam:0,last:{}},await store.get('mocks',{}));
   stats=Object.assign({},DEF_STATS,await store.get('srs:stats',{}));
   if(!stats.dailyGoal)stats.dailyGoal=6;
   // haftalık dondurma şarjı (maks 2, asla satın alma yok)
@@ -2399,8 +2639,10 @@ if(location.hash==='#test'){
     T('have+V3+geçmiş zarf', checkEnglish('I have finished the report yesterday.').fixed==='I finished the report yesterday.');
     T('fark: önce silinen', diffWords('I go school','I went to school.').html==='I <del>go</del> <ins>went</ins> <ins>to</ins> school.');
     T('temiz kartta ✅ ve dinle yok', (()=>{const c=buildCheckCard('I need you help.',checkEnglish('I need you help.'));return !/✅/.test(c.textContent)&&!c.querySelector('#playCorr');})());
+    T('cevap kiti: tüm birleşimler motordan temiz', (()=>{const bad=[];Object.values(KITS).forEach(k=>k.forEach(ln=>kitCombos(ln).forEach(c=>{if(checkEnglish(c).found.length)bad.push(c);})));if(bad.length)console.log('kit sorunlu:',bad.slice(0,5));return !bad.length;})());
+    T('cevap kiti: her soru için var', INTERVIEW_QA.every(q=>KITS[q.q]));
     T('düzensiz çoğula dokunmaz', ['The people go home.','My children go to school.','The men work here.','The women work in the office.'].every(x=>checkEnglish(x).found.length===0));
-    const keep={...stats,todayNew:[...(stats.todayNew||[])]};/* grade() reviews/lastStudy/todayNew yazar — snapshot ÖNCE, dizi kopyalanarak */
+    const keep={...stats,todayNew:[...(stats.todayNew||[])]},keepLog=JSON.parse(JSON.stringify(actLog));/* grade() günlüğe de yazar *//* grade() reviews/lastStudy/todayNew yazar — snapshot ÖNCE, dizi kopyalanarak */
     const s={interval:10,box:3,seen:true};states[9999]=s;
     grade(9999,'easy');
     T('grade easy büyür', s.interval>=17&&s.interval<=30);
@@ -2414,7 +2656,7 @@ if(location.hash==='#test'){
     stats.streak=5;stats.freezes=2;
     bumpStreak();
     T('freeze 2 gün kapatır', stats.streak===6&&stats.freezes===0);
-    for(const k in stats)delete stats[k];Object.assign(stats,keep);/* bumpStreak'in eklediği frozenOn da gitsin */
+    for(const k in stats)delete stats[k];Object.assign(stats,keep);actLog=keepLog;store.set('log',actLog);/* bumpStreak'in eklediği frozenOn da gitsin */
     /* grade() içindeki persist() sahte 9999 kaydını diske yazdı — temiz hâli
        geri yaz, yoksa "Görülen" sayacı kalıcı olarak 1 fazla kalır. */
     persist();
