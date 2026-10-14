@@ -1,5 +1,5 @@
 /* Çevrimdışı çalışma. Sürüm değişince eski önbellek silinir. */
-const V = 'ing-v5.2';
+const V = 'ing-v5.3';
 /* Yazı tipleri Google'dan geliyor. Same-origin şartı bunları önbelleğe almıyordu,
    uçak modunda sayfa sistem fontuna düşüyordu. Bu iki kaynak da önbelleklenir. */
 const FONT_HOSTS = /^https:\/\/fonts\.(googleapis|gstatic)\.com$/;

@@ -187,6 +187,9 @@
   .pr-ln{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);}
   .mine-ans{margin-top:12px;padding:12px;border-radius:12px;background:rgba(244,183,64,.08);border:1px solid rgba(244,183,64,.25);font-size:14px;line-height:1.55;color:#EDEEF7;}
   .kit-slot{margin-top:10px;}
+  .ai-out .snt{border-radius:5px;transition:background .15s;cursor:pointer;}
+  .ai-out .snt.reading{background:rgba(244,183,64,.22);box-shadow:0 0 0 2px rgba(244,183,64,.22);}
+  .ai-out .spk{color:var(--violet);}
   .ai-out .vocab{background:var(--bg3);border-radius:11px;padding:11px 13px;margin-top:6px;font-size:13.5px;color:#cfd2e8;}
   .taread{width:100%;background:var(--surface);color:var(--ink);border:2px solid transparent;border-radius:14px;padding:14px 15px;font-family:inherit;font-size:16px;font-weight:500;outline:none;resize:vertical;min-height:80px;transition:border-color .15s;}
   .taread:focus{border-color:var(--accent);}
@@ -1299,17 +1302,27 @@ function pickVoice(){
   for(const p of pools){const hit=p.find(v=>!BAD_VOICE.test(v.name));if(hit)return chosenVoice=hit;}
   return chosenVoice=en[0];
 }
-function speak(text,rate){
+let seqTok=0;
+function speak(text,rate,onend,voice){
+  if(!onend)seqTok++;/* dışarıdan gelen her konuşma süren cümle zincirini keser */
   try{
-    if(!('speechSynthesis' in window))return;
+    if(!('speechSynthesis' in window)){onend&&onend(true);return;}
     window.speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(text);
     u.lang='en-US';u.rate=rate||0.82;
     if(!voices.length)loadVoices();
-    const v=pickVoice();
+    const v=voice||pickVoice();
     if(v)u.voice=v;
+    if(onend){u.onend=()=>onend(false);u.onerror=()=>onend(true);}
     window.speechSynthesis.speak(u);
-  }catch(e){}
+  }catch(e){onend&&onend(true);}
+}
+/* Cümle zinciri: uzun metni tek parça okutmak bazı seslerde ~15 sn'de kesiliyor; cümle cümle okutup
+   okunanı vurgular (okurken dinleme). on(i) her cümle başında, on(-1) bitince ya da kesilince. */
+function speakSeq(parts,rate,on){
+  const tok=++seqTok;let i=0;
+  const next=stop=>{if(stop||tok!==seqTok||i>=parts.length){on&&on(-1);return;}on&&on(i);speak(parts[i++],rate,next);};
+  next(false);
 }
 
 let toastTimer;
@@ -1414,6 +1427,24 @@ function renderPlan(){
     if(b.dataset.go==='interview'&&hasAns)$('#intSeg button[data-m="mock"]').click();}));
 }
 
+let welcomeShown=false;
+/* Takvim hatırlatması (.ics): push sunucusu yok, çevrimdışı ve ücretsiz. Seçilen çalışma anına günlük tekrar.
+   ponytail: iOS ana ekran uygulamasında Blob indirmesi çalışmayabilir — önce paylaşım sayfası (dosya paylaşımı)
+   denenir, yoksa indirme. Cihazda doğrulanmadı. */
+const CUE_SAAT={'Sabah kahvesiyle':'0800','Yolda / serviste':'0830','Akşam yemeğinden sonra':'2030','Yatmadan önce':'2230'};
+function takvimeEkle(){
+  const hm=CUE_SAAT[stats.cue]||'2030',d=todayStr().split('-').map(Number);
+  const ds=d[0]+String(d[1]).padStart(2,'0')+String(d[2]).padStart(2,'0');
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ingilizce-koc//TR','BEGIN:VEVENT','UID:ingilizce-koc-gunluk@zahitdoganayitu.github.io',
+    'DTSTAMP:'+ds+'T000000Z','DTSTART:'+ds+'T'+hm+'00','DURATION:PT10M','RRULE:FREQ=DAILY','SUMMARY:İngilizce Koçu · 10 dakika',
+    'DESCRIPTION:Bugün · 3 adım: kelimeler\\, 3 cümle\\, 1 mülakat sorusu. https://zahitdoganayitu.github.io/ingilizce-koc/',
+    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:İngilizce zamanı','TRIGGER:PT0M','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const f=new File([ics],'ingilizce-hatirlatma.ics',{type:'text/calendar'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'İngilizce hatırlatması'}).catch(()=>{});return;}
+  const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
+  toast('Dosyayı aç — takvimine her gün eklenir',3500);
+}
 function renderStudy(){
   const area=$('#studyArea');
   if(!session.current)nextCard();
@@ -1432,15 +1463,32 @@ function renderStudy(){
       ${yeni.length?`<div class="cue-chips" aria-label="Bugünün yeni kelimeleri">${yeni.map(w=>`<button class="chip" data-say="${esc(cleanForSpeech(w.en))}" aria-label="${esc(w.en)} — dinle">🔊 ${esc(w.en)}</button>`).join('')}</div>`:''}
       <div class="mini"><div><div class="v">${stats.dayN||0}</div><div class="l">Bugün kart</div></div><div><div class="v">${stats.newToday}</div><div class="l">Yeni bugün</div></div><div><div class="v">${stats.streak}</div><div class="l">Gün seri</div></div><div><div class="v">🧊${stats.freezes||0}</div><div class="l">Dondurma</div></div></div>
       <div class="cue-chips"><button class="chip" data-go="ear">🎧 Kulak eğitimi</button><button class="chip" data-go="mock">🎤 Sahte mülakat</button>${canBonus?'<button class="chip" data-bonus>➕ 6 kelime daha (bugünlük)</button>':''}</div>
-      ${!stats.cue?`<p style="margin-top:22px;color:#EDEEF7;font-weight:600;">Alışkanlık için: her gün <b>ne zaman</b> çalışacaksın?</p><div class="cue-chips">${['Sabah kahvesiyle','Yolda / serviste','Akşam yemeğinden sonra','Yatmadan önce'].map(c=>`<button class="chip" data-cue="${c}">${c}</button>`).join('')}</div><p style="margin-top:10px;font-size:11.5px;color:var(--muted2);">"Şu andan sonra çalışırım" diyenler 2 kat daha çok devam ediyor (uygulama niyeti, d=.65).</p>`:''}
+      ${!stats.cue?`<p style="margin-top:22px;color:#EDEEF7;font-weight:600;">Alışkanlık için: her gün <b>ne zaman</b> çalışacaksın?</p><div class="cue-chips">${['Sabah kahvesiyle','Yolda / serviste','Akşam yemeğinden sonra','Yatmadan önce'].map(c=>`<button class="chip" data-cue="${c}">${c}</button>`).join('')}</div><p style="margin-top:10px;font-size:11.5px;color:var(--muted2);">"Şu andan sonra çalışırım" diyenler 2 kat daha çok devam ediyor (uygulama niyeti, d=.65).</p>`:`<div class="cue-chips"><button class="chip" data-ics>📅 Her gün ${esc(stats.cue.toLowerCase())} hatırlat</button></div>`}
     </div>`);
     area.appendChild(done);
     done.querySelectorAll('[data-cue]').forEach(b=>b.addEventListener('click',async()=>{stats.cue=b.dataset.cue;await persist();toast('Kaydedildi: her gün '+stats.cue);renderStudy();}));
+    const ics=done.querySelector('[data-ics]');if(ics)ics.addEventListener('click',takvimeEkle);
     done.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>speak(b.dataset.say)));
     done.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{switchTab('interview');$('#intSeg button[data-m="'+b.dataset.go+'"]').click();}));
     const bonus=done.querySelector('[data-bonus]');
     if(bonus)bonus.addEventListener('click',async()=>{stats.bonusDate=t;await persist();buildSession();renderHeader();renderStudy();toast('Bugünlük +6 — yarın tekrar yığılmasın diye günde bir kez');});
     $('#sessProg').style.width='100%';return;
+  }
+  /* Dönüş karşılaması: uzun aradan ya da tekrar birikiminden sonra 150 kartla karşılaşmak terk ettiriyor.
+     Sayfa başına bir kez; seçim: 15 kartla kısa seans ya da hepsi. */
+  if(!welcomeShown&&session.done===0){
+    const left=session.queue.length+1,ara=stats.lastStudy?Math.round((parseDay(todayStr())-parseDay(stats.lastStudy))/DAY):0;
+    if(left>25||ara>=2){welcomeShown=true;
+      area.innerHTML='';
+      const wc=el(`<div class="done"><div class="big">👋</div><h2>Tekrar hoş geldin!</h2>
+        <p>${left} kart seni bekliyor (~${Math.max(1,Math.round(left/4))} dk).${ara>=2?` En son ${ara} gün önce çalıştın — sorun değil, kaldığın yerden.`:''}</p>
+        <div class="cue-chips"><button class="chip on" data-w="15">15 kartla başla</button><button class="chip" data-w="all">Hepsini yap</button>${stats.cue?'<button class="chip" data-ics>📅 Takvimime ekle</button>':''}</div></div>`);
+      area.appendChild(wc);
+      wc.querySelector('[data-w="15"]').addEventListener('click',()=>{const extra=session.queue.length-14;
+        if(extra>0){session.queue=session.queue.slice(0,14);session.cut=(session.cut||0)+extra;session.planned=Math.max(1,session.planned-extra);}renderStudy();});
+      wc.querySelector('[data-w="all"]').addEventListener('click',()=>renderStudy());
+      const ic=wc.querySelector('[data-ics]');if(ic)ic.addEventListener('click',takvimeEkle);
+      return;}
   }
   const w=session.current;
   const st=states[w.id];
@@ -1637,10 +1685,15 @@ function answerCard(id,rating){
 }
 
 /* ================= CHUNKS + SHADOWING ================= */
+/* Kalıplar tek seferde bir kategori: 11 kategori alt alta ~14 ekran kaydırmaydı (ürün ölçümü 9683 px). */
+let chunkCat=0;
 function renderChunks(){
   const area=$('#chunksArea');area.innerHTML='';
-  CHUNKS.forEach(group=>{
-    area.appendChild(el(`<div class="cat-head">${esc(group.cat)}</div>`));
+  const chips=el(`<div class="cue-chips" style="justify-content:flex-start;margin:0 0 12px;">${CHUNKS.map((g,i)=>`<button class="chip${i===chunkCat?' on':''}" data-c="${i}">${esc(g.cat)}</button>`).join('')}</div>`);
+  chips.querySelectorAll('[data-c]').forEach(b=>b.addEventListener('click',()=>{chunkCat=+b.dataset.c;renderChunks();}));
+  area.appendChild(chips);
+  [CHUNKS[chunkCat]].forEach(group=>{
+    area.appendChild(el(`<div class="cat-head">${esc(group.cat)} · ${group.items.length}</div>`));
     group.items.forEach(c=>{
       const item=el(`<div class="chunk">
         <div class="cen"><button class="say sm" aria-label="Dinle" data-say="${esc(c.en)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><span class="txt">${esc(c.en)}</span></div>
@@ -1733,8 +1786,12 @@ function genReading(){
 }
 
 function buildReadCard(r){
+  /* Metin cümle cümle span: okunan cümle vurgulanır. Diyalogda "A:/B:" görünür ama okunmaz. */
+  const parts=[];
+  const html=r.en.split('\n').map(line=>{const m=/^([AB]):\s*/.exec(line);const body=m?line.slice(m[0].length):line;
+    return (m?`<b class="spk">${m[1]}:</b> `:'')+splitSentences(body).map(s=>{parts.push(s.trim());return `<span class="snt" data-i="${parts.length-1}">${esc(s.trim())}</span>`;}).join(' ');}).join('<br>');
   const card=el(`<div class="ai-out">
-    <div class="en-text">${mdLite(r.en)}</div>
+    <div class="en-text">${html}</div>
     <div style="display:flex;gap:8px;margin-top:14px;">
       <button class="ai-btn sec" id="playRead" style="flex:1;">🔊 Dinle</button>
       <button class="ai-btn sec auto" id="playSlow" aria-label="Yavaş dinle">🐢</button>
@@ -1743,10 +1800,12 @@ function buildReadCard(r){
     <div id="trSlot" hidden><div class="lbl">Türkçe</div><div class="tr-text">${mdLite(r.tr)}</div></div>
     <div class="lbl">Kilit kelimeler</div><div class="vocab">${mdLite(r.vocab)}</div>
   </div>`);
-  /* "A:/B:" her satır başında silinir (eski /^A:|B:/ yalnız ilk A:'yı siliyordu, TTS "A" diye okuyordu) */
-  const flat=r.en.replace(/^[AB]:\s*/gm,'').replace(/\n/g,' ');
-  card.querySelector('#playRead').addEventListener('click',()=>{speak(flat,0.85);logAct('oku');});
-  card.querySelector('#playSlow').addEventListener('click',()=>speak(flat,0.6));
+  const spans=card.querySelectorAll('.snt');
+  const vurgu=i=>spans.forEach((s,k)=>s.classList.toggle('reading',k===i));
+  card.querySelector('#playRead').addEventListener('click',()=>{speakSeq(parts,0.85,vurgu);logAct('oku');});
+  card.querySelector('#playSlow').addEventListener('click',()=>speakSeq(parts,0.6,vurgu));
+  /* tek cümleye dokun: sadece onu dinle */
+  spans.forEach((s,k)=>s.addEventListener('click',()=>speakSeq([parts[k]],0.8,i=>vurgu(i<0?-1:k))));
   const trSlot=card.querySelector('#trSlot'),trBtn=card.querySelector('#showTr');
   trBtn.addEventListener('click',()=>{
     trSlot.hidden=!trSlot.hidden;
@@ -2139,23 +2198,53 @@ function makeRecognizer(onText,onEnd){
 
 /* ===== Kulak eğitimi: soruyu duyup tanı ===== */
 let earScore={ok:0,total:0};
+/* Kulak: gerçek mülakatçı aynı soruyu farklı sözlerle sorar; ilk kelimeden tanımak yetmez.
+   Her soru için doğal söyleyiş çeşitleri (paraphrase) — anlam aynı, kalıp farklı. */
+const Q_ALTS={
+ "Tell me about yourself.":["Can you introduce yourself?","Could you tell me a little about yourself?","Walk me through your background."],
+ "What are your strengths?":["What would you say your strengths are?","What are you good at?","What is your biggest strength?"],
+ "What is your weakness?":["What is your greatest weakness?","What would you like to improve about yourself?","What is one area you need to work on?"],
+ "Tell me about a challenge you solved.":["Can you describe a problem you solved?","Tell me about a difficult situation and how you handled it.","Give me an example of a challenge you faced."],
+ "Why do you want to work here?":["Why did you apply to our company?","What interests you about this company?","Why are you interested in this position?"],
+ "Where do you see yourself in five years?":["What are your plans for the future?","What are your long-term goals?","Where do you want to be in five years?"],
+ "Do you have any questions for us?":["Is there anything you would like to ask us?","What questions do you have for me?","Is there anything you want to know about the role?"],
+ "What do you want to learn from this internship?":["What do you hope to get from this internship?","What do you expect to learn here?","What skills do you want to develop in this internship?"],
+ "Tell me about a course project you worked on.":["Can you describe a project from one of your classes?","Tell me about a university project you are proud of.","What was your favorite project at university?"],
+ "Tell me about a time you worked under pressure.":["How do you handle stress?","Tell me about a time you had a very tight deadline.","How do you work when there is a lot of pressure?"],
+ "How would you describe your English level?":["How good is your English?","How comfortable are you speaking English at work?","Can you work in English?"],
+ "Why should we hire you?":["Why are you the right person for this job?","What makes you a good fit for this role?","Why should we choose you?"],
+ "When can you start, and how many days a week can you work?":["When are you available to start?","How many days a week are you available?","What is your availability?"],
+ "Tell me about a mistake you made and what you learned.":["Tell me about a time you failed.","What is a mistake you learned from?","Describe a time something went wrong. What did you do?"],
+ "Tell me about a time you disagreed with a teammate.":["Tell me about a conflict in a team.","How do you handle disagreements with colleagues?","Describe a time you did not agree with someone on your team."]
+};
+/* Ses çiftleri (minimal pairs): Türkçede olmayan farklar — w/v, th, kısa/uzun i, æ/e, æ/ʌ.
+   Birden çok sesle dinlemek (HVPT, Thomson 2018) algıyı yeni konuşmacılara genelleştirir; cihazda tek ses varsa tek sesle çalışır. */
+const PAIRS=[['work','walk'],['west','vest'],['wine','vine'],['think','sink'],['three','tree'],['live','leave'],['ship','sheep'],['full','fool'],['bad','bed'],['hat','hut'],['cap','cup']];
+let earMode='q',pairScore={ok:0,total:0};
+function earVoices(){const en=voices.filter(v=>/^en/i.test(v.lang));const iyi=en.filter(v=>GOOD_VOICE.test(v.name));
+  return (iyi.length>=2?iyi:en.filter(v=>!BAD_VOICE.test(v.name))).slice(0,5);}
 function renderEar(){
   const area=$('#intEar');area.innerHTML='';
-  area.appendChild(el(`<p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">Cevap verebilmek için önce soruyu <b>kulaktan anlaman</b> gerekir. Soru sesli gelir, yazısı gizli — hangisi olduğunu bul. Gerçek mülakatın en az yarısı dinlemektir.</p>`));
+  const modes=el(`<div class="cue-chips" style="justify-content:flex-start;margin:0 0 12px;"><button class="chip${earMode==='q'?' on':''}" data-e="q">❓ Sorular</button><button class="chip${earMode==='p'?' on':''}" data-e="p">👂 Ses çiftleri</button></div>`);
+  modes.querySelectorAll('[data-e]').forEach(b=>b.addEventListener('click',()=>{earMode=b.dataset.e;renderEar();}));
+  area.appendChild(modes);
+  if(earMode==='p'){renderPairs(area);return;}
+  area.appendChild(el(`<p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">Cevap verebilmek için önce soruyu <b>kulaktan anlaman</b> gerekir. Mülakatçı aynı soruyu farklı sözlerle sorabilir — yazısı gizli, anlamını bul.</p>`));
   const q=INTERVIEW_QA[Math.floor(Math.random()*INTERVIEW_QA.length)];
+  const cesit=[q.q,...(Q_ALTS[q.q]||[])],said=cesit[Math.floor(Math.random()*cesit.length)];
   const opts=shuffleArr([q,...shuffleArr(INTERVIEW_QA.filter(x=>x!==q)).slice(0,2)]);
   const card=el(`<div class="scard">
     <div style="display:flex;gap:9px;">
       <button class="ai-btn" style="flex:1;" id="earPlay">🔊 Soruyu dinle</button>
       <button class="btn" id="earSlow" aria-label="Yavaş dinle" style="width:auto;padding:0 16px;background:var(--bg3);color:#EDEEF7;border:1px solid var(--line2);">🐢</button>
     </div>
-    <div class="strhint" style="margin:14px 0 10px;">Hangi soruyu duydun?</div>
+    <div class="strhint" style="margin:14px 0 10px;">Ne soruldu?</div>
     <div id="earOpts"></div>
     <div class="sscore">Doğru: <b>${earScore.ok}</b> / ${earScore.total}</div>
   </div>`);
   area.appendChild(card);
-  card.querySelector('#earPlay').addEventListener('click',()=>speak(q.q,0.85));
-  card.querySelector('#earSlow').addEventListener('click',()=>speak(q.q,0.6));
+  card.querySelector('#earPlay').addEventListener('click',()=>speak(said,0.85));
+  card.querySelector('#earSlow').addEventListener('click',()=>speak(said,0.6));
   const box=card.querySelector('#earOpts');
   opts.forEach(o=>{
     const b=el(`<button class="ear-opt">${esc(o.qtr)}</button>`);
@@ -2164,13 +2253,38 @@ function renderEar(){
       const ok=(o===q);earScore.total++;if(ok)earScore.ok++;logAct(ok?'kulak':'kulakx');
       b.classList.add(ok?'ok':'no');
       [...box.children].forEach(c=>{if(c.textContent===q.qtr)c.classList.add('ok');});
-      card.appendChild(el(`<div class="sfeedback ${ok?'ok':'no'}" style="margin-top:8px;">${ok?'✅':'Doğrusu:'} ${esc(q.q)}</div>`));
-      speak(q.q,0.85);
-      setTimeout(()=>{if(!area.hidden)renderEar();},ok?1700:3200);
+      card.appendChild(el(`<div class="sfeedback ${ok?'ok':'no'}" style="margin-top:8px;">${ok?'✅':'Duyduğun:'} ${esc(said)}${said!==q.q?`<br><span style="color:var(--muted);font-size:12.5px;">= ${esc(q.q)}</span>`:''}</div>`));
+      speak(said,0.85);
+      setTimeout(()=>{if(!area.hidden&&earMode==='q')renderEar();},ok?2200:3600);
     });
     box.appendChild(b);
   });
-  setTimeout(()=>speak(q.q,0.85),350);
+  setTimeout(()=>speak(said,0.85),350);
+}
+function renderPairs(area){
+  const vs=earVoices();
+  area.appendChild(el(`<p style="color:var(--muted);font-size:13px;margin-bottom:13px;line-height:1.5;">Türkçede olmayan ses farkları: <b>w / v</b>, <b>th</b>, kısa/uzun <b>i</b>, <b>æ</b>. Dinle, hangisini duyduğunu seç.${vs.length>=2?` Her seferinde farklı bir ses okur (${vs.length} ses) — kulağın konuşmacıya değil sese alışsın.`:''}</p>`));
+  const pr=PAIRS[Math.floor(Math.random()*PAIRS.length)],hedef=pr[Math.random()<.5?0:1],v=vs.length?vs[Math.floor(Math.random()*vs.length)]:null;
+  const card=el(`<div class="scard">
+    <button class="ai-btn" id="pPlay">🔊 Kelimeyi dinle</button>
+    <div class="strhint" style="margin:14px 0 10px;">Hangisini duydun?</div>
+    <div style="display:flex;gap:9px;">${shuffleArr(pr).map(w=>`<button class="ear-opt" style="text-align:center;font-size:18px;margin:0;" data-w="${w}">${w}</button>`).join('')}</div>
+    <div class="sscore">Doğru: <b>${pairScore.ok}</b> / ${pairScore.total}</div>
+  </div>`);
+  area.appendChild(card);
+  const cal=()=>speak(hedef,0.75,null,v);
+  card.querySelector('#pPlay').addEventListener('click',cal);
+  card.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    if(card.dataset.done)return;card.dataset.done='1';
+    const ok=b.dataset.w===hedef;pairScore.total++;if(ok)pairScore.ok++;logAct(ok?'kulak':'kulakx');
+    b.classList.add(ok?'ok':'no');card.querySelectorAll('[data-w]').forEach(x=>{if(x.dataset.w===hedef)x.classList.add('ok');});
+    /* iki kelimeyi arka arkaya duymak farkı kulağa yerleştirir */
+    const diger=pr[0]===hedef?pr[1]:pr[0];
+    card.appendChild(el(`<div class="sfeedback ${ok?'ok':'no'}" style="margin-top:8px;">${ok?'✅':'Duyduğun:'} <b>${hedef}</b> · öbürü: ${diger}</div>`));
+    speak(hedef,0.75,()=>setTimeout(()=>speak(diger,0.75,()=>{},v),250),v);
+    setTimeout(()=>{if(!area.hidden&&earMode==='p')renderEar();},ok?2600:3800);
+  }));
+  setTimeout(cal,350);
 }
 
 /* ===== 4/3/2 akıcılık antrenmanı (Nation 1989) ===== */
@@ -2641,6 +2755,8 @@ if(location.hash==='#test'){
     T('temiz kartta ✅ ve dinle yok', (()=>{const c=buildCheckCard('I need you help.',checkEnglish('I need you help.'));return !/✅/.test(c.textContent)&&!c.querySelector('#playCorr');})());
     T('cevap kiti: tüm birleşimler motordan temiz', (()=>{const bad=[];Object.values(KITS).forEach(k=>k.forEach(ln=>kitCombos(ln).forEach(c=>{if(checkEnglish(c).found.length)bad.push(c);})));if(bad.length)console.log('kit sorunlu:',bad.slice(0,5));return !bad.length;})());
     T('cevap kiti: her soru için var', INTERVIEW_QA.every(q=>KITS[q.q]));
+    T('kulak çeşitleri: her soru için, motordan temiz', INTERVIEW_QA.every(q=>(Q_ALTS[q.q]||[]).length>=3&&Q_ALTS[q.q].every(a=>!checkEnglish(a).found.length)));
+    T('okuma: diyalog konuşmacısı okunmaz', (()=>{const c=buildReadCard({en:'A: Hello. How are you?\nB: Fine, thanks.',tr:'',vocab:''});return [...c.querySelectorAll('.snt')].map(s=>s.textContent).join('|')==='Hello.|How are you?|Fine, thanks.';})());
     T('düzensiz çoğula dokunmaz', ['The people go home.','My children go to school.','The men work here.','The women work in the office.'].every(x=>checkEnglish(x).found.length===0));
     const keep={...stats,todayNew:[...(stats.todayNew||[])]},keepLog=JSON.parse(JSON.stringify(actLog));/* grade() günlüğe de yazar *//* grade() reviews/lastStudy/todayNew yazar — snapshot ÖNCE, dizi kopyalanarak */
     const s={interval:10,box:3,seen:true};states[9999]=s;
