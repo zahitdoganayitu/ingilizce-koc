@@ -18,10 +18,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
+    color-scheme:dark;/* form denetimleri (select, kaydırma çubuğu) koyu temaya uysun — Akıcılık'taki <select> beyaz açılıyordu */
     --bg:#16182F; --bg2:#1E2140; --bg3:#262A50; --bg4:#2F345F;
     --surface:#FBFAF5; --ink:#1C1E33; --ink2:#4A4E6B;
     --muted:#8A8FB5; --muted2:#8085AD;
-    --accent:#F4B740; --accent-deep:#E09A2D;
+    --accent:#F4B740; --accent-deep:#E09A2D; --accent-ink:#8A5A0E;/* açık kâğıt üstünde amber yazı: 5.7:1 (accent-deep 2.1:1 idi) */
     --mint:#4FD1A5; --mint-deep:#33B489;
     --coral:#FF7A6B; --coral-deep:#F05C4B;
     --violet:#9B8CFF; --violet-deep:#7A67E8;
@@ -53,13 +54,13 @@
   .sec-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:20px;color:#fff;}
   .sec-head p{color:var(--muted);font-size:13px;margin-top:3px;line-height:1.45;}
 
-  .progressbar{height:6px;background:var(--bg3);border-radius:999px;overflow:hidden;margin:6px 0 16px;}
+  .progressbar{height:6px;background:var(--bg4);border-radius:999px;overflow:hidden;margin:6px 0 16px;}
   .progressbar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-deep));border-radius:999px;transition:width .4s ease;}
 
   /* CARD */
   .card{background:var(--surface);color:var(--ink);border-radius:24px;padding:28px 22px 24px;box-shadow:var(--shadow);position:relative;min-height:330px;display:flex;flex-direction:column;
     background-image:linear-gradient(var(--paper-line) 1px,transparent 1px);background-size:100% 30px;background-position:0 74px;}
-  .card .tag{align-self:flex-start;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-deep);background:rgba(244,183,64,0.14);padding:4px 10px;border-radius:999px;margin-bottom:18px;}
+  .card .tag{align-self:flex-start;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-ink);background:rgba(244,183,64,0.14);padding:4px 10px;border-radius:999px;margin-bottom:18px;}
   .word-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .word{font-family:"Fraunces",serif;font-weight:600;font-size:40px;line-height:1.05;letter-spacing:-.02em;color:var(--ink);}
   .pos{font-size:13px;color:var(--ink2);font-style:italic;font-weight:500;}
@@ -67,7 +68,10 @@
   .say:hover{background:#2C2F4D;}
   .say:active{transform:scale(.9);}
   .say svg{width:20px;height:20px;}
-  .say.sm{width:34px;height:34px;border-radius:10px;}
+  .say{position:relative;}
+  .say.sm{width:36px;height:36px;border-radius:10px;}
+  .say.sm::after{content:'';position:absolute;inset:-5px;}/* görünür 36, dokunma alanı 46 px */
+  .chunk .say.sm,.qa .say.sm{background:var(--bg4);color:#EDEEF7;}/* koyu zeminde koyu düğme görünmüyordu (1.05:1) */
   .say.sm svg{width:15px;height:15px;}
 
   .prompt{margin-top:auto;padding-top:20px;}
@@ -85,8 +89,8 @@
   .ex-en > span{margin-top:5px;}
   .ex-tr{font-size:14px;color:var(--ink2);margin-top:5px;padding-left:43px;}
   .tip{margin-top:14px;background:rgba(244,183,64,0.12);border:1px solid rgba(224,154,45,0.28);border-radius:14px;padding:11px 13px;font-size:13px;color:#6b4d17;line-height:1.5;}
-  .tip b{color:var(--accent-deep);}
-  .tip .tt{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--accent-deep);font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;}
+  .tip b{color:var(--accent-ink);}
+  .tip .tt{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--accent-ink);font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;}
 
   /* AI mnemonic inside card */
   .mnem-btn{margin-top:14px;width:100%;background:rgba(122,103,232,0.12);border:1px solid rgba(122,103,232,0.35);color:var(--violet-deep);font-family:inherit;font-weight:700;font-size:13.5px;padding:12px;border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s;}
@@ -99,10 +103,11 @@
   .rate button{border:none;cursor:pointer;font-family:inherit;border-radius:14px;padding:13px 6px;color:#fff;font-weight:700;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .12s,filter .15s;}
   .rate button:active{transform:translateY(1px) scale(.97);}
   .rate button small{font-weight:500;font-size:10px;opacity:.85;}
-  .rate .again{background:linear-gradient(160deg,var(--coral),var(--coral-deep));}
+  /* Koyu yazı: beyaz yazı nane/mercan üstünde 1.9-3.3:1 idi; "Zor" gibi koyu mürekkep ≥4.7:1 */
+  .rate .again{background:linear-gradient(160deg,var(--coral),var(--coral-deep));color:#4a0f08;}
   .rate .hard{background:linear-gradient(160deg,var(--accent),var(--accent-deep));color:#3d2b06;}
   .rate .hard small{opacity:.7;}
-  .rate .easy{background:linear-gradient(160deg,var(--mint),var(--mint-deep));}
+  .rate .easy{background:linear-gradient(160deg,var(--mint),var(--mint-deep));color:#0d3326;}
 
   .done{text-align:center;padding:44px 22px;background:var(--bg2);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);}
   .done .big{font-size:50px;margin-bottom:8px;}
@@ -128,14 +133,14 @@
 
   /* SEGMENT toggle */
   .segment{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:4px;gap:4px;margin-bottom:16px;}
-  .segment button{flex:1;background:none;border:none;font-family:inherit;font-weight:700;font-size:14px;color:var(--muted);padding:10px;border-radius:10px;cursor:pointer;transition:all .15s;}
+  .segment button{min-height:44px;flex:1;background:none;border:none;font-family:inherit;font-weight:700;font-size:14px;color:var(--muted);padding:10px;border-radius:10px;cursor:pointer;transition:all .15s;}
   .segment button.on{background:var(--bg4);color:#fff;}
 
   /* AI panels */
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-  .chip{background:var(--bg3);border:1.5px solid var(--line2);color:#EDEEF7;font-family:inherit;font-weight:600;font-size:13px;padding:8px 13px;border-radius:999px;cursor:pointer;transition:all .15s;}
+  .chip{min-height:44px;background:var(--bg3);border:1.5px solid var(--line2);color:#EDEEF7;font-family:inherit;font-weight:600;font-size:13px;padding:8px 13px;border-radius:999px;cursor:pointer;transition:all .15s;}
   .chip.on{background:var(--accent);color:#3d2b06;border-color:var(--accent);}
-  .ai-btn{width:100%;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border:none;color:#fff;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,filter .15s;}
+  .ai-btn{width:100%;background:linear-gradient(160deg,#6a56d8,#5643c4);/* beyaz yazı ≥5.3:1 (eski mor 2.8:1) */border:none;color:#fff;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,filter .15s;}
   .ai-btn:hover{filter:brightness(1.08);}
   .ai-btn:active{transform:translateY(1px) scale(.995);}
   .ai-btn:disabled{opacity:.6;cursor:default;}
@@ -143,6 +148,12 @@
   .ai-out .en-text{font-size:16.5px;color:#fff;font-weight:500;}
   .ai-out .lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--violet);font-weight:700;margin:14px 0 6px;}
   .ai-out .tr-text{color:var(--muted);font-size:14px;}
+  /* Düzeltme farkı: eklenen amber, silinen mercan üstü çizili. Çevir karşılaştırmasında nötr (.cmp) — başka doğru çeviri de olabilir. */
+  .ai-out ins{text-decoration:none;color:var(--accent);background:rgba(244,183,64,.16);border-radius:5px;padding:0 3px;font-weight:600;}
+  .ai-out del{color:var(--coral);opacity:.85;}
+  .ai-out .cmp ins{color:#EDEEF7;background:rgba(255,255,255,.1);font-weight:500;}
+  .ai-out .cmp del{color:var(--muted);}
+  .ai-out .mine{color:var(--muted);font-size:14.5px;}
   .ai-out .vocab{background:var(--bg3);border-radius:11px;padding:11px 13px;margin-top:6px;font-size:13.5px;color:#cfd2e8;}
   .taread{width:100%;background:var(--surface);color:var(--ink);border:2px solid transparent;border-radius:14px;padding:14px 15px;font-family:inherit;font-size:16px;font-weight:500;outline:none;resize:vertical;min-height:80px;transition:border-color .15s;}
   .taread:focus{border-color:var(--accent);}
@@ -155,7 +166,7 @@
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
   .stat{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:17px 16px;}
   .stat .v{font-family:"Fraunces",serif;font-size:31px;font-weight:600;line-height:1;color:#fff;}
-  .stat .v.acc{color:var(--accent);}
+  .stat .v.hl{color:var(--accent);}/* .acc adı akordeon bileşeniyle çakışıp seri sayısını kutuya sokuyordu */
   .stat .v.mnt{color:var(--mint);}
   .stat .l{font-size:12px;color:var(--muted);margin-top:7px;font-weight:500;}
   .panel{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;}
@@ -229,8 +240,11 @@
   .bubble.ai{background:var(--bg2);border:1px solid var(--line);color:#EDEEF7;border-bottom-left-radius:5px;align-self:flex-start;}
   .bubble.me{background:linear-gradient(160deg,var(--accent),var(--accent-deep));color:#3d2b06;font-weight:600;border-bottom-right-radius:5px;align-self:flex-end;}
   .bubble .b-tr{font-size:12px;color:var(--muted2);margin-top:7px;padding-top:7px;border-top:1px solid var(--line);}
-  .bubble .b-fb{font-size:12.5px;color:var(--mint);margin-top:8px;padding-top:8px;border-top:1px solid var(--line);line-height:1.5;}
-  .bubble .b-say{background:none;border:none;color:var(--violet);cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;padding:8px 0;min-height:40px;margin-top:4px;display:inline-block;}
+  /* Geri bildirim nötr renkte: nane "başarı" demek, düzeltme listesi başarı değil */
+  .bubble .b-fb{font-size:12.5px;color:#cfd2e8;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);line-height:1.5;}
+  .bubble .b-fb ins{text-decoration:none;color:var(--accent);background:rgba(244,183,64,.16);border-radius:4px;padding:0 2px;font-weight:600;}
+  .bubble .b-fb del{color:var(--coral);opacity:.85;}
+  .bubble .b-say{background:none;border:none;color:var(--violet);cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;padding:8px 0;min-height:44px;margin-top:4px;display:inline-block;}
   .chatrow{display:flex;gap:9px;}
   .chatrow textarea{flex:1;background:var(--surface);color:var(--ink);border:2px solid transparent;border-radius:14px;padding:12px 14px;font-family:inherit;font-size:15px;font-weight:500;outline:none;resize:none;min-height:50px;max-height:110px;transition:border-color .15s;}
   .chatrow textarea:focus{border-color:var(--accent);}
@@ -258,7 +272,7 @@
   .type-in{width:100%;background:#fff;color:var(--ink);border:2px solid var(--paper-line);border-radius:12px;padding:13px 15px;font-family:inherit;font-size:17px;font-weight:600;outline:none;transition:border-color .15s;}
   .type-in:focus{border-color:var(--accent);}
   .cloze-line{font-size:18px;color:var(--ink);font-weight:600;line-height:1.6;margin-bottom:14px;}
-  .cloze-line b{color:var(--accent-deep);letter-spacing:.15em;}
+  .cloze-line b{color:var(--accent-ink);letter-spacing:.15em;}
   .ear-opt{width:100%;text-align:left;background:var(--bg3);border:1.5px solid var(--line2);color:#EDEEF7;font-family:inherit;font-weight:600;font-size:14px;padding:13px 15px;border-radius:12px;cursor:pointer;margin-bottom:9px;transition:all .15s;line-height:1.45;}
   .ear-opt.ok{border-color:var(--mint);background:rgba(79,209,165,.12);}
   .ear-opt.no{border-color:var(--coral);background:rgba(255,122,107,.1);}
@@ -311,7 +325,7 @@
 
   <main>
     <section class="view active" id="v-study">
-      <div class="progressbar"><i id="sessProg"></i></div>
+      <div class="progressbar" id="sessBar" role="progressbar" aria-label="Seans ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="sessProg"></i></div>
       <div id="studyArea"></div>
     </section>
 
@@ -331,7 +345,7 @@
         <button data-m="prep" class="on" style="font-size:12.5px;padding:10px 2px;">📋 Hazırlık</button>
         <button data-m="ear" style="font-size:12.5px;padding:10px 2px;">🎧 Kulak</button>
         <button data-m="drill" style="font-size:12.5px;padding:10px 2px;">⏱ Akıcılık</button>
-        <button data-m="mock" style="font-size:12.5px;padding:10px 2px;">🎤 Mülakat</button>
+        <button data-m="mock" style="font-size:12.5px;padding:10px 2px;">🎤 Prova</button>
       </div>
       <div id="intPrep"></div>
       <div id="intEar" hidden></div>
@@ -440,7 +454,7 @@ const WORDS = [
   {id:61,lvl:3,en:"how",tr:"nasıl",pos:"soru",exEn:"How are you?",exTr:"Nasılsın?"},
   {id:62,lvl:3,en:"what",tr:"ne",pos:"soru",exEn:"What is this?",exTr:"Bu ne?"},
   {id:63,lvl:3,en:"where",tr:"nerede / nereye",pos:"soru",exEn:"Where are you?",exTr:"Neredesin?"},
-  {id:64,lvl:3,en:"when",tr:"ne zaman",pos:"soru",exEn:"When do you come?",exTr:"Ne zaman geliyorsun?"},
+  {id:64,lvl:3,en:"when",tr:"ne zaman",pos:"soru",exEn:"When are you coming?",exTr:"Ne zaman geliyorsun?"},
   {id:65,lvl:3,en:"why",tr:"neden / niçin",pos:"soru",exEn:"Why are you sad?",exTr:"Neden üzgünsün?"},
   {id:66,lvl:4,en:"wake up",tr:"uyanmak",pos:"öbek fiil",exEn:"I wake up early.",exTr:"Erken uyanırım.",tip:"<b>Öbek fiil:</b> iki kelime birleşip tek anlam taşır. wake + up → <b>uyanmak</b>. Ayrı ayrı çevirme."},
   {id:67,lvl:4,en:"look for",tr:"aramak",pos:"öbek fiil",exEn:"I am looking for my phone.",exTr:"Telefonumu arıyorum.",tip:"<b>look</b> = bakmak; <b>look for</b> = aramak. Edat anlamı tamamen değiştirir."},
@@ -511,7 +525,7 @@ const WORDS = [
   {id:132,lvl:2,en:"morning",tr:"sabah",pos:"isim",exEn:"I study in the morning.",exTr:"Sabahları çalışırım."},
   {id:133,lvl:2,en:"evening",tr:"akşam",pos:"isim",exEn:"I go home in the evening.",exTr:"Akşam eve giderim."},
   {id:134,lvl:2,en:"week",tr:"hafta",pos:"isim",exEn:"I work four days a week.",exTr:"Haftada dört gün çalışırım."},
-  {id:135,lvl:2,en:"month",tr:"ay",pos:"isim",exEn:"The internship is three months.",exTr:"Staj üç ay."},
+  {id:135,lvl:2,en:"month",tr:"ay",pos:"isim",exEn:"The internship is three months long.",exTr:"Staj üç ay sürüyor."},
   {id:136,lvl:2,en:"school",tr:"okul",pos:"isim",exEn:"I go to school every day.",exTr:"Her gün okula giderim."},
   {id:137,lvl:2,en:"house",tr:"ev",pos:"isim",exEn:"Our house is near the school.",exTr:"Evimiz okula yakın."},
   {id:138,lvl:2,en:"book",tr:"kitap",pos:"isim",exEn:"I read a book every month.",exTr:"Her ay bir kitap okurum."},
@@ -519,7 +533,7 @@ const WORDS = [
   {id:140,lvl:2,en:"phone",tr:"telefon",pos:"isim",exEn:"My phone is on the table.",exTr:"Telefonum masanın üstünde."},
   {id:141,lvl:2,en:"city",tr:"şehir",pos:"isim",exEn:"Istanbul is a big city.",exTr:"İstanbul büyük bir şehir."},
   {id:142,lvl:2,en:"happy",tr:"mutlu",pos:"sıfat",exEn:"I am happy to be here.",exTr:"Burada olduğum için mutluyum."},
-  {id:143,lvl:2,en:"tired",tr:"yorgun",pos:"sıfat",exEn:"I am tired but I finish the work.",exTr:"Yorgunum ama işi bitiriyorum."},
+  {id:143,lvl:2,en:"tired",tr:"yorgun",pos:"sıfat",exEn:"I am tired, but I will finish the work.",exTr:"Yorgunum ama işi bitireceğim."},
   {id:144,lvl:2,en:"some",tr:"biraz / bazı",pos:"belirteç",exEn:"I have some experience.",exTr:"Biraz deneyimim var."},
   {id:145,lvl:2,en:"many",tr:"çok (sayılabilen)",pos:"belirteç",exEn:"I have many friends at school.",exTr:"Okulda çok arkadaşım var.",tip:"Sayılabilenlerde <b>many</b> (many books), sayılamayanlarda <b>much</b> (much water)."},
   {id:146,lvl:2,en:"also",tr:"ayrıca / da",pos:"zarf",exEn:"I also speak a little German.",exTr:"Ayrıca biraz Almanca konuşurum."},
@@ -794,7 +808,7 @@ const MNEM={
   "skill":["İSKELE","<b>İskelede</b> tek eliyle tuğla dizen usta. Herkes duruyor, o çalışıyor — çünkü <b>becerisi</b> var."],
   "deadline":["DEDE + LAYN (çizgi)","<b>Dede</b> yere kalın bir <b>çizgi</b> çekiyor: \"Bu çizgiden sonra iş kabul yok!\" — <b>son teslim tarihi</b>."],
   "strength":["STREÇ","<b>Streç</b> film gibisin: gerilirsin, esnersin ama kopmazsın. Bu senin <b>güçlü yönün</b>."],
-  "weakness":["VİKS","Nezle olmuşsun, göğsüne <b>Viks</b> sürüyorsun. Herkesin böyle bir <b>zayıf anı</b> var."],
+  "weakness":["VİKS","Nezle olmuşsun, göğsüne <b>Viks</b> sürüyorsun. Herkesin böyle bir <b>zayıf anı</b> var. <i>Dikkat: <b>w</b> dudak yuvarlanarak söylenir (\"u\" gibi başlar) — <b>v</b> değil.</i>"],
   "achieve":["AÇ + EV","Günlerce <b>aç</b> yürüdün, sonunda <b>eve</b> ulaştın. Ulaşmak = <b>başarmak</b>."],
   "improve":["İMZA + PROVA","<b>İmzanı</b> yüz kere <b>prova</b> ediyorsun; her seferinde biraz daha güzel. <b>Geliştirmek</b> budur."],
   "manage":["MENÜ + AŞÇI","Müdür elinde <b>menü</b>, mutfakta <b>aşçılara</b> bağırıyor. Hepsini <b>yönetiyor</b>."],
@@ -810,7 +824,7 @@ const MNEM={
   "meeting":["MİTİNG","Kalabalık bir <b>miting</b> — ama salonda ve kravatlı. <b>Toplantı</b>."],
   "report":["RÖPORTAJ","<b>Röportajı</b> yazıya döküyorsun, patrona veriyorsun. Olan biteni anlatan kâğıt = <b>rapor</b>."],
   "difficult":["DEFİ (meydan okuma) + KÜLT","Efsanevi bir <b>meydan okuma</b>, <b>kült</b> olmuş bir sınav. Yani: <b>zor</b>."],
-  "wake up":["VEY! KAP!","Alarm çalıyor: \"<b>Vey! Kap</b> kendini!\" Yataktan fırlıyorsun — <b>uyanmak</b>."],
+  "wake up":["VEY! KAP!","Alarm çalıyor: \"<b>Vey! Kap</b> kendini!\" Yataktan fırlıyorsun — <b>uyanmak</b>. <i>Dikkat: <b>w</b> dudak yuvarlanarak söylenir (\"u\" gibi başlar) — <b>v</b> değil.</i>"],
   "look for":["LUK + FOR","Gözünle her yeri <b>tarıyorsun</b> (look) çünkü bir amaç <b>için</b> (for). Bakmak + amaç = <b>aramak</b>."],
   "apply for":["APLİKASYON","Telefonundaki <b>aplikasyon</b> (application) üzerinden işe <b>başvuruyorsun</b>."],
   "hardworking":["HARD (sert) + WORKING","Taş gibi <b>sert</b>, durmadan <b>çalışan</b> biri. <b>Çalışkan</b>."],
@@ -819,7 +833,7 @@ const MNEM={
   "because":["Bİ KOZ","Elinde <b>bir koz</b> var, onu masaya koyup açıklıyorsun: \"<b>çünkü</b>...\""],
   "people":["PİPOLULAR","Meydanı dolduran <b>pipolu</b> adamlar. Bir sürü var — o yüzden <b>zaten çoğul</b>, \"peoples\" deme."],
   "money":["MANİ","<b>Para</b> manisine tutulmuş adam, gece gündüz sayıyor."],
-  "water":["VATER","Ustanın <b>vateri</b> (su terazisi) — içindeki <b>su</b> kabarcığı doğruyu söyler."],
+  "water":["VATER","Ustanın <b>vateri</b> (su terazisi) — içindeki <b>su</b> kabarcığı doğruyu söyler. <i>Dikkat: <b>w</b> dudak yuvarlanarak söylenir (\"u\" gibi başlar) — <b>v</b> değil.</i>"],
   "friend":["FREN","Gerçek <b>arkadaş</b> seni kötü bir şey yapmadan <b>frenler</b>."],
   "answer":["ANSIRMAK","Öğretmen sorunca <b>cevap</b> ağzından <b>hapşırık</b> gibi fırlıyor."],
   "question":["KES + ÇENE","Öğretmen <b>çeneni kesip</b> bir <b>soru</b> soruyor."],
@@ -868,8 +882,8 @@ const READINGS=[
    tr:"Telefonumu her gün kullanırım. Sabah haberleri okur, otobüste müzik dinlerim. Bazen telefonu çok fazla kullanıyorum. Şimdi yeni bir planım var: saat ondan sonra telefon yok. Zor ama daha iyi uyuyorum.",
    vocab:"too much = çok fazla\ndifficult = zor\nbetter = daha iyi"},
   {topic:"Teknoloji",type:"diyalog",lvl:2,
-   en:"A: I can't find my keys.\nB: Are they on the table?\nA: No, I looked there. I am looking for them everywhere.\nB: Call your phone. Maybe the keys are next to your bag.\nA: Good idea! Thank you very much.",
-   tr:"A: Anahtarlarımı bulamıyorum.\nB: Masanın üstünde mi?\nA: Hayır, oraya baktım. Her yerde arıyorum.\nB: Telefonunu ara. Belki anahtarlar çantanın yanındadır.\nA: İyi fikir! Çok teşekkürler.",
+   en:"A: I can't find my keys.\nB: Are they on the table?\nA: No, I looked there. I am looking for them everywhere.\nB: Look in your bag. Maybe the keys are in it.\nA: Good idea! Thank you very much.",
+   tr:"A: Anahtarlarımı bulamıyorum.\nB: Masanın üstünde mi?\nA: Hayır, oraya baktım. Her yerde arıyorum.\nB: Çantana bak. Belki anahtarlar içindedir.\nA: İyi fikir! Çok teşekkürler.",
    vocab:"can't find = bulamıyorum\neverywhere = her yerde\nmaybe = belki"},
   {topic:"Seyahat",type:"hikaye",lvl:2,
    en:"Last year I went to a small city near the sea. The people were very friendly. The food was good and not expensive. Every morning I walked and I looked at the sea. I want to go there again next year.",
@@ -882,7 +896,7 @@ const READINGS=[
   {topic:"Yemek",type:"hikaye",lvl:1,
    en:"My mother makes very good food. On Sunday all the family comes to our home. We eat together and we talk about the week. I am happy on those days, because I love my family.",
    tr:"Annem çok güzel yemek yapar. Pazar günü bütün aile evimize gelir. Birlikte yeriz ve haftayı konuşuruz. O günlerde mutluyum çünkü ailemi seviyorum.",
-   vocab:"together = birlikte\nspeak about = hakkında konuşmak\nthose days = o günler"},
+   vocab:"together = birlikte\ntalk about = hakkında konuşmak\nthose days = o günler"},
   {topic:"Yemek",type:"diyalog",lvl:2,
    en:"A: Can I have the bill, please?\nB: Of course. Did you like the food?\nA: Yes, it was very good. How much is it?\nB: It is two hundred lira.\nA: Here you are. Thank you, have a nice day!",
    tr:"A: Hesabı alabilir miyim, lütfen?\nB: Tabii. Yemeği beğendiniz mi?\nA: Evet, çok güzeldi. Ne kadar?\nB: İki yüz lira.\nA: Buyurun. Teşekkürler, iyi günler!",
@@ -892,8 +906,8 @@ const READINGS=[
    tr:"A: Günaydın. Lütfen oturun.\nB: Günaydın. Zaman ayırdığınız için teşekkürler.\nA: Bana kendinizden bahsedin.\nB: İTÜ'de üçüncü sınıf işletme mühendisliği öğrencisiyim. Şu anda yaz stajı arıyorum.\nA: Neden burada çalışmak istiyorsunuz?\nB: Şirketiniz hızla büyüyor ve güçlü bir takımdan öğrenmek istiyorum.",
    vocab:"have a seat = buyurun oturun\nat the moment = şu anda\ngrow fast = hızlı büyümek"},
   {topic:"Mülakat",type:"hikaye",lvl:4,
-   en:"Last semester our group project was almost late. Two people left the team and we had only one week. I made a simple plan and gave every person one task. I checked the work every evening. We finished the report on time and the teacher gave us a high grade. I learned that a short plan is better than a long meeting.",
-   tr:"Geçen dönem grup projemiz neredeyse gecikiyordu. İki kişi takımdan ayrıldı ve sadece bir haftamız vardı. Basit bir plan yaptım ve herkese bir görev verdim. Her akşam işi kontrol ettim. Raporu zamanında bitirdik ve öğretmen bize yüksek not verdi. Kısa bir planın uzun bir toplantıdan iyi olduğunu öğrendim.",
+   en:"Last semester our group project was almost late. Two people left the team and we had only one week. I made a simple plan and gave every person one task. I checked the work every evening. We finished the report on time and the professor gave us a high grade. I learned that a short plan is better than a long meeting.",
+   tr:"Geçen dönem grup projemiz neredeyse gecikiyordu. İki kişi takımdan ayrıldı ve sadece bir haftamız vardı. Basit bir plan yaptım ve herkese bir görev verdim. Her akşam işi kontrol ettim. Raporu zamanında bitirdik ve hoca bize yüksek not verdi. Kısa bir planın uzun bir toplantıdan iyi olduğunu öğrendim.",
    vocab:"almost = neredeyse\non time = zamanında\ngrade = not"},
   {topic:"İş hayatı",type:"hikaye",lvl:3,
    en:"My first week at the office was difficult. I did not understand every word in the meetings. I took notes and asked my supervisor after the meeting. After two weeks it became easier. Now I understand most of the words, and I ask fewer questions.",
@@ -954,6 +968,13 @@ const V_ING=V_BASE.split('|').map(ing).join('|');
    Şüpheli durumda elemek güvenli taraftır — düzeltmemek, yanlış düzeltmekten iyi. */
 const PLURAL_SUBJ=/(?:s|\bpeople|\bchildren|\bmen|\bwomen|\bpolice|\bstaff|\bfeet|\bteeth|\bmice)$/i;
 const isPluralSubj=s=>PLURAL_SUBJ.test(String(s).trim());
+/* İsim olarak da kullanılan fiiller ("is design", "study materials", "it is work"). Bağlam belirsizse
+   fiil sanılıp düzeltilmez. 2026-10-14 ölçümü: 40 doğru öğrenci cümlesinin 22'si bu belirsizlikle bozuluyordu. */
+const V_NOUNY=/^(work|help|plan|change|design|test|answer|study|check|call|use|look|walk|drink|sleep|start|play|win|move|run|fix|stop|read|hope|love|finish|try|watch|drive|build)$/i;
+/* Cümlede geçmiş zaman fiili — past_marker ana cümle fiiline yapışmasın ("I think I made…"). */
+const PAST_RE=new RegExp('\\b('+[...new Set(V_BASE.split('|').map(past))].join('|')+'|was|were|did|had)\\b','i');
+/* "have + V3" ile geçmiş zarf: "I have finished it yesterday" → "I finished". V3 → V2. */
+const PP_PAST={done:'did',gone:'went',seen:'saw',written:'wrote',taken:'took',given:'gave',come:'came',eaten:'ate',spoken:'spoke',known:'knew',chosen:'chose',forgotten:'forgot',grown:'grew',begun:'began',drunk:'drank',run:'ran',become:'became',driven:'drove',gotten:'got',got:'got',made:'made',sent:'sent',met:'met',bought:'bought',built:'built',found:'found',kept:'kept',left:'left',lost:'lost',slept:'slept',taught:'taught',told:'told',felt:'felt',had:'had',put:'put',read:'read',sold:'sold',understood:'understood',won:'won',thought:'thought'};
 
 const TRAPS=[
   /* "agree" özel: fiil olduğu için tobe_bare'den ÖNCE gelmeli, yoksa hiç ateşlenmez. */
@@ -962,23 +983,35 @@ const TRAPS=[
    why:'<b>agree</b> zaten fiil — yanına am/is/are gelmez. "Katılıyorum" = <b>I agree</b>.',
    fix:s=>s.replace(/\b(am|is|are)\s+agree\b/i,'agree')},
   {id:'tobe_bare',
-   re:new RegExp('\\b(am|is|are|was|were)\\s+('+V_BASE+')\\b','i'),
+   /* Yalnız zamir öznesi: "My favorite course is design", "What I need is help", "Is work important?"
+      doğru — be'den sonraki kelime orada isim. "It is work" da isim olabilir. */
+   re:new RegExp('\\b(i|you|he|she|it|we|they)\\s+(am|is|are|was|were)\\s+('+V_BASE+')\\b','i'),
+   guard:(s,m)=>!(m[1].toLowerCase()==='it'&&V_NOUNY.test(m[3])),
    ttl:'Gereksiz "to be"',
    why:'Türkçede "gidiyorum" tek kelime, İngilizcede ya <b>to be</b> ya normal fiil olur — ikisi yan yana gelmez.',
    /* "I was work" → geçmiş anlam silinmesin: was/were ise fiil geçmişe çekilir. */
-   fix:(s,m)=>s.replace(m[0],/^(was|were)$/i.test(m[1])?past(m[2]):m[2]),
-   alt:(s,m)=>V_STATIVE.test(m[2])?null:s.replace(m[0],m[1]+' '+ing(m[2]))},
+   fix:(s,m)=>s.replace(m[0],m[1]+' '+(/^(was|were)$/i.test(m[2])?past(m[3]):m[3])),
+   alt:(s,m)=>V_STATIVE.test(m[3])?null:s.replace(m[0],m[1]+' '+m[2]+' '+ing(m[3]))},
   /* Zaman zarfı varsa fiil de geçmişe çekilir. third_s'den ÖNCE gelmeli, yoksa
      "Yesterday he go" önce "he goes" olur ve geçmiş zaman hatası kaçar.
      Zarf yalnızca kendi cümlesinde aranır — checkEnglish metni cümlelere böler. */
   {id:'past_marker',
-   re:new RegExp('\\b(i|you|we|they|he|she|it)\\s+('+V_BASE+')\\b','i'),
+   re:new RegExp('\\b(i|you|we|they|he|she|it)\\s+('+V_BASE+'|has)\\b','i'),
    guard:(s,m)=>/\b(yesterday|last\s+(week|year|month|night|summer|semester|term)|(\d+|a\s+few|two|three|four|five|ten)\s+(days?|weeks?|years?|months?)\s+ago)\b/i.test(s)
      /* "…but now I want": eşleşmenin bulunduğu yan cümlede şimdi-zarfı varsa dokunma */
-     &&!/\b(now|today|currently|these days)\b/i.test(s.slice(0,m.index).split(/\b(?:and|but|so|because)\b|[,;]/).pop()+' '+s.slice(m.index+m[0].length).split(/\b(?:and|but|so|because)\b|[,;]/)[0]),
+     &&!/\b(now|today|currently|these days)\b/i.test(s.slice(0,m.index).split(/\b(?:and|but|so|because)\b|[,;]/).pop()+' '+s.slice(m.index+m[0].length).split(/\b(?:and|but|so|because)\b|[,;]/)[0])
+     /* soru/yardımcı fiil sonrası yalın fiil doğru: "Do you remember…", "I want to tell…" */
+     &&!/\b(do|does|did|to|can|could|will|would|should|must|may|might)\s*$/i.test(s.slice(0,m.index))
+     /* geçmiş fiil zaten eşleşmeden sonra geliyorsa ana cümle fiiline dokunma: "I think I made a mistake yesterday" */
+     /* (have/has + V3'te V3'ün kendisi sayılmaz — o durumu fix ayrıca düzeltir) */
+     &&!PAST_RE.test(s.slice(m.index+m[0].length).replace(/^\s+[a-z]+/i,s=>/^(have|has)$/i.test(m[2])?'':s)),
    ttl:'Geçmiş zaman: fiil de değişir',
-   why:'Türkçede "dün gittim" derken zaman <b>ekte</b>. İngilizcede zaman zarfı yetmez — <b>fiilin kendisi</b> geçmiş hâle geçer: go → <b>went</b>.',
-   fix:(s,m)=>s.replace(m[0],m[1]+' '+past(m[2]))},
+   why:'Türkçede "dün gittim" derken zaman <b>ekte</b>. İngilizcede zaman zarfı yetmez — <b>fiilin kendisi</b> geçmiş hâle geçer: go → <b>went</b>. <b>yesterday / last week / ago</b> ile <i>have + V3</i> de kullanılmaz: <i>I have finished it yesterday</i> ✗ → <b>I finished it yesterday</b> ✓',
+   fix:(s,m)=>{const rest=s.slice(m[0].length),v=/^\s+([a-z]+)/i.exec(rest);
+     if(/^(have|has)$/i.test(m[2])&&v){const w=v[1].toLowerCase();
+       const v2=w==='been'?(/^(we|you|they)$/i.test(m[1])?'were':'was'):(PP_PAST[w]||(/ed$/.test(w)?w:null));
+       if(v2)return m[1]+' '+v2+rest.slice(v[0].length);}
+     return s.replace(m[0],m[1]+' '+past(/^has$/i.test(m[2])?'have':m[2]));}},
   {id:'modal_to',
    re:new RegExp('\\b(can|could|will|would|should|must|may|might)\\s+to\\s+('+V_BASE+')\\b','i'),
    ttl:'Modal fiilden sonra <b>to</b> gelmez',
@@ -988,7 +1021,9 @@ const TRAPS=[
      I want work" (isim) meşru olduğu için help/work/plan gibi isim de olan fiiller dışarıda. */
   {id:'want_to',
    re:/\b(want|wants|wanted|need|needs|needed|hope|hopes|hoped|plan|plans|planned|decide|decided|try|tries|tried|would like)\s+(go|come|study|learn|be|speak|talk|improve|apply|find|get|make|see|know|start|finish|meet|join|become|do|use|write|read|buy|live|stay|grow|develop|contribute|work)\b/i,
-   guard:(s,m)=>!/^(work)$/i.test(m[2])||!/\b(need|needs|needed|want|wants|wanted)$/i.test(m[1]),
+   guard:(s,m)=>(!/^(work)$/i.test(m[2])||!/\b(need|needs|needed|want|wants|wanted)$/i.test(m[1]))
+     /* "I need study materials", "try study groups": isim tamlaması, fiil değil */
+     &&!(V_NOUNY.test(m[2])&&/^\s+[a-z]+(s|ing)\b/i.test(s.slice(m.index+m[0].length))),
    ttl:'<b>to</b> eksik',
    why:'Türkçe "-mek istiyorum" tek mastar; İngilizcede <b>want / need / hope / plan / decide / try</b> sonrası <b>to + fiil</b>: <i>I want go</i> ✗ → <b>I want to go</b> ✓',
    fix:(s,m)=>s.replace(m[0],m[1]+' to '+m[2])},
@@ -1001,7 +1036,10 @@ const TRAPS=[
      Sadece geçmiş hâli = ortaç olan fiiller + be. "have" ana fiil listede yok
      ("I have three years experience" doğru; have→had had döngüsü). */
   {id:'pres_perf',
-   re:/\b(i|you|we|they|he|she|it)\s+(am|is|are|work|works|study|studies|live|lives|teach|teaches|learn|learns|use|uses|stay|stays|wait|waits|want|wants|love|loves|like|likes|play|plays)\b(?=[^.!?]*\b(?:for\s+(?:\d+|two|three|four|five|six|seven|eight|nine|ten|many|several|a few)\s+(?:years?|months?|weeks?)|since\s+(?:19|20)\d\d)\b)/i,
+   /* want/like/love çıkarıldı: "I want to work abroad for two years" geleceği anlatır. */
+   re:/\b(i|you|we|they|he|she|it)\s+(am|is|are|work|works|study|studies|live|lives|teach|teaches|learn|learns|use|uses|stay|stays|wait|waits|play|plays)\b(?=[^.!?]*\b(?:for\s+(?:\d+|two|three|four|five|six|seven|eight|nine|ten|many|several|a few)\s+(?:years?|months?|weeks?)|since\s+(?:19|20)\d\d)\b)/i,
+   /* "I am in Istanbul for two weeks" ziyaret de olabilir — be + yer + for belirsiz, yalnız since kesin */
+   guard:(s,m)=>!(/^(am|is|are)$/i.test(m[2])&&/^\s+(in|at|on|here|there)\b/i.test(s.slice(m.index+m[0].length))&&!/\bsince\b/i.test(s)),
    ttl:'Süren durum: <b>present perfect</b>',
    why:'"3 yıldır çalışıyorum" Türkçede şimdiki zaman; İngilizcede <b>for / since</b> ile hâlâ süren şey <b>have / has + V3</b> ister: <i>I work here for 3 years</i> ✗ → <b>I have worked here for 3 years</b> ✓',
    fix:(s,m)=>{const p=m[1].toLowerCase();const hv=(p==='he'||p==='she'||p==='it')?'has':'have';const v=m[2].toLowerCase();
@@ -1025,6 +1063,8 @@ const TRAPS=[
    fix:(s,m)=>s.replace(m[0],m[1]+" doesn't")},
   {id:'missing_be_ing',
    re:new RegExp('\\b(i|you|we|they|he|she|it)\\s+('+V_ING+')\\b','i'),
+   /* Devrik soru: "Are you coming?", "How is it going?" — be zaten öznenin önünde */
+   guard:(s,m)=>!/\b(am|is|are|was|were|be|been)\s*$/i.test(s.slice(0,m.index)),
    ttl:'"am / is / are" eksik',
    why:'Türkçede "çalışıyorum" tek kelime. İngilizcede şimdiki zaman iki parçadır: <b>be + fiil-ing</b>. <i>I studying</i> ✗ → <b>I am studying</b> ✓',
    fix:(s,m)=>{const p=m[1].toLowerCase();const be=p==='i'?'am':(p==='you'||p==='we'||p==='they')?'are':'is';
@@ -1053,7 +1093,8 @@ const TRAPS=[
   {id:'no_be',
    /* Cümle başı özne + (a/an)? meslek | sıfat | from | N years old. Soru cümlesi hariç ("You ready?"). */
    re:new RegExp('^\\s*(he|she|it|i|you|we|they)\\s+(?:(a|an)\\s+)?((?:'+V_JOB+')s?|ready|happy|tired|busy|sure|sorry|hungry|late|early|fine|good|okay|ok|free|available|interested|responsible|flexible|here|from|\\d+\\s+years\\s+old)\\b','i'),
-   guard:s=>!/\?\s*$/.test(s),
+   /* "We students need more practice": arkasından fiil geliyorsa özne öbeği, be eksik değil */
+   guard:(s,m)=>!/\?\s*$/.test(s)&&!new RegExp('^\\s+('+V_BASE+')\\b','i').test(s.slice(m.index+m[0].length)),
    ttl:'"be" (am/is/are) eksik',
    why:'Türkçede "Öğrenciyim / Hazırım" derken fiil yok. İngilizcede <b>am/is/are</b> asla atlanmaz: <i>I student</i> ✗ → <b>I am a student</b> ✓, <i>I ready</i> ✗ → <b>I am ready</b> ✓',
    fix:(s,m)=>{const p=m[1].toLowerCase();const be=p==='i'?'am':(p==='you'||p==='we'||p==='they')?'are':'is';
@@ -1065,15 +1106,16 @@ const TRAPS=[
    why:'Türkçe "-den sorumlu" doğrudan çevrilmiş. Doğrusu <b>responsible for</b>.',
    fix:s=>s.replace(/\bresponsible\s+from\b/i,'responsible for')},
   /* "interested to learn" doğru — "to" yalnızca fiil izlemiyorsa yakalanır. */
-  {id:'interested_with',re:new RegExp('\\binterested\\s+(with|about|to(?!\\s+(?:'+V_BASE+')\\b))\\b','i'),
+  /* "interested to hear/learn" doğru — "to" yalnız isim öbeği izliyorsa yakalanır. */
+  {id:'interested_with',re:/\binterested\s+(with|about|to(?=\s+(?:a|an|the|this|that|my|your|our|their|it|[a-z]+ing)\b))\b/i,
    ttl:'interested <b>in</b> olmalı',
    why:'"-ile ilgileniyorum" düşüncesiyle <i>with</i> denir. Doğrusu <b>interested in</b>.',
    fix:s=>s.replace(/\binterested\s+(with|about|to)\b/i,'interested in')},
   /* Türkçe hâl eki → edat aktarımı. Tek tablo, tek kural. */
   {id:'prep_table',
-   re:/\b(good\s+in(?!\s+(?:a|an|the|my|our|your|his|her|their|this)\b)|depends?\s+to|afraid\s+from|discuss(?:es|ed)?\s+about|explain(?:s|ed)?\s+me|listen(?:s|ed)?\s+(?:music|podcasts?|songs?|the|him|her|them|me|you|english|radio|news)|arrive(?:s|d)?\s+to)\b/i,
+   re:/\b(good\s+in(?!\s+(?:a|an|the|my|our|your|his|her|their|this)\b)|depends?\s+to|afraid\s+from|discuss(?:es|ed)?\s+about|explain(?:s|ed)?\s+me|listen(?:s|ed)?\s+(?:music|podcasts?|songs?|the|him|her|them|me|you|english|radio|news)|arrive(?:s|d)?\s+to(?=\s+(?:the|work|school)\b))\b/i,
    ttl:'Edat Türkçeden çevrilmez',
-   why:'-de/-e/-den ekleri birebir edata dönmez; İngilizce fiil kendi edatını taşır: <b>good at</b>, <b>depend on</b>, <b>afraid of</b>, <b>discuss</b> (edatsız), <b>explain to me</b>, <b>listen to</b>, <b>arrive at</b>.',
+   why:'-de/-e/-den ekleri birebir edata dönmez; İngilizce fiil kendi edatını taşır: <b>good at</b>, <b>depend on</b>, <b>afraid of</b>, <b>discuss</b> (edatsız), <b>explain to me</b>, <b>listen to</b>, <b>arrive at</b> (şehir/ülke: <b>arrive in</b> Istanbul).',
    fix:(s,m)=>s.replace(m[0],x=>x.replace(/good\s+in/i,'good at').replace(/(depends?)\s+to/i,'$1 on').replace(/afraid\s+from/i,'afraid of').replace(/(discuss(?:es|ed)?)\s+about/i,'$1').replace(/(explain(?:s|ed)?)\s+me/i,'$1 to me').replace(/(listen(?:s|ed)?)\s+/i,'$1 to ').replace(/(arrive(?:s|d)?)\s+to/i,'$1 at'))},
   {id:'apply_to',re:/\b(appl(?:y|ied|ying))\s+to\s+(a|an|the|this)?\s*(job|position|internship)\b/i,
    ttl:'apply <b>for</b> olmalı',
@@ -1084,7 +1126,7 @@ const TRAPS=[
    why:'İngilizcede "ben" anlamındaki <b>I</b> cümlenin neresinde olursa olsun büyük yazılır.',
    fix:s=>s.replace(/(^|[\s(])i(?=[\s'.,!?]|$)/g,'$1I')},
   /* Sadece yaş anlamında ateşle. "two years of experience" DOĞRU cümledir — dokunma. */
-  {id:'have_years',re:/\b(i|he|she|we|they|you)\s+(have|has)\s+(\d+|one|two|three|ten|twenty|thirty)\s+years?(\s+old)?\b(?!\s*(?:of|in|at|experience|working))/i,
+  {id:'have_years',re:/\b(i|he|she|we|they|you)\s+(have|has)\s+(\d+|one|two|three|ten|twenty|thirty)\s+years?(\s+old)?\b(?!\s*(?:of|in|at|experience|working|left|more|ago|until|before|to\s+go))/i,
    ttl:'Yaş: "be" ile söylenir',
    why:'Türkçe "20 yaşındayım" → <i>I have 20 years</i> değil. Doğrusu <b>I am 20 years old</b>.',
    fix:(s,m)=>{const p=m[1].toLowerCase();const be=p==='i'?'am':(p==='you'||p==='we'||p==='they')?'are':'is';
@@ -1107,10 +1149,11 @@ const TRAPS=[
    ttl:'Çifte karşılaştırma',
    why:'<b>better</b> zaten "daha iyi" demek — başına <i>more</i> gelmez.',
    fix:s=>s.replace(/\bmore\s+(better|worse|bigger|easier|harder|faster)\b/i,'$1')},
-  {id:'speak_than',re:/\b(speak|talk|speaking|talking)\s+(than|from)\b/i,
+  /* "I speak from experience" doğru — "from" yalnız talk ile ("-dan bahsetmek") yakalanır */
+  {id:'speak_than',re:/\b(speak|talk|speaking|talking)\s+than\b|\b(talk|talks|talked|talking)\s+from\b/i,
    ttl:'"about" olmalı',
    why:'Türkçe "-dan bahsetmek" doğrudan çevrilmiş. Bir konu hakkında konuşmak = <b>talk about</b>.',
-   fix:s=>s.replace(/\b(speak|talk|speaking|talking)\s+(than|from)\b/i,'$1 about')}
+   fix:s=>s.replace(/\b(speak|talk|talks|talked|speaking|talking)\s+(than|from)\b/i,'$1 about')}
 ];
 
 /* Tek cümle denetimi. Bir kural aynı cümlede birden fazla kez geçebilir
@@ -1153,6 +1196,8 @@ function splitSentences(text){
 /* Paragraf denetimi: her cümle kendi başına taranır. Bu, zaman zarfına bakan
    past_marker kuralının komşu cümleyi geçmişe çekmesini de engeller. */
 function checkEnglish(text){
+  /* iOS klavyesi akıllı kesme işareti yazar: "don’t" düz ' olmadan hiçbir kural tutmuyordu */
+  text=String(text).replace(/[’‘]/g,"'");
   const parts=splitSentences(text);
   if(parts.length<2)return checkSentence(text);
   const found=[], fixed=[];
@@ -1180,7 +1225,7 @@ const store = {
 /* ================= STATE ================= */
 const DAY=86400000;
 let states={};
-const DEF_STATS={streak:0,lastStudy:null,newToday:0,newDate:null,dailyGoal:6,reviews:0,freezes:2,freezeWeek:null,cue:null};
+const DEF_STATS={streak:0,lastStudy:null,newToday:0,newDate:null,dailyGoal:6,reviews:0,freezes:2,freezeWeek:null,cue:null,dayN:0,todayNew:[]};
 let stats={...DEF_STATS};
 let session={queue:[],relearn:[],current:null,done:0,planned:0};
 let aiTopic="Günlük hayat", aiType="hikaye";
@@ -1244,6 +1289,8 @@ function grade(id,rating){
   st.seen=true;
   /* Öğrenme adımı: yeni kart ilk görüşte planlanmaz, aynı seansta bir kez daha
      hatırlanır (Karpicke & Roediger 2008); aralık ikinci başarıda başlar. */
+  /* bugünün sayacı ve yeni kelimeleri (bitiş ekranı: sayfa yeniden açılınca da kaybolmasın) */
+  stats.dayN=(stats.dayN||0)+1;if(isNew)(stats.todayNew=stats.todayNew||[]).push(id);
   if(isNew&&rating!=='again'){st.box=1;st.interval=0;st.nextReview=Date.now();stats.reviews++;stats.newToday++;bumpStreak();persist();return {sameSession:true};}
   if(rating==='again'){st.box=1;st.interval=0;}
   else if(rating==='hard'){st.interval=(!st.interval||st.interval<1)?1:Math.max(1,Math.round(st.interval*1.2));st.box=Math.max(1,st.box);}
@@ -1252,7 +1299,7 @@ function grade(id,rating){
   /* Gün başına hizala: akşam çalışılan kart ertesi sabah gelsin, kendi saatine kilitlenmesin. */
   st.nextReview=new Date().setHours(0,0,0,0)+st.interval*DAY;
   stats.reviews++;if(isNew)stats.newToday++;bumpStreak();persist();
-  return {sameSession:rating==='again'};
+  return {sameSession:rating==='again',isNew};
 }
 function parseDay(s){const p=String(s).split('-').map(Number);return new Date(p[0],p[1]-1,p[2]).getTime();}
 function bumpStreak(){
@@ -1269,7 +1316,7 @@ function bumpStreak(){
   stats.lastStudy=t;
   if(stats.streak===7)setTimeout(()=>toast('🎉 7 gün seri! Alışkanlık oturuyor.'),900);
 }
-function rolloverDay(){const t=todayStr();if(stats.newDate!==t){stats.newToday=0;stats.newDate=t;}}
+function rolloverDay(){const t=todayStr();if(stats.newDate!==t){stats.newToday=0;stats.newDate=t;stats.dayN=0;stats.todayNew=[];}}
 async function persist(){await store.set('srs:states',states);await store.set('srs:stats',stats);}
 
 function renderHeader(){$('#streakNum').textContent=stats.streak;const g=stats.dailyGoal+(stats.bonusDate===todayStr()?6:0);$('#goalNum').textContent=Math.min(stats.newToday,g)+'/'+g+' yeni';}
@@ -1295,10 +1342,11 @@ function buildSession(){
   session.cut=Math.max(0,due.length-40);due=due.slice(0,40);
   // serpiştirme: kategoriler karışsın — bloklama yok
   session.queue=[...warm,...intv,...shuffleArr([...due,...rest])];
-  session.relearn=[];session.done=0;session.planned=session.queue.length;session.current=null;
+  /* yeni kelime öğrenme adımıyla iki kez görünür — çubuk ilk yarıda donmasın diye plana baştan eklenir */
+  session.relearn=[];session.done=0;session.planned=session.queue.length+intv.length+rest.length;session.current=null;
 }
 function nextCard(){if(session.queue.length){session.current=session.queue.shift();return session.current;}if(session.relearn.length){session.current=session.relearn.shift();return session.current;}session.current=null;return null;}
-function updateSessProg(){const total=Math.max(1,session.planned);$('#sessProg').style.width=Math.min(100,Math.round((session.done/total)*100))+'%';}
+function updateSessProg(){const total=Math.max(1,session.planned),p=Math.min(100,Math.round((session.done/total)*100));$('#sessProg').style.width=p+'%';$('#sessBar').setAttribute('aria-valuenow',p);}
 
 function renderStudy(){
   const area=$('#studyArea');
@@ -1308,16 +1356,21 @@ function renderStudy(){
     const t=todayStr();
     const canBonus=stats.bonusDate!==t&&WORDS.some(w=>!states[w.id]||!states[w.id].seen);
     area.innerHTML='';
-    const done=el(`<div class="done"><div class="big">🎉</div>
-      <h2>${(stats.newToday>0||stats.reviews>0)?'Bugünlük tamam!':'Başlamaya hazırsın'}</h2>
+    /* 🎉 yalnız gerçek iş yapıldıysa; hiç kart görmeden boş ekrana konfeti sahte kutlama */
+    const worked=(stats.dayN||0)>0;
+    const yeni=(stats.todayNew||[]).map(wById).filter(Boolean).slice(0,12);
+    const done=el(`<div class="done"><div class="big">${worked?'🎉':'👋'}</div>
+      <h2>${worked?'Bugünlük tamam!':'Bugünlük kart kalmadı — yarın görüşürüz'}</h2>
       <p>${session.cut?`Bugünlük 40 tekrar yeter, ${session.cut} kart daha sırada — fazlası kafayı yorar.`:'Yeni kelime ve tekrar kalmadı.'} ${stats.cue?`Yarın <b>${esc(stats.cue)}</b> görüşürüz 👋`:'Yarın gel — kelimeler tam unutulmadan karşına çıkacak.'}</p>
       ${stats.frozenOn===t?`<p>🧊 Dün kaçırdın, ${stats.frozenN} dondurma gitti — ${stats.freezes||0} kaldı. Her hafta 1 tane geri gelir.</p>`:''}
-      <div class="mini"><div><div class="v">${session.done}</div><div class="l">Bu seans</div></div><div><div class="v">${stats.newToday}</div><div class="l">Yeni bugün</div></div><div><div class="v">${stats.streak}</div><div class="l">Gün seri</div></div><div><div class="v">🧊${stats.freezes||0}</div><div class="l">Dondurma</div></div></div>
+      ${yeni.length?`<div class="cue-chips" aria-label="Bugünün yeni kelimeleri">${yeni.map(w=>`<button class="chip" data-say="${esc(cleanForSpeech(w.en))}" aria-label="${esc(w.en)} — dinle">🔊 ${esc(w.en)}</button>`).join('')}</div>`:''}
+      <div class="mini"><div><div class="v">${stats.dayN||0}</div><div class="l">Bugün kart</div></div><div><div class="v">${stats.newToday}</div><div class="l">Yeni bugün</div></div><div><div class="v">${stats.streak}</div><div class="l">Gün seri</div></div><div><div class="v">🧊${stats.freezes||0}</div><div class="l">Dondurma</div></div></div>
       <div class="cue-chips"><button class="chip" data-go="ear">🎧 Kulak eğitimi</button><button class="chip" data-go="mock">🎤 Sahte mülakat</button>${canBonus?'<button class="chip" data-bonus>➕ 6 kelime daha (bugünlük)</button>':''}</div>
       ${!stats.cue?`<p style="margin-top:22px;color:#EDEEF7;font-weight:600;">Alışkanlık için: her gün <b>ne zaman</b> çalışacaksın?</p><div class="cue-chips">${['Sabah kahvesiyle','Yolda / serviste','Akşam yemeğinden sonra','Yatmadan önce'].map(c=>`<button class="chip" data-cue="${c}">${c}</button>`).join('')}</div><p style="margin-top:10px;font-size:11.5px;color:var(--muted2);">"Şu andan sonra çalışırım" diyenler 2 kat daha çok devam ediyor (uygulama niyeti, d=.65).</p>`:''}
     </div>`);
     area.appendChild(done);
     done.querySelectorAll('[data-cue]').forEach(b=>b.addEventListener('click',async()=>{stats.cue=b.dataset.cue;await persist();toast('Kaydedildi: her gün '+stats.cue);renderStudy();}));
+    done.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>speak(b.dataset.say)));
     done.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{switchTab('interview');$('#intSeg button[data-m="'+b.dataset.go+'"]').click();}));
     const bonus=done.querySelector('[data-bonus]');
     if(bonus)bonus.addEventListener('click',async()=>{stats.bonusDate=t;await persist();buildSession();renderHeader();renderStudy();toast('Bugünlük +6 — yarın tekrar yığılmasın diye günde bir kez');});
@@ -1509,7 +1562,9 @@ function showMnemonic(w,ans){
 
 function answerCard(id,rating){
   const res=grade(id,rating);
-  if(res.sameSession)session.relearn.push(wById(id));else session.done++;
+  session.done++;/* her cevap ilerletir; "Tekrar" ek bir görüş daha doğurur */
+  /* yeni kartın "Tekrar"ı plandaki öğrenme adımının yerine geçer, ek görüş değil */
+  if(res.sameSession){session.relearn.push(wById(id));if(rating==='again'&&!res.isNew)session.planned++;}
   session.current=null;renderHeader();renderStudy();
 }
 
@@ -1614,19 +1669,20 @@ function buildReadCard(r){
     <div class="en-text">${mdLite(r.en)}</div>
     <div style="display:flex;gap:8px;margin-top:14px;">
       <button class="ai-btn" id="playRead" style="flex:1;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Dinle</button>
-      <button class="ai-btn" id="playSlow" style="width:auto;padding:11px 16px;background:var(--bg3);color:var(--violet);font-size:13.5px;">🐢</button>
+      <button class="ai-btn" id="playSlow" aria-label="Yavaş dinle" style="width:auto;padding:11px 16px;background:var(--bg3);color:var(--violet);font-size:13.5px;">🐢</button>
     </div>
-    <button class="ai-btn" id="showTr" style="margin-top:8px;background:var(--bg3);color:#EDEEF7;font-size:13px;padding:10px;">🇹🇷 Türkçesini göster</button>
+    <button class="ai-btn" id="showTr" style="margin-top:8px;background:var(--bg3);color:#EDEEF7;font-size:13px;padding:10px;">Türkçesini göster</button>
     <div id="trSlot" hidden><div class="lbl">Türkçe</div><div class="tr-text">${mdLite(r.tr)}</div></div>
     <div class="lbl">Kilit kelimeler</div><div class="vocab">${mdLite(r.vocab)}</div>
   </div>`);
-  const flat=r.en.replace(/\n/g,' ').replace(/^A:|B:/g,'');
+  /* "A:/B:" her satır başında silinir (eski /^A:|B:/ yalnız ilk A:'yı siliyordu, TTS "A" diye okuyordu) */
+  const flat=r.en.replace(/^[AB]:\s*/gm,'').replace(/\n/g,' ');
   card.querySelector('#playRead').addEventListener('click',()=>speak(flat,0.85));
   card.querySelector('#playSlow').addEventListener('click',()=>speak(flat,0.6));
   const trSlot=card.querySelector('#trSlot'),trBtn=card.querySelector('#showTr');
   trBtn.addEventListener('click',()=>{
     trSlot.hidden=!trSlot.hidden;
-    trBtn.textContent=trSlot.hidden?'🇹🇷 Türkçesini göster':'🙈 Türkçesini gizle';
+    trBtn.textContent=trSlot.hidden?'Türkçesini göster':'Türkçesini gizle';
   });
   return card;
 }
@@ -1651,23 +1707,53 @@ function checkWriting(){
   out.appendChild(buildCheckCard(text,checkEnglish(text)));
 }
 
-/* Tuzak taramasının sonucunu kart olarak bas. ref = varsa doğru çeviri (Çevir modu). */
+/* Kelime düzeyi fark (LCS): b'yi basar, a'ya göre eklenen/değişen <ins>, silinen <del>.
+   A1-A2'de fark etme etkisi var ama yük sınırı da: en çok `max` değişiklik işaretlenir, kalanı sayılır.
+   Büyük/küçük harf ve noktalama fark sayılmaz. */
+function diffWords(a,b,max=3){
+  const A=String(a).trim().split(/\s+/),B=String(b).trim().split(/\s+/),n=x=>x.toLowerCase().replace(/[.!?,;:"]/g,'');
+  const L=Array.from({length:A.length+1},()=>new Array(B.length+1).fill(0));
+  for(let i=A.length-1;i>=0;i--)for(let j=B.length-1;j>=0;j--)L[i][j]=n(A[i])===n(B[j])?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const out=[];let i=0,j=0,groups=0,inG=false,words=0;
+  const mark=()=>{words++;if(!inG){inG=true;groups++;}return groups<=max;};
+  while(i<A.length||j<B.length){
+    if(i<A.length&&j<B.length&&n(A[i])===n(B[j])){out.push(esc(B[j]));i++;j++;inG=false;}
+    /* eşitlikte önce silineni bas: "~~go~~ went" okunuşu "eskisi → yenisi" */
+    else if(i<A.length&&(j>=B.length||L[i+1][j]>=L[i][j+1])){if(mark())out.push('<del>'+esc(A[i])+'</del>');i++;}
+    else{out.push(mark()?'<ins>'+esc(B[j])+'</ins>':esc(B[j]));j++;}
+  }
+  return {html:out.join(' '),changes:groups,words,more:Math.max(0,groups-max)};
+}
+
+/* Tuzak taramasının sonucunu kart olarak bas. ref = varsa doğru çeviri (Çevir modu).
+   Kural: motor kapalı liste — "temiz" sonuçta ✅ yok, ve anadili sesi doğrulanmamış cümleyi okumaz.
+   Çevir'de doğrulanmış örnek üstte; öğrencinin cümlesi altta, örnekle farkı nötr renkte. */
 function buildCheckCard(original,res,ref){
-  const clean=!res.found.length;
+  const fixedN=res.found.length>0;
+  const exact=!!ref&&normAns(res.fixed)===normAns(ref);
+  const d=fixedN?diffWords(original,res.fixed):null;
+  const cmp=ref&&!exact?diffWords(res.fixed,ref):null;
+  const yakin=cmp&&cmp.words<=3;/* değişen kelime sayısı: uzak çeviriyi kırmızıya boyamamak için fark ancak istenince */
   const card=el(`<div class="ai-out">
-    <div class="lbl" style="color:${clean?'var(--mint)':'var(--accent)'};">${clean?'✅ Bilinen tuzaklara takılmadın':'🔧 Düzeltilmiş hâli'}</div>
-    <div class="en-text">${esc(res.fixed)}</div>
-    <button class="ai-btn" id="playCorr" style="margin-top:12px;background:var(--bg3);color:var(--mint);font-size:13.5px;padding:11px;">🔊 Dinle</button>
-    ${res.alt?`<div class="lbl">Şu an oluyorsa</div><div class="tr-text">${esc(res.alt)}</div>`:''}
-    ${res.found.length?`<div class="lbl">📝 Yakalananlar</div>${res.found.map(f=>
+    ${ref?`<div class="lbl" style="color:${exact?'var(--mint)':'var(--violet)'};">${exact?'✅ Örnekle aynı':'🎯 Örnek çeviri'}</div>
+      <div class="en-text">${esc(ref)}</div>
+      <button class="ai-btn" id="playRef" style="margin-top:10px;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Örneği dinle</button>
+      ${cmp?`<div class="lbl" style="color:var(--muted);">Seninki · örnekten farklı</div>
+        <div class="mine cmp" id="cmpTxt">${yakin?cmp.html:esc(res.fixed)}</div>
+        ${yakin?'':'<button class="chip" id="cmpBtn" style="margin-top:8px;">Farkı göster</button>'}
+        <div class="tr-text" style="margin-top:6px;font-size:12.5px;">Farklı olması yanlış demek değil — aynı şeyi söylemenin başka yolu da olabilir.</div>`:''}`:''}
+    ${fixedN?`<div class="lbl" style="color:var(--accent);">🔧 Düzeltilmiş hâli</div>
+      <div class="en-text">${d.html}</div>${d.more?`<div class="tr-text" style="font-size:12.5px;">+${d.more} düzeltme daha</div>`:''}
+      ${ref?'':`<button class="ai-btn" id="playCorr" style="margin-top:12px;background:var(--bg3);color:var(--accent);font-size:13.5px;padding:11px;">🔊 Düzeltilmiş hâlini dinle</button>`}
+      ${res.alt?`<div class="lbl">Şu an oluyorsa</div><div class="tr-text">${esc(res.alt)}</div>`:''}
+      <div class="lbl">📝 Yakalananlar</div>${res.found.map(f=>
         `<div class="vocab" style="margin-bottom:7px;"><b style="color:var(--accent);">${f.ttl}</b><br>${f.why}</div>`).join('')}`
-      :`<div class="lbl">📝 Not</div><div class="tr-text">Türkçe konuşanların en sık ${TRAPS.length} tuzağını taradım, hiçbirine takılmamışsın. Bu tam bir dilbilgisi denetimi değil — kelime seçimi ve doğallık için ${ref?'aşağıdaki örnek çeviriye bak.':'aynı cümleyi <b>Cümle → Çevir</b> bölümünde dene, orada karşılaştırma yapabilirsin.'}</div>`}
-    ${ref?`<div class="lbl" style="color:var(--violet);">🎯 Örnek çeviri</div><div class="en-text" style="font-size:15px;">${esc(ref)}</div>
-      <button class="ai-btn" id="playRef" style="margin-top:10px;background:var(--bg3);color:var(--violet);font-size:13.5px;padding:11px;">🔊 Örneği dinle</button>`:''}
+    :(ref?'':`<div class="lbl" style="color:var(--muted);">Senin cümlen</div><div class="en-text">${esc(res.fixed)}</div>
+      <div class="lbl">📝 Not</div><div class="tr-text">Bilinen tuzak yok. Tam denetim değil — kelime seçimine sen de bak. Karşılaştırmalı denemek için <b>Cümle → Çevir</b>.</div>`)}
   </div>`);
-  card.querySelector('#playCorr').addEventListener('click',()=>speak(res.fixed,0.85));
-  const pr=card.querySelector('#playRef');
-  if(pr)pr.addEventListener('click',()=>speak(ref,0.85));
+  const pc=card.querySelector('#playCorr');if(pc)pc.addEventListener('click',()=>speak(res.fixed,0.85));
+  const pr=card.querySelector('#playRef');if(pr)pr.addEventListener('click',()=>speak(ref,0.85));
+  const cb=card.querySelector('#cmpBtn');if(cb)cb.addEventListener('click',()=>{card.querySelector('#cmpTxt').innerHTML=diffWords(res.fixed,ref,99).html;cb.remove();});
   return card;
 }
 
@@ -1685,7 +1771,11 @@ function newSentenceQ(){
   const pool=sentencePool();
   const q=pool[Math.floor(Math.random()*pool.length)];
   const tokens=q.en.replace(/[.!?]/g,'').split(/\s+/);
-  sent.q={...q,tokens,answerKey:tokens.join(' ').toLowerCase()};
+  const key=tokens.join(' ').toLowerCase();
+  /* Sondaki zaman zarfı başa da alınabilir: "Today I have a meeting" doğru. Türk sezgisi zarfı başa koyar;
+     tek sırayı kabul etmek doğru cümleyi cezalandırıyordu. "on time" gibi zarf olmayan öbekler listede yok. */
+  const z=/^(.+\s.+?)\s+((?:every|last|next)\s+\w+|today|tomorrow|yesterday|now|tonight|in the (?:morning|evening|afternoon)|at (?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|night|noon)(?: o'clock)?|on (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekends?))$/i.exec(key);
+  sent.q={...q,tokens,answerKey:key,altKey:z?(z[2]+' '+z[1]).toLowerCase():null};
   sent.placed=[];
   renderSentTiles();
 }
@@ -1732,9 +1822,11 @@ function renderSentTiles(){
     if(!attempt){fb.className='sfeedback no';fb.textContent='Önce kelimeleri diz.';return;}
     /* setTimeout sırasında sekme değişmiş olabilir: sadece hâlâ aynı soruysa yenile */
     const next=ms=>setTimeout(()=>{if(sent.q===q){sent.q=null;renderSentTiles();}},ms);
-    if(attempt===q.answerKey){
+    if(attempt===q.answerKey||attempt===q.altKey){
       e.currentTarget.disabled=true;sent.total++;sent.correct++;
-      zone.classList.add('ok');fb.className='sfeedback ok';fb.textContent='Mükemmel! 🎯 '+q.en;
+      zone.classList.add('ok');fb.className='sfeedback ok';
+      if(attempt===q.answerKey)fb.textContent='Mükemmel! 🎯 '+q.en;
+      else fb.innerHTML='Doğru! 🎯 Bu sıra da olur: <i>'+esc(q.en)+'</i>';
       speak(q.en);next(1700);
     }else if(!q.tried){
       /* İlk yanlışta cevap gizli, bir hak: kopyalamak değil hatırlamak. Karolar yerinde kalır. */
@@ -1792,9 +1884,7 @@ function renderSentTranslate(){
     if(!attempt){toast('Önce çevirini yaz');return;}
     out.innerHTML='';
     const res=checkEnglish(attempt);
-    const exact=normAns(res.fixed)===normAns(cur.en);
     out.appendChild(buildCheckCard(attempt,res,cur.en));
-    if(exact)toast('🎯 Örnek çeviriyle birebir aynı!');
   });
 }
 
@@ -1809,9 +1899,9 @@ const INTERVIEW_QA=[
    tr:"En güçlü yönüm hızlı öğrenmem. Örneğin son projemde yeni bir yazılım programını bir haftada öğrendim ve işi son tarihten önce bitirdim.",
    note:"Güçlü yönü söyleyip bırakma — mutlaka küçük bir örnekle kanıtla."},
   {q:"What is your weakness?",qtr:"Zayıf yönün ne?",tmpl:"🧭 Şablon: ZAYIF YÖN + NASIL GELİŞTİRİYORUM",
-   en:"Sometimes I focus too much on details. But I am improving: now I plan my time and check the big picture first.",
-   tr:"Bazen detaylara fazla odaklanırım. Ama gelişiyorum: artık zamanımı planlıyor ve önce büyük resme bakıyorum.",
-   note:"Asla \"zayıf yönüm yok\" deme. Küçük, işi bitirmeyen bir zayıflık + geliştirme adımı söyle."},
+   en:"My weakness is that sometimes I accept too many tasks, because I want to help everyone. But I am improving: now I plan my week first and say no politely when I am too busy.",
+   tr:"Zayıf yönüm, herkese yardım etmek istediğim için bazen çok fazla iş kabul etmem. Ama gelişiyorum: artık önce haftamı planlıyorum ve çok yoğunsam kibarca hayır diyorum.",
+   note:"Asla \"zayıf yönüm yok\" deme. \"Detaylara fazla odaklanırım\" gibi klişeler mülakatçının tanıdığı kaçamaktır — gerçek ama küçük bir zayıflık + somut geliştirme adımı söyle."},
   {q:"Tell me about a challenge you solved.",qtr:"Çözdüğün bir zorluğu anlat.",tmpl:"⭐ Şablon: STAR — Situation, Task, Action, Result",
    en:"In my last job, a big order was late (Situation). I had to inform the customer and find a solution (Task). I called the supplier, changed the plan, and worked with my team (Action). We delivered the order in two days and the customer was happy (Result).",
    tr:"Son işimde büyük bir sipariş gecikti (Durum). Müşteriyi bilgilendirmem ve çözüm bulmam gerekiyordu (Görev). Tedarikçiyi aradım, planı değiştirdim, ekibimle çalıştım (Eylem). Siparişi iki günde teslim ettik, müşteri memnun kaldı (Sonuç).",
@@ -1845,8 +1935,8 @@ const INTERVIEW_QA=[
    tr:"İngilizcem hâlâ gelişiyor. İşimi anlayıp anlatabiliyorum ve her gün çalışıyorum. Bir şeyi anlamadığımda sorarım.",
    note:"Türkiye'de stajyer mülakatının en sık ve en stresli sorusu. Abartma, küçümseme; \"gelişiyor + her gün çalışıyorum\" de — bu cevabı ezberle."},
   {q:"Why should we hire you?",qtr:"Neden seni işe alalım?",tmpl:"🧭 Şablon: GÜÇLÜ YÖN + TAKIM + KATKI",
-   en:"I learn quickly, I work well with others, and I am willing to do the boring parts too. I think I can contribute to your team from the first week.",
-   tr:"Hızlı öğrenirim, insanlarla iyi çalışırım ve sıkıcı kısımları da yaparım. İlk haftadan takımınıza katkı sağlayabileceğimi düşünüyorum.",
+   en:"I learn quickly, I work well with others, and I am ready to do any task the team needs. I think I can contribute to your team from the first week.",
+   tr:"Hızlı öğrenirim, insanlarla iyi çalışırım ve takımın ihtiyaç duyduğu her işi yapmaya hazırım. İlk haftadan takımınıza katkı sağlayabileceğimi düşünüyorum.",
    note:"Kapanış klasiği. \"Çünkü ihtiyacım var\" deme; ne getireceğini söyle."},
   {q:"When can you start, and how many days a week can you work?",qtr:"Ne zaman başlayabilirsin, haftada kaç gün çalışabilirsin?",tmpl:"🧭 Şablon: KISA + KESİN",
    en:"I can start in June and work full-time for three months. During the semester, I can work two days a week.",
@@ -1857,8 +1947,8 @@ const INTERVIEW_QA=[
    tr:"Bir grup projesinde sayıları kontrol etmeden raporu gönderdim, bir tablo yanlıştı. Aynı gün düzelttim ve özür diledim. Bundan öğrendiğim, göndermeden önce işimi kontrol etmek oldu.",
    note:"Gerçek ama küçük bir hata + hızlı düzeltme + ders. \"Hiç hata yapmadım\" deme."},
   {q:"Tell me about a time you disagreed with a teammate.",qtr:"Bir takım arkadaşınla anlaşamadığın bir zamanı anlat.",tmpl:"⭐ Şablon: STAR + ORTA YOL",
-   en:"In a course project, my teammate wanted a long report and I wanted a short one. We talked, looked at the requirements together, and found a middle way. The teacher liked the result.",
-   tr:"Bir ders projesinde takım arkadaşım uzun rapor istedi, ben kısa. Konuştuk, gereksinimlere birlikte baktık ve orta yol bulduk. Öğretmen sonucu beğendi.",
+   en:"In a course project, my teammate wanted a long report and I wanted a short one. We talked, looked at the requirements together, and found a middle ground. The professor liked the result.",
+   tr:"Bir ders projesinde takım arkadaşım uzun rapor istedi, ben kısa. Konuştuk, gereksinimlere birlikte baktık ve orta yol bulduk. Hoca sonucu beğendi.",
    note:"Çatışmayı değil çözümü anlat: konuştuk + birlikte baktık + orta yol bulduk."}
 ];
 /* Her soruda görüşmecinin duymak istediği anahtar kalıplar — cevap kapsaması bunlarla ölçülür */
@@ -1877,7 +1967,7 @@ const MOCK_KEYS={
   "Why should we hire you?":["learn","team","contribute","work"],
   "When can you start, and how many days a week can you work?":["start","full-time","week","month"],
   "Tell me about a mistake you made and what you learned.":["mistake","learned","fixed","check"],
-  "Tell me about a time you disagreed with a teammate.":["talked","together","middle way","agreed"]
+  "Tell me about a time you disagreed with a teammate.":["talked","together","middle ground","agreed"]
 };
 let mockIdx=0,mockTry=0;
 
@@ -1906,7 +1996,7 @@ function renderEar(){
   const card=el(`<div class="scard">
     <div style="display:flex;gap:9px;">
       <button class="ai-btn" style="flex:1;" id="earPlay">🔊 Soruyu dinle</button>
-      <button class="btn" id="earSlow" style="width:auto;padding:0 16px;background:var(--bg3);color:#EDEEF7;border:1px solid var(--line2);">🐢</button>
+      <button class="btn" id="earSlow" aria-label="Yavaş dinle" style="width:auto;padding:0 16px;background:var(--bg3);color:#EDEEF7;border:1px solid var(--line2);">🐢</button>
     </div>
     <div class="strhint" style="margin:14px 0 10px;">Hangi soruyu duydun?</div>
     <div id="earOpts"></div>
@@ -2079,15 +2169,17 @@ function sendMock(){
   const res=checkEnglish(text);
   const keys=MOCK_KEYS[q.q]||[];
   const low=' '+text.toLowerCase()+' ';
-  const hit=keys.filter(k=>low.includes(k.toLowerCase()));
+  /* kelime başı sınırı: "know" artık "now" kalıbını, "about" "but" kalıbını karşılamaz */
+  const hit=keys.filter(k=>new RegExp('\\b'+k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(low));
   const miss=keys.filter(k=>!hit.includes(k));
 
   let fb='';
   if(res.found.length){
-    fb+='<b>Bulduğum düzeltmeler:</b> '+res.found.map(f=>f.ttl.replace(/<[^>]+>/g,'')).join(', ')+'<br>→ '+esc(res.fixed);
+    const d=diffWords(text,res.fixed);
+    fb+='<b>Bulduğum düzeltmeler:</b> '+res.found.map(f=>f.ttl.replace(/<[^>]+>/g,'')).join(', ')+'<br>→ <span class="fx">'+d.html+'</span>'+(d.more?' <small>(+'+d.more+' düzeltme daha)</small>':'');
   }else{
     /* ✅ yok: motor kapalı liste, "temiz" demek yanlış güven verir */
-    fb+='Bilinen tuzaklara takılmadın.';
+    fb+='Bilinen tuzak yok — tam denetim değil, örnek cevapla karşılaştır.';
   }
   if(words>90)fb+='<br>📏 Biraz uzun ('+words+' kelime). 30-45 saniye yeterli, özet konuş.';
   if(/^Do you have any questions/.test(q.q)){
@@ -2156,7 +2248,7 @@ function renderProgress(){
       <div class="miles">${MILES.map(m=>`<div class="mi ${readiness>=m[0]?'hit':''}"><b>%${m[0]}</b><span>${m[1]}</span></div>`).join('')}</div>
     </div>
     <div class="grid2">
-      <div class="stat"><div class="v acc">${stats.streak}<span style="font-size:14px;color:var(--muted2)"> 🧊${stats.freezes||0}</span></div><div class="l">🔥 Seri (+ dondurma hakkı)</div></div>
+      <div class="stat"><div class="v hl">${stats.streak}<span style="font-size:14px;color:var(--muted2)"> 🧊${stats.freezes||0}</span></div><div class="l">🔥 Seri (+ dondurma hakkı)</div></div>
       <div class="stat"><div class="v">${seenCount}<span style="font-size:15px;color:var(--muted2)">/${WORDS.length}</span></div><div class="l">Karşılaşılan kelime</div></div>
       <div class="stat"><div class="v mnt">${mastered}</div><div class="l">✅ Pekişmiş (kalıcı)</div></div>
       <div class="stat"><div class="v">${dueNow}</div><div class="l">📌 Bugün tekrar</div></div>
@@ -2257,6 +2349,18 @@ async function init(){
 }
 init();
 
+/* Segment düğmelerinin seçili durumu ekran okuyucuya: .on sınıfıyla senkron aria-pressed */
+const syncPressed=()=>document.querySelectorAll('.segment button').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('on')));
+document.addEventListener('click',e=>{if(e.target.closest('.segment button'))setTimeout(syncPressed);});
+syncPressed();
+/* Masaüstü klavye: Boşluk cevabı gösterir, 1/2/3 = Tekrar/Zor/Kolay. Yazı alanındayken devre dışı. */
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input,textarea,select')||e.metaKey||e.ctrlKey||e.altKey||!$('#v-study').classList.contains('active'))return;
+  const area=$('#studyArea');
+  if(e.key===' '){const b=area.querySelector('.btn.reveal');if(b){e.preventDefault();b.click();}return;}
+  const r={'1':'again','2':'hard','3':'easy'}[e.key];
+  if(r){const b=area.querySelector('.rate button[data-r="'+r+'"]');if(b){e.preventDefault();b.click();}}
+});
 /* PWA arka planda günlerce yaşar; ekrana dönünce gün değiştiyse sayaç sıfırlansın.
    reload yok — yazılan taslak ve mülakat sohbeti gitmesin. */
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&stats.newDate!==todayStr()){rolloverDay();persist();renderHeader();if(!session.current&&$('#v-study').classList.contains('active')){buildSession();renderStudy();}}});
@@ -2290,8 +2394,13 @@ if(location.hash==='#test'){
     T('paragraf doğru metne dokunmaz', checkEnglish('I am a student. I want to improve my English.').found.length===0);
     T('isim öznesi 3. tekil', checkEnglish("My friend don't finish his part.").fixed==="My friend doesn't finish his part."&&checkEnglish('The manager go home early.').fixed==='The manager goes home early.');
     T('çoğul özneye dokunmaz', checkEnglish("My friends don't like it.").found.length===0&&checkEnglish('My friends go home.').found.length===0);
+    T('akıllı kesme işareti', checkEnglish('He don\u2019t like it.').fixed==="He doesn't like it.");
+    T('isim olarak fiil bozulmaz', ['My favorite course is design.','I need study materials.','Are you coming to the meeting?','I think I made a mistake yesterday.'].every(x=>checkEnglish(x).found.length===0));
+    T('have+V3+geçmiş zarf', checkEnglish('I have finished the report yesterday.').fixed==='I finished the report yesterday.');
+    T('fark: önce silinen', diffWords('I go school','I went to school.').html==='I <del>go</del> <ins>went</ins> <ins>to</ins> school.');
+    T('temiz kartta ✅ ve dinle yok', (()=>{const c=buildCheckCard('I need you help.',checkEnglish('I need you help.'));return !/✅/.test(c.textContent)&&!c.querySelector('#playCorr');})());
     T('düzensiz çoğula dokunmaz', ['The people go home.','My children go to school.','The men work here.','The women work in the office.'].every(x=>checkEnglish(x).found.length===0));
-    const keep={...stats};/* grade() reviews/lastStudy yazar — snapshot ÖNCE alınır */
+    const keep={...stats,todayNew:[...(stats.todayNew||[])]};/* grade() reviews/lastStudy/todayNew yazar — snapshot ÖNCE, dizi kopyalanarak */
     const s={interval:10,box:3,seen:true};states[9999]=s;
     grade(9999,'easy');
     T('grade easy büyür', s.interval>=17&&s.interval<=30);

@@ -1,0 +1,15 @@
+import sys,os,json,time
+src=open(os.path.join(os.path.dirname(__file__),'cdp.py')).read()
+exec(src.split("cmd = sys.argv[1]")[0])
+ws=WS(target_ws())
+ws.call('Network.enable')
+ws.call('Network.clearBrowserCache')
+ws.call('Network.setCacheDisabled',cacheDisabled=True)
+# Fast 3G-ish: 150ms RTT, 1.6Mbps down
+ws.call('Network.emulateNetworkConditions',offline=False,latency=150,downloadThroughput=1.6e6/8,uploadThroughput=750e3/8)
+ws.call('Page.navigate',url='http://localhost:8777/index.html?v=%d'%time.time())
+time.sleep(12)
+r=ws.call('Runtime.evaluate',expression="""JSON.stringify((()=>{const n=performance.getEntriesByType('navigation')[0];const p=Object.fromEntries(performance.getEntriesByType('paint').map(e=>[e.name,Math.round(e.startTime)]));const r=performance.getEntriesByType('resource').map(e=>[e.name.slice(8,60),Math.round(e.startTime),Math.round(e.responseEnd),Math.round(e.encodedBodySize/1024)+'KB',e.renderBlockingStatus]);return {dcl:Math.round(n.domContentLoadedEventEnd),load:Math.round(n.loadEventEnd),p,r,fonts:document.fonts.status}})())""",returnByValue=True)
+print(r['result']['result']['value'])
+ws.call('Network.emulateNetworkConditions',offline=False,latency=0,downloadThroughput=-1,uploadThroughput=-1)
+ws.call('Network.setCacheDisabled',cacheDisabled=False)
